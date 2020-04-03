@@ -16,6 +16,7 @@ import Hydration from './Hydration';
 import Sleep from './Sleep';
 import UserRepo from './User-repo';
 
+var historicalWeek = document.querySelectorAll('.historicalWeek');
 // var sidebarName = document.getElementById('sidebarName');
 // var stepGoalCard = document.getElementById('stepGoalCard');
 // var headerText = document.getElementById('headerText');
@@ -27,7 +28,6 @@ import UserRepo from './User-repo';
 // var hydrationAverage = document.getElementById('hydrationAverage');
 // var hydrationThisWeek = document.getElementById('hydrationThisWeek');
 // var hydrationEarlierWeek = document.getElementById('hydrationEarlierWeek');
-var historicalWeek = document.querySelectorAll('.historicalWeek');
 // var sleepToday = document.getElementById('sleepToday');
 // var sleepQualityToday = document.getElementById('sleepQualityToday');
 // var avUserSleepQuality = document.getElementById('avUserSleepQuality');
@@ -47,7 +47,7 @@ var historicalWeek = document.querySelectorAll('.historicalWeek');
 // var userMinutesThisWeek = document.getElementById('userMinutesThisWeek');
 // var bestUserSteps = document.getElementById('bestUserSteps');
 // var streakList = document.getElementById('streakList');
-var streakListMinutes = document.getElementById('streakListMinutes')
+// var streakListMinutes = document.getElementById('streakListMinutes')
 
 function startApp() {
   let userList = [];
