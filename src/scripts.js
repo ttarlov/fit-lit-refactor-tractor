@@ -17,7 +17,7 @@ import Sleep from './Sleep';
 import UserRepo from './User-repo';
 
 // var sidebarName = document.getElementById('sidebarName');
-var stepGoalCard = document.getElementById('stepGoalCard');
+// var stepGoalCard = document.getElementById('stepGoalCard');
 var headerText = document.getElementById('headerText');
 var userAddress = document.getElementById('userAddress');
 var userEmail = document.getElementById('userEmail');
@@ -87,8 +87,10 @@ function getUserById(id, listRepo) {
 
 function addInfoToSidebar(user, userStorage) {
   // sidebarName.innerText = user.name;
-  $('#sidebarName').text('user.name')
-  headerText.innerText = `${user.getFirstName()}'s Activity Tracker`;
+  $('#sidebarName').text(user.name)
+  // headerText.innerText = `${user.getFirstName()}'s Activity Tracker`;
+  $('#headerText').text(`${user.getFirstName()}'s Activity Tracker`)
+
   // stepGoalCard.innerText = `Your daily step goal is ${user.dailyStepGoal}.`
   $('#stepGoalCard').text(`Your daily step goal is ${user.dailyStepGoal}.`)
   avStepGoalCard.innerText = `The average daily step goal is ${userStorage.calculateAverageStepGoal()}`;
