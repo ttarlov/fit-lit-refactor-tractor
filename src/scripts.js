@@ -34,7 +34,7 @@ var historicalWeek = document.querySelectorAll('.historicalWeek');
 // var sleepThisWeek = document.getElementById('sleepThisWeek');
 // var sleepEarlierWeek = document.getElementById('sleepEarlierWeek');
 // var friendChallengeListToday = document.getElementById('friendChallengeListToday');
-var friendChallengeListHistory = document.getElementById('friendChallengeListHistory');
+// var friendChallengeListHistory = document.getElementById('friendChallengeListHistory');
 var bigWinner = document.getElementById('bigWinner');
 var userStepsToday = document.getElementById('userStepsToday');
 var avgStepsToday = document.getElementById('avgStepsToday');
@@ -189,7 +189,8 @@ function addFriendGameInfo(id, activityInfo, userStorage, dateString, laterDateS
   $('#friendChallengeListToday').prepend(makeFriendChallengeHTML(id, activityInfo, userStorage, activityInfo.showChallengeListAndWinner(user, dateString, userStorage)))
   streakList.insertAdjacentHTML("afterBegin", makeStepStreakHTML(id, activityInfo, userStorage, activityInfo.getStreak(userStorage, id, 'numSteps')));
   streakListMinutes.insertAdjacentHTML("afterBegin", makeStepStreakHTML(id, activityInfo, userStorage, activityInfo.getStreak(userStorage, id, 'minutesActive')));
-  friendChallengeListHistory.insertAdjacentHTML("afterBegin", makeFriendChallengeHTML(id, activityInfo, userStorage, activityInfo.showChallengeListAndWinner(user, dateString, userStorage)));
+  // friendChallengeListHistory.insertAdjacentHTML("afterBegin", makeFriendChallengeHTML(id, activityInfo, userStorage, activityInfo.showChallengeListAndWinner(user, dateString, userStorage)));
+  $('#friendChallengeListHistory').prepend(makeFriendChallengeHTML(id, activityInfo, userStorage, activityInfo.showChallengeListAndWinner(user, dateString, userStorage)))
   bigWinner.insertAdjacentHTML('afterBegin', `THIS WEEK'S WINNER! ${activityInfo.showcaseWinner(user, dateString, userStorage)} steps`)
 }
 
