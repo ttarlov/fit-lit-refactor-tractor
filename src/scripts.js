@@ -20,9 +20,9 @@ import UserRepo from './User-repo';
 // var stepGoalCard = document.getElementById('stepGoalCard');
 // var headerText = document.getElementById('headerText');
 // var userAddress = document.getElementById('userAddress');
-var userEmail = document.getElementById('userEmail');
-var userStridelength = document.getElementById('userStridelength');
-var friendList = document.getElementById('friendList');
+// var userEmail = document.getElementById('userEmail');
+// var userStridelength = document.getElementById('userStridelength');
+// var friendList = document.getElementById('friendList');
 var hydrationToday = document.getElementById('hydrationToday');
 var hydrationAverage = document.getElementById('hydrationAverage');
 var hydrationThisWeek = document.getElementById('hydrationThisWeek');
@@ -96,9 +96,12 @@ function addInfoToSidebar(user, userStorage) {
   avStepGoalCard.innerText = `The average daily step goal is ${userStorage.calculateAverageStepGoal()}`;
   // userAddress.innerText = user.address;
   $('#userAddress').text(user.address)
-  userEmail.innerText = user.email;
-  userStridelength.innerText = `Your stridelength is ${user.strideLength} meters.`;
-  friendList.insertAdjacentHTML('afterBegin', makeFriendHTML(user, userStorage))
+  // userEmail.innerText = user.email;
+  $('#userEmail').text(user.email)
+  // userStridelength.innerText = `Your stridelength is ${user.strideLength} meters.`;
+  $('#userStridelength').text(`Your stridelength is ${user.strideLength} meters.`)
+  // friendList.insertAdjacentHTML('afterBegin', makeFriendHTML(user, userStorage))
+  $('#friendList').prepend(makeFriendHTML(user, userStorage))
 };
 
 function makeFriendHTML(user, userStorage) {
