@@ -46,7 +46,7 @@ var historicalWeek = document.querySelectorAll('.historicalWeek');
 // var userStairsThisWeek = document.getElementById('userStairsThisWeek');
 // var userMinutesThisWeek = document.getElementById('userMinutesThisWeek');
 // var bestUserSteps = document.getElementById('bestUserSteps');
-var streakList = document.getElementById('streakList');
+// var streakList = document.getElementById('streakList');
 var streakListMinutes = document.getElementById('streakListMinutes')
 
 function startApp() {
@@ -197,8 +197,10 @@ function makeMinutesHTML(id, activityInfo, userStorage, method) {
 function addFriendGameInfo(id, activityInfo, userStorage, dateString, laterDateString, user) {
   // friendChallengeListToday.insertAdjacentHTML("afterBegin", makeFriendChallengeHTML(id, activityInfo, userStorage, activityInfo.showChallengeListAndWinner(user, dateString, userStorage)));
   $('#friendChallengeListToday').prepend(makeFriendChallengeHTML(id, activityInfo, userStorage, activityInfo.showChallengeListAndWinner(user, dateString, userStorage)))
-  streakList.insertAdjacentHTML("afterBegin", makeStepStreakHTML(id, activityInfo, userStorage, activityInfo.getStreak(userStorage, id, 'numSteps')));
-  streakListMinutes.insertAdjacentHTML("afterBegin", makeStepStreakHTML(id, activityInfo, userStorage, activityInfo.getStreak(userStorage, id, 'minutesActive')));
+  // streakList.insertAdjacentHTML("afterBegin", makeStepStreakHTML(id, activityInfo, userStorage, activityInfo.getStreak(userStorage, id, 'numSteps')));
+  $('#streakList').prepend(makeStepStreakHTML(id, activityInfo, userStorage, activityInfo.getStreak(userStorage, id, 'numSteps')))
+  // streakListMinutes.insertAdjacentHTML("afterBegin", makeStepStreakHTML(id, activityInfo, userStorage, activityInfo.getStreak(userStorage, id, 'minutesActive')));
+  $('#streakListMinutes').prepend(makeStepStreakHTML(id, activityInfo, userStorage, activityInfo.getStreak(userStorage, id, 'minutesActive')))
   // friendChallengeListHistory.insertAdjacentHTML("afterBegin", makeFriendChallengeHTML(id, activityInfo, userStorage, activityInfo.showChallengeListAndWinner(user, dateString, userStorage)));
   $('#friendChallengeListHistory').prepend(makeFriendChallengeHTML(id, activityInfo, userStorage, activityInfo.showChallengeListAndWinner(user, dateString, userStorage)))
   // bigWinner.insertAdjacentHTML('afterBegin', `THIS WEEK'S WINNER! ${activityInfo.showcaseWinner(user, dateString, userStorage)} steps`)
