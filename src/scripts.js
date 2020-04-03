@@ -18,8 +18,8 @@ import UserRepo from './User-repo';
 
 // var sidebarName = document.getElementById('sidebarName');
 // var stepGoalCard = document.getElementById('stepGoalCard');
-var headerText = document.getElementById('headerText');
-var userAddress = document.getElementById('userAddress');
+// var headerText = document.getElementById('headerText');
+// var userAddress = document.getElementById('userAddress');
 var userEmail = document.getElementById('userEmail');
 var userStridelength = document.getElementById('userStridelength');
 var friendList = document.getElementById('friendList');
@@ -94,7 +94,8 @@ function addInfoToSidebar(user, userStorage) {
   // stepGoalCard.innerText = `Your daily step goal is ${user.dailyStepGoal}.`
   $('#stepGoalCard').text(`Your daily step goal is ${user.dailyStepGoal}.`)
   avStepGoalCard.innerText = `The average daily step goal is ${userStorage.calculateAverageStepGoal()}`;
-  userAddress.innerText = user.address;
+  // userAddress.innerText = user.address;
+  $('#userAddress').text(user.address)
   userEmail.innerText = user.email;
   userStridelength.innerText = `Your stridelength is ${user.strideLength} meters.`;
   friendList.insertAdjacentHTML('afterBegin', makeFriendHTML(user, userStorage))
