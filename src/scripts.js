@@ -89,7 +89,8 @@ function addInfoToSidebar(user, userStorage) {
   // sidebarName.innerText = user.name;
   $('#sidebarName').text('user.name')
   headerText.innerText = `${user.getFirstName()}'s Activity Tracker`;
-  stepGoalCard.innerText = `Your daily step goal is ${user.dailyStepGoal}.`
+  // stepGoalCard.innerText = `Your daily step goal is ${user.dailyStepGoal}.`
+  $('#stepGoalCard').text(`Your daily step goal is ${user.dailyStepGoal}.`)
   avStepGoalCard.innerText = `The average daily step goal is ${userStorage.calculateAverageStepGoal()}`;
   userAddress.innerText = user.address;
   userEmail.innerText = user.email;
