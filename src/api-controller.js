@@ -10,7 +10,8 @@ class ApiController {
   }
 
   getActivityData() {
-
+    let url = `${this.rootUrl}/activity/activityData`
+    return fetch(url).then(response => response.json());
   }
 
 
