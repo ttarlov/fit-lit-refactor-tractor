@@ -5,7 +5,7 @@ import $ from 'jquery'
 import './images/person walking on path.jpg';
 import './images/The Rock.jpg';
 
-import userData from './data/users';
+// import userData from './data/users';
 import hydrationData from './data/hydration';
 import sleepData from './data/sleep';
 import activityData from './data/activity';
@@ -15,6 +15,7 @@ import Activity from './Activity';
 import Hydration from './Hydration';
 import Sleep from './Sleep';
 import UserRepo from './User-repo';
+import ApiController from './api-controller';
 
 // var historicalWeek = document.querySelectorAll('.historicalWeek');
 // var sidebarName = document.getElementById('sidebarName');
@@ -48,10 +49,36 @@ import UserRepo from './User-repo';
 // var bestUserSteps = document.getElementById('bestUserSteps');
 // var streakList = document.getElementById('streakList');
 // var streakListMinutes = document.getElementById('streakListMinutes')
+let api = new ApiController();
 
-function startApp() {
+
+
+
+
+const fetchData = () => {
+  let userData = api.getUsersData()
+
+
+Promise.all([userData])
+.then(finalValues => {
+  let userData = finalValues[0]
+  // console.log(userData.userData);
+  startApp(userData.userData)
+}).catch(error => console.log(error.message))
+
+}
+
+// console.log(userData);
+
+
+
+
+fetchData();
+
+
+function startApp(userData) {
   let userList = [];
-  makeUsers(userList);
+  makeUsers(userData, userList);
   let userRepo = new UserRepo(userList);
   let hydrationRepo = new Hydration(hydrationData);
   let sleepRepo = new Sleep(sleepData);
@@ -70,7 +97,12 @@ function startApp() {
   addFriendGameInfo(userNowId, activityRepo, userRepo, today, randomHistory, userNow);
 }
 
-function makeUsers(array) {
+
+
+
+
+
+function makeUsers(userData, array) {
   userData.forEach(function(dataItem) {
     let user = new User(dataItem);
     array.push(user);
@@ -215,4 +247,4 @@ function makeStepStreakHTML(id, activityInfo, userStorage, method) {
   return method.map(streakData => `<li class="historical-list-listItem">${streakData}!</li>`).join('');
 }
 
-startApp();
+// startApp();
