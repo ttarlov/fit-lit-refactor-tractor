@@ -16,7 +16,7 @@ import Hydration from './Hydration';
 import Sleep from './Sleep';
 import UserRepo from './User-repo';
 
-var historicalWeek = document.querySelectorAll('.historicalWeek');
+// var historicalWeek = document.querySelectorAll('.historicalWeek');
 // var sidebarName = document.getElementById('sidebarName');
 // var stepGoalCard = document.getElementById('stepGoalCard');
 // var headerText = document.getElementById('headerText');
@@ -60,7 +60,8 @@ function startApp() {
   let userNow = getUserById(userNowId, userRepo);
   let today = makeToday(userRepo, userNowId, hydrationData);
   let randomHistory = makeRandomDate(userRepo, userNowId, hydrationData);
-  historicalWeek.forEach(instance => instance.insertAdjacentHTML('afterBegin', `Week of ${randomHistory}`));
+  // historicalWeek.forEach(instance => instance.insertAdjacentHTML('afterBegin', `Week of ${randomHistory}`));
+  $('.historicalWeek').prepend(`Week of ${randomHistory}`)
   addInfoToSidebar(userNow, userRepo);
   addHydrationInfo(userNowId, hydrationRepo, today, userRepo, randomHistory);
   addSleepInfo(userNowId, sleepRepo, today, userRepo, randomHistory);
@@ -90,7 +91,6 @@ function addInfoToSidebar(user, userStorage) {
   $('#sidebarName').text(user.name)
   // headerText.innerText = `${user.getFirstName()}'s Activity Tracker`;
   $('#headerText').text(`${user.getFirstName()}'s Activity Tracker`)
-
   // stepGoalCard.innerText = `Your daily step goal is ${user.dailyStepGoal}.`
   $('#stepGoalCard').text(`Your daily step goal is ${user.dailyStepGoal}.`)
   avStepGoalCard.innerText = `The average daily step goal is ${userStorage.calculateAverageStepGoal()}`;
