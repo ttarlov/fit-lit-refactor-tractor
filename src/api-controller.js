@@ -15,12 +15,14 @@ class ApiController {
 
 
  getSleepData() {
-
+   let url = `${this.rootUrl}/sleep/sleepData`
+   return fetch(url).then(response => response.json());
  }
 
 
  getHydrationData() {
-
+   let url = `${this.rootUrl}/hydration/hydrationData`
+   return fetch(url).then(response => response.json());
  }
 
 }
