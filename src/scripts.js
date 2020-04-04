@@ -8,7 +8,7 @@ import './images/The Rock.jpg';
 // import userData from './data/users';
 // import hydrationData from './data/hydration';
 // import sleepData from './data/sleep';
-import activityData from './data/activity';
+// import activityData from './data/activity';
 
 import User from './User';
 import Activity from './Activity';
@@ -59,13 +59,15 @@ const fetchData = () => {
   let userData = api.getUsersData()
   let hydrationData = api.getHydrationData();
   let sleepData = api.getSleepData();
+  let activityData = api.getActivityData();
 
-Promise.all([userData, hydrationData, sleepData])
+Promise.all([userData, hydrationData, sleepData, activityData])
 .then(finalValues => {
   let userData = finalValues[0];
   let hydrationData = finalValues[1];
-  let sleepData = finalValues[2]
-  startApp(userData.userData, hydrationData.hydrationData, sleepData.sleepData)
+  let sleepData = finalValues[2];
+  let activityData = finalValues[3];
+  startApp(userData.userData, hydrationData.hydrationData, sleepData.sleepData, activityData.activityData);
 }).catch(error => console.log(error.message))
 
 }
@@ -73,7 +75,7 @@ Promise.all([userData, hydrationData, sleepData])
 
 
 
-function startApp(userData, hydrationData, sleepData) {
+function startApp(userData, hydrationData, sleepData, activityData) {
   // console.log(hydrationData);
   let userList = [];
   makeUsers(userData, userList);
