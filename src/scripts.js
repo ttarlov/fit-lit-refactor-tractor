@@ -5,16 +5,17 @@ import $ from 'jquery'
 import './images/person walking on path.jpg';
 import './images/The Rock.jpg';
 
-import userData from './data/users';
-import hydrationData from './data/hydration';
-import sleepData from './data/sleep';
-import activityData from './data/activity';
+// import userData from './data/users';
+// import hydrationData from './data/hydration';
+// import sleepData from './data/sleep';
+// import activityData from './data/activity';
 
 import User from './User';
 import Activity from './Activity';
 import Hydration from './Hydration';
 import Sleep from './Sleep';
 import UserRepo from './User-repo';
+import ApiController from './api-controller';
 
 // var historicalWeek = document.querySelectorAll('.historicalWeek');
 // var sidebarName = document.getElementById('sidebarName');
@@ -48,12 +49,39 @@ import UserRepo from './User-repo';
 // var bestUserSteps = document.getElementById('bestUserSteps');
 // var streakList = document.getElementById('streakList');
 // var streakListMinutes = document.getElementById('streakListMinutes')
+let api = new ApiController();
 
-function startApp() {
+
+
+
+
+const fetchData = () => {
+  let userData = api.getUsersData()
+  let hydrationData = api.getHydrationData();
+  let sleepData = api.getSleepData();
+  let activityData = api.getActivityData();
+
+Promise.all([userData, hydrationData, sleepData, activityData])
+.then(finalValues => {
+  let userData = finalValues[0];
+  let hydrationData = finalValues[1];
+  let sleepData = finalValues[2];
+  let activityData = finalValues[3];
+  startApp(userData.userData, hydrationData.hydrationData, sleepData.sleepData, activityData.activityData);
+}).catch(error => console.log(error.message))
+
+}
+
+
+
+
+function startApp(userData, hydrationData, sleepData, activityData) {
+  // console.log(hydrationData);
   let userList = [];
-  makeUsers(userList);
+  makeUsers(userData, userList);
   let userRepo = new UserRepo(userList);
   let hydrationRepo = new Hydration(hydrationData);
+  console.log(hydrationRepo);
   let sleepRepo = new Sleep(sleepData);
   let activityRepo = new Activity(activityData);
   var userNowId = pickUser();
@@ -70,7 +98,12 @@ function startApp() {
   addFriendGameInfo(userNowId, activityRepo, userRepo, today, randomHistory, userNow);
 }
 
-function makeUsers(array) {
+
+
+
+
+
+function makeUsers(userData, array) {
   userData.forEach(function(dataItem) {
     let user = new User(dataItem);
     array.push(user);
@@ -132,7 +165,24 @@ function addHydrationInfo(id, hydrationInfo, dateString, userStorage, laterDateS
   $('#hydrationThisWeek').prepend(makeHydrationHTML(id, hydrationInfo, userStorage, hydrationInfo.calculateFirstWeekOunces(userStorage, id)))
   // hydrationEarlierWeek.insertAdjacentHTML('afterBegin', makeHydrationHTML(id, hydrationInfo, userStorage, hydrationInfo.calculateRandomWeekOunces(laterDateString, id, userStorage)));
   $('#hydrationEarlierWeek').prepend(makeHydrationHTML(id, hydrationInfo, userStorage, hydrationInfo.calculateRandomWeekOunces(laterDateString, id, userStorage)))
+
+  // makeDataArray(hydrationInfo.calculateRandomWeekOunces(laterDateString, id, userStorage))
 }
+
+// function makeDataArray(hydrationArry) {
+//   let hydrationDataForAWeek = hydrationArry;
+//   let ozAmounts = [];
+//   let daysOftheWeek = []
+//   hydrationDataForAWeek.forEach(day => {
+//     ozAmounts.push(day.split(":").pop())
+//   })
+//   hydrationDataForAWeek.forEach(day => {
+//     daysOftheWeek.push(day.split(":").shift())
+//   })
+//     console.log(daysOftheWeek)
+//     console.log(ozAmounts)
+// }
+
 
 function makeHydrationHTML(id, hydrationInfo, userStorage, method) {
   return method.map(drinkData => `<li class="historical-list-listItem">On ${drinkData}oz</li>`).join('');
@@ -215,4 +265,5 @@ function makeStepStreakHTML(id, activityInfo, userStorage, method) {
   return method.map(streakData => `<li class="historical-list-listItem">${streakData}!</li>`).join('');
 }
 
-startApp();
+// startApp();
+fetchData();
