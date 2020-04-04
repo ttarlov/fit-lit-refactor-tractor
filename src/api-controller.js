@@ -4,12 +4,26 @@ class ApiController {
   }
 
 
-  getUsers() {
+  getUsersData() {
     let url = `${this.rootUrl}/users/userData`
     return fetch(url).then(response => response.json());
   }
 
-  
+  getActivityData() {
 
+  }
+
+
+ getSleepData() {
+
+ }
+
+
+ getHydrationData() {
+
+ }
 
 }
+
+
+module.exports = ApiController;
