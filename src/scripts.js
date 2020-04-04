@@ -6,8 +6,8 @@ import './images/person walking on path.jpg';
 import './images/The Rock.jpg';
 
 // import userData from './data/users';
-import hydrationData from './data/hydration';
-import sleepData from './data/sleep';
+// import hydrationData from './data/hydration';
+// import sleepData from './data/sleep';
 import activityData from './data/activity';
 
 import User from './User';
@@ -57,30 +57,29 @@ let api = new ApiController();
 
 const fetchData = () => {
   let userData = api.getUsersData()
+  let hydrationData = api.getHydrationData();
+  let sleepData = api.getSleepData();
 
-
-Promise.all([userData])
+Promise.all([userData, hydrationData, sleepData])
 .then(finalValues => {
-  let userData = finalValues[0]
-  // console.log(userData.userData);
-  startApp(userData.userData)
+  let userData = finalValues[0];
+  let hydrationData = finalValues[1];
+  let sleepData = finalValues[2]
+  startApp(userData.userData, hydrationData.hydrationData, sleepData.sleepData)
 }).catch(error => console.log(error.message))
 
 }
 
-// console.log(userData);
 
 
 
-
-fetchData();
-
-
-function startApp(userData) {
+function startApp(userData, hydrationData, sleepData) {
+  // console.log(hydrationData);
   let userList = [];
   makeUsers(userData, userList);
   let userRepo = new UserRepo(userList);
   let hydrationRepo = new Hydration(hydrationData);
+  console.log(hydrationRepo);
   let sleepRepo = new Sleep(sleepData);
   let activityRepo = new Activity(activityData);
   var userNowId = pickUser();
@@ -164,7 +163,24 @@ function addHydrationInfo(id, hydrationInfo, dateString, userStorage, laterDateS
   $('#hydrationThisWeek').prepend(makeHydrationHTML(id, hydrationInfo, userStorage, hydrationInfo.calculateFirstWeekOunces(userStorage, id)))
   // hydrationEarlierWeek.insertAdjacentHTML('afterBegin', makeHydrationHTML(id, hydrationInfo, userStorage, hydrationInfo.calculateRandomWeekOunces(laterDateString, id, userStorage)));
   $('#hydrationEarlierWeek').prepend(makeHydrationHTML(id, hydrationInfo, userStorage, hydrationInfo.calculateRandomWeekOunces(laterDateString, id, userStorage)))
+
+  // makeDataArray(hydrationInfo.calculateRandomWeekOunces(laterDateString, id, userStorage))
 }
+
+// function makeDataArray(hydrationArry) {
+//   let hydrationDataForAWeek = hydrationArry;
+//   let ozAmounts = [];
+//   let daysOftheWeek = []
+//   hydrationDataForAWeek.forEach(day => {
+//     ozAmounts.push(day.split(":").pop())
+//   })
+//   hydrationDataForAWeek.forEach(day => {
+//     daysOftheWeek.push(day.split(":").shift())
+//   })
+//     console.log(daysOftheWeek)
+//     console.log(ozAmounts)
+// }
+
 
 function makeHydrationHTML(id, hydrationInfo, userStorage, method) {
   return method.map(drinkData => `<li class="historical-list-listItem">On ${drinkData}oz</li>`).join('');
@@ -248,3 +264,4 @@ function makeStepStreakHTML(id, activityInfo, userStorage, method) {
 }
 
 // startApp();
+fetchData();
