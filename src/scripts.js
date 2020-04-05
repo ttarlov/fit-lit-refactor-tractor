@@ -310,7 +310,7 @@ const buildActivityPostObject = () => {
   console.log(userNowId);
   let activityObj = {
     "userId": Number(`${userNowId}`),
-    "date": "2019/09/23",
+    "date": `${$('#date').val().split('-').join('/')}`,
     "numSteps": Number(`${$('#numSteps').val()}`),
     "minutesActive": Number(`${$('#minutesActive').val()}`),
     "flightsOfStairs": Number(`${$('#flightsOfStairs').val()}`),
