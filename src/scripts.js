@@ -275,14 +275,15 @@ fetchData();
 const eventHandler = (event) => {
   if (event.target.classList.contains('activity-button')) {
     showActivityForm()
-  } else if (event.target.classList.contains('back-button')) {
-    showHome()
   }
+  // } else if (event.target.classList.contains('back-button')) {
+  //   showHome()
+  // }
 }
 
 const showActivityForm = () => {
-  $('.main-column-hydration, .main-column-activity, .main-column-sleep').toggle('hidden');
-  $('.body-main-infoContainter').html(
+  // $('.main-column-hydration, .main-column-activity, .main-column-sleep').toggle('hidden');
+  $('.body-main-infoContainter').prepend(
     `<section class="pop-up-card">
     <form method="post">
       <label for="date">Date</label>
@@ -295,12 +296,13 @@ const showActivityForm = () => {
       <button class="back-button" type="button" name="button">Back</button>
     </form>
   </section>`)
+  $('.main-column-hydration, .main-column-activity, .main-column-sleep').addClass('blur')
 }
 
-const showHome = () => {
-  $('.pop-up-card').toggle('hidden');
-  $('.main-column-hydration, .main-column-activity, .main-column-sleep').toggle('hidden');
-}
+// const showHome = () => {
+//   $('.pop-up-card').toggle('hidden');
+//   $('.main-column-hydration, .main-column-activity, .main-column-sleep').toggle('hidden');
+// }
 
 $('body').click(eventHandler);
 
