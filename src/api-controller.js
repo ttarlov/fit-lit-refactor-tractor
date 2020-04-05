@@ -27,8 +27,8 @@ class ApiController {
   }
 
   postActivityData(activityObject) {
-    let url = `${this.rootUrl}/activity/activityData`
-    fetch(url, {
+    let url = `${this.rootUrl}/activity/activityData`;
+    return fetch(url, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
