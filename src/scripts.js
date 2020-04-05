@@ -54,7 +54,7 @@ let m = moment();
 // var streakList = document.getElementById('streakList');
 // var streakListMinutes = document.getElementById('streakListMinutes')
 let api = new ApiController();
-
+let userNowId;
 
 
 
@@ -64,14 +64,14 @@ const fetchData = () => {
   let sleepData = api.getSleepData();
   let activityData = api.getActivityData();
 
-Promise.all([userData, hydrationData, sleepData, activityData])
-.then(finalValues => {
-  let userData = finalValues[0];
-  let hydrationData = finalValues[1];
-  let sleepData = finalValues[2];
-  let activityData = finalValues[3];
-  startApp(userData.userData, hydrationData.hydrationData, sleepData.sleepData, activityData.activityData);
-}).catch(error => console.log(error.message))
+  Promise.all([userData, hydrationData, sleepData, activityData])
+    .then(finalValues => {
+      let userData = finalValues[0];
+      let hydrationData = finalValues[1];
+      let sleepData = finalValues[2];
+      let activityData = finalValues[3];
+      startApp(userData.userData, hydrationData.hydrationData, sleepData.sleepData, activityData.activityData);
+    }).catch(error => console.log(error.message))
 
 }
 
@@ -87,7 +87,7 @@ function startApp(userData, hydrationData, sleepData, activityData) {
   console.log(hydrationRepo);
   let sleepRepo = new Sleep(sleepData);
   let activityRepo = new Activity(activityData);
-  var userNowId = pickUser();
+  userNowId = pickUser();
   let userNow = getUserById(userNowId, userRepo);
   let today = makeToday(userRepo, userNowId, hydrationData);
   let randomHistory = makeRandomDate(userRepo, userNowId, hydrationData);
@@ -145,7 +145,7 @@ function makeFriendHTML(user, userStorage) {
   return user.getFriendsNames(userStorage).map(friendName => `<li class='historical-list-listItem'>${friendName}</li>`).join('');
 }
 
-function makeWinnerID(activityInfo, user, dateString, userStorage){
+function makeWinnerID(activityInfo, user, dateString, userStorage) {
   return activityInfo.getWinnerId(user, dateString, userStorage)
 }
 
@@ -274,18 +274,18 @@ fetchData();
 
 const eventHandler = (event) => {
   if (event.target.classList.contains('activity-button')) {
-    showActivityForm()
+    showActivityForm();
   } else if (event.target.classList.contains('back-button')) {
-    $('.pop-up-card').hide()
-    $('.main-column-hydration, .main-column-activity, .main-column-sleep').removeClass('blur')
+    $('.pop-up-card').hide();
+    $('.main-column-hydration, .main-column-activity, .main-column-sleep').removeClass('blur');
   } else if (event.target.classList.contains('submit-button')) {
-    $('.pop-up-card').hide()
-    $('.main-column-hydration, .main-column-activity, .main-column-sleep').removeClass('blur')
+    buildActivityPostObject();
+    $('.pop-up-card').hide();
+    $('.main-column-hydration, .main-column-activity, .main-column-sleep').removeClass('blur');
   }
 }
 
 const showActivityForm = () => {
-  // $('.main-column-hydration, .main-column-activity, .main-column-sleep').toggle('hidden');
   $('.body-main-infoContainter').prepend(
     `<section class="pop-up-card">
     <form method="post">
@@ -302,22 +302,14 @@ const showActivityForm = () => {
   $('.main-column-hydration, .main-column-activity, .main-column-sleep').addClass('blur')
 }
 
-// const showHome = () => {
-//   $('.pop-up-card').toggle('hidden');
-//   $('.main-column-hydration, .main-column-activity, .main-column-sleep').toggle('hidden');
-// }
-
 $('body').click(eventHandler);
 
-// const fp = flatpickr("#tbDate", {})
-// console.log(fp);
-// flatpickr('#tbDate', {});
-// $('#tbDate').flatpickr({
-//     enableTime: true,
-//     dateFormat: "Y-m-d H:i",
-// })
-
-// $("#tbDate").flatpickr({
-// "enableTime": true,
-// "dateFormat": "F, d Y H:i"
-// });
+const buildActivityPostObject = () => {
+  console.log(userNowId);
+  let activityObj = {
+    "userId": `${userNowId}`,
+    "date": "2019/09/23",
+    "hoursSlept": 5.4,
+    "sleepQuality": 4.9
+  }
+}
