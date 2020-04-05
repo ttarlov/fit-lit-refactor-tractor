@@ -290,11 +290,13 @@ const showActivityForm = () => {
     `<section class="pop-up-card">
     <form method="post">
       <label for="date">Date</label>
-      <input id="tbDate" type="date" name="date" value="${moment().format("YYYY-MM-DD")}"></input>
-      <label for="minutes">Minutes</label>
-      <input id="minutes" type="number" name="minutes"></input>
+      <input id="date" type="date" name="date" value="${moment().format("YYYY-MM-DD")}"></input>
       <label for="step-count">Step Count</label>
-      <input type="number" name="step-count"></input>
+      <input id="numSteps" type="number" name="step-count"></input>
+      <label for="minutes-active">Minutes Active</label>
+      <input id="minutesActive" type="number" name="minutes-active"></input>
+      <label for="flights-of-stairs">Flights of Stairs</label>
+      <input id="flightsOfStairs" type="number" name="flights-of-stairs"></input>
       <button class="submit-button" type="button" name="submit">Submit</button>
       <button class="back-button" type="button" name="button">Back</button>
     </form>
@@ -307,9 +309,11 @@ $('body').click(eventHandler);
 const buildActivityPostObject = () => {
   console.log(userNowId);
   let activityObj = {
-    "userId": `${userNowId}`,
+    "userId": Number(`${userNowId}`),
     "date": "2019/09/23",
-    "hoursSlept": 5.4,
-    "sleepQuality": 4.9
+    "numSteps": Number(`${$('#numSteps').val()}`),
+    "minutesActive": Number(`${$('#minutesActive').val()}`),
+    "flightsOfStairs": Number(`${$('#flightsOfStairs').val()}`),
   }
+  console.log(activityObj);
 }
