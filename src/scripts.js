@@ -309,11 +309,12 @@ $('body').click(eventHandler);
 const buildActivityPostObject = () => {
   console.log(userNowId);
   let activityObj = {
-    "userId": Number(`${userNowId}`),
+    "userID": Number(`${userNowId}`),
     "date": `${$('#date').val().split('-').join('/')}`,
     "numSteps": Number(`${$('#numSteps').val()}`),
     "minutesActive": Number(`${$('#minutesActive').val()}`),
     "flightsOfStairs": Number(`${$('#flightsOfStairs').val()}`),
   }
   console.log(activityObj);
+  api.postActivityData(activityObj);
 }
