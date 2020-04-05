@@ -1,3 +1,4 @@
+import moment from "moment";
 import './css/base.scss';
 import './css/style.scss';
 import $ from 'jquery'
@@ -16,6 +17,9 @@ import Hydration from './Hydration';
 import Sleep from './Sleep';
 import UserRepo from './User-repo';
 import ApiController from './api-controller';
+
+let m = moment();
+// console.log(m);
 
 // var historicalWeek = document.querySelectorAll('.historicalWeek');
 // var sidebarName = document.getElementById('sidebarName');
@@ -50,7 +54,6 @@ import ApiController from './api-controller';
 // var streakList = document.getElementById('streakList');
 // var streakListMinutes = document.getElementById('streakListMinutes')
 let api = new ApiController();
-
 
 
 
@@ -96,6 +99,7 @@ function startApp(userData, hydrationData, sleepData, activityData) {
   let winnerNow = makeWinnerID(activityRepo, userNow, today, userRepo);
   addActivityInfo(userNowId, activityRepo, today, userRepo, randomHistory, userNow, winnerNow);
   addFriendGameInfo(userNowId, activityRepo, userRepo, today, randomHistory, userNow);
+
 }
 
 
@@ -267,3 +271,48 @@ function makeStepStreakHTML(id, activityInfo, userStorage, method) {
 
 // startApp();
 fetchData();
+
+const eventHandler = (event) => {
+  if (event.target.classList.contains('activity-button')) {
+    showActivityForm()
+  } else if (event.target.classList.contains('back-button')) {
+    showHome()
+  }
+}
+
+const showActivityForm = () => {
+  $('.main-column-hydration, .main-column-activity, .main-column-sleep').toggle('hidden');
+  $('.body-main-infoContainter').html(
+    `<section class="pop-up-card">
+    <form method="post">
+      <label for="date">Date</label>
+      <input id="tbDate" type="date" name="date" value="${moment().format("YYYY-MM-DD")}"></input>
+      <label for="minutes">Minutes</label>
+      <input id="minutes" type="number" name="minutes"></input>
+      <label for="step-count">Step Count</label>
+      <input type="number" name="step-count"></input>
+      <button type="button" name="submit">Submit</button>
+      <button class="back-button" type="button" name="button">Back</button>
+    </form>
+  </section>`)
+}
+
+const showHome = () => {
+  $('.pop-up-card').toggle('hidden');
+  $('.main-column-hydration, .main-column-activity, .main-column-sleep').toggle('hidden');
+}
+
+$('body').click(eventHandler);
+
+// const fp = flatpickr("#tbDate", {})
+// console.log(fp);
+// flatpickr('#tbDate', {});
+// $('#tbDate').flatpickr({
+//     enableTime: true,
+//     dateFormat: "Y-m-d H:i",
+// })
+
+// $("#tbDate").flatpickr({
+// "enableTime": true,
+// "dateFormat": "F, d Y H:i"
+// });
