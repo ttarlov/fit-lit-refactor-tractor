@@ -275,10 +275,13 @@ fetchData();
 const eventHandler = (event) => {
   if (event.target.classList.contains('activity-button')) {
     showActivityForm()
+  } else if (event.target.classList.contains('back-button')) {
+    $('.pop-up-card').hide()
+    $('.main-column-hydration, .main-column-activity, .main-column-sleep').removeClass('blur')
+  } else if (event.target.classList.contains('submit-button')) {
+    $('.pop-up-card').hide()
+    $('.main-column-hydration, .main-column-activity, .main-column-sleep').removeClass('blur')
   }
-  // } else if (event.target.classList.contains('back-button')) {
-  //   showHome()
-  // }
 }
 
 const showActivityForm = () => {
@@ -292,7 +295,7 @@ const showActivityForm = () => {
       <input id="minutes" type="number" name="minutes"></input>
       <label for="step-count">Step Count</label>
       <input type="number" name="step-count"></input>
-      <button type="button" name="submit">Submit</button>
+      <button class="submit-button" type="button" name="submit">Submit</button>
       <button class="back-button" type="button" name="button">Back</button>
     </form>
   </section>`)
