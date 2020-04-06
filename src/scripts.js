@@ -305,6 +305,23 @@ const showActivityForm = () => {
   $('.main-column-hydration, .main-column-activity, .main-column-sleep').addClass('blur')
 }
 
+const showSleepForm = () => {
+  $('.body-main-infoContainter').prepend(
+    `<section class="pop-up-card">
+    <form method="post">
+      <label for="date">Date</label>
+      <input id="date" type="date" name="date" value="${moment().format("YYYY-MM-DD")}"></input>
+      <label for="hours-slept">Hours Slept</label>
+      <input id="hours-slept" type="number" name="hours-slept"></input>
+      <label for="sleep-quality">Sleep Quality</label>
+      <input id="sleep-quality" type="number" name="sleep-quality"></input>
+      <button class="sleep-submit-button" type="button" name="submit">Submit</button>
+      <button class="back-button" type="button" name="button">Back</button>
+    </form>
+  </section>`)
+  $('.main-column-hydration, .main-column-activity, .main-column-sleep').addClass('blur')
+}
+
 $('body').click(eventHandler);
 
 const buildActivityPostObject = () => {
