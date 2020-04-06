@@ -72,7 +72,6 @@ const fetchData = () => {
       let activityData = finalValues[3];
       startApp(userData.userData, hydrationData.hydrationData, sleepData.sleepData, activityData.activityData);
     }).catch(error => console.log(error.message))
-
 }
 
 function startApp(userData, hydrationData, sleepData, activityData) {
@@ -159,7 +158,6 @@ function addHydrationInfo(id, hydrationInfo, dateString, userStorage, laterDateS
   $('#hydrationThisWeek').prepend(makeHydrationHTML(id, hydrationInfo, userStorage, hydrationInfo.calculateFirstWeekOunces(userStorage, id)))
   // hydrationEarlierWeek.insertAdjacentHTML('afterBegin', makeHydrationHTML(id, hydrationInfo, userStorage, hydrationInfo.calculateRandomWeekOunces(laterDateString, id, userStorage)));
   $('#hydrationEarlierWeek').prepend(makeHydrationHTML(id, hydrationInfo, userStorage, hydrationInfo.calculateRandomWeekOunces(laterDateString, id, userStorage)))
-
   // makeDataArray(hydrationInfo.calculateRandomWeekOunces(laterDateString, id, userStorage))
 }
 
@@ -285,7 +283,6 @@ const eventHandler = (event) => {
     $('.pop-up-card').hide();
     $('.main-column-hydration, .main-column-activity, .main-column-sleep').removeClass('blur');
   }
-
 }
 
 const showHydrationForm = () => {
@@ -302,8 +299,6 @@ const showHydrationForm = () => {
   </section>`)
   $('.main-column-hydration, .main-column-activity, .main-column-sleep').addClass('blur')
 }
-
-
 
 const showActivityForm = () => {
   $('.body-main-infoContainter').prepend(
@@ -368,7 +363,6 @@ const buildSleepPostObject = () => {
     "hoursSlept": Number(`${$('#hours-slept').val()}`),
     "sleepQuality": Number(`${$('#sleep-quality').val()}`),
   }
-  console.log(sleepObj)
   api.postSleepData(sleepObj);
 }
 
