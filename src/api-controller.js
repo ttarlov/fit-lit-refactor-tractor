@@ -29,12 +29,25 @@ class ApiController {
   postActivityData(activityObject) {
     let url = `${this.rootUrl}/activity/activityData`;
     return fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(activityObject),
-      })
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(activityObject),
+    })
+      .then(response => console.log(response.json()))
+      .catch(err => console.log(err.message));
+  }
+
+  postSleepData(sleepObject) {
+    let url = `${this.rootUrl}/sleep/sleepData`;
+    return fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(sleepObject),
+    })
       .then(response => console.log(response.json()))
       .catch(err => console.log(err.message));
   }
