@@ -75,19 +75,14 @@ const fetchData = () => {
 
 }
 
-
-
-
 function startApp(userData, hydrationData, sleepData, activityData) {
-  // console.log(hydrationData);
   let userList = [];
   makeUsers(userData, userList);
   let userRepo = new UserRepo(userList);
   let hydrationRepo = new Hydration(hydrationData);
-  console.log(hydrationRepo);
   let sleepRepo = new Sleep(sleepData);
-  let activityRepo = new Activity(activityData);
   userNowId = pickUser();
+  let activityRepo = new Activity(activityData);
   let userNow = getUserById(userNowId, userRepo);
   let today = makeToday(userRepo, userNowId, hydrationData);
   let randomHistory = makeRandomDate(userRepo, userNowId, hydrationData);
@@ -275,11 +270,17 @@ fetchData();
 const eventHandler = (event) => {
   if (event.target.classList.contains('activity-button')) {
     showActivityForm();
+  } else if (event.target.classList.contains('sleep-button')) {
+    showSleepForm();
   } else if (event.target.classList.contains('back-button')) {
     $('.pop-up-card').hide();
     $('.main-column-hydration, .main-column-activity, .main-column-sleep').removeClass('blur');
-  } else if (event.target.classList.contains('submit-button')) {
+  } else if (event.target.classList.contains('activity-submit-button')) {
     buildActivityPostObject();
+    $('.pop-up-card').hide();
+    $('.main-column-hydration, .main-column-activity, .main-column-sleep').removeClass('blur');
+  } else if (event.target.classList.contains('sleep-submit-button')) {
+    buildSleepPostObject();
     $('.pop-up-card').hide();
     $('.main-column-hydration, .main-column-activity, .main-column-sleep').removeClass('blur');
   }
@@ -297,7 +298,7 @@ const showActivityForm = () => {
       <input id="minutesActive" type="number" name="minutes-active"></input>
       <label for="flights-of-stairs">Flights of Stairs</label>
       <input id="flightsOfStairs" type="number" name="flights-of-stairs"></input>
-      <button class="submit-button" type="button" name="submit">Submit</button>
+      <button class="activity-submit-button" type="button" name="submit">Submit</button>
       <button class="back-button" type="button" name="button">Back</button>
     </form>
   </section>`)
@@ -307,7 +308,6 @@ const showActivityForm = () => {
 $('body').click(eventHandler);
 
 const buildActivityPostObject = () => {
-  console.log(userNowId);
   let activityObj = {
     "userID": Number(`${userNowId}`),
     "date": `${$('#date').val().split('-').join('/')}`,
@@ -315,6 +315,5 @@ const buildActivityPostObject = () => {
     "minutesActive": Number(`${$('#minutesActive').val()}`),
     "flightsOfStairs": Number(`${$('#flightsOfStairs').val()}`),
   }
-  console.log(activityObj);
   api.postActivityData(activityObj);
 }
