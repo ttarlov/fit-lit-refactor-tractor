@@ -75,19 +75,14 @@ const fetchData = () => {
 
 }
 
-
-
-
 function startApp(userData, hydrationData, sleepData, activityData) {
-  // console.log(hydrationData);
   let userList = [];
   makeUsers(userData, userList);
   let userRepo = new UserRepo(userList);
   let hydrationRepo = new Hydration(hydrationData);
-  console.log(hydrationRepo);
   let sleepRepo = new Sleep(sleepData);
-  let activityRepo = new Activity(activityData);
   userNowId = pickUser();
+  let activityRepo = new Activity(activityData);
   let userNow = getUserById(userNowId, userRepo);
   let today = makeToday(userRepo, userNowId, hydrationData);
   let randomHistory = makeRandomDate(userRepo, userNowId, hydrationData);
@@ -101,11 +96,6 @@ function startApp(userData, hydrationData, sleepData, activityData) {
   addFriendGameInfo(userNowId, activityRepo, userRepo, today, randomHistory, userNow);
 
 }
-
-
-
-
-
 
 function makeUsers(userData, array) {
   userData.forEach(function(dataItem) {
@@ -275,11 +265,17 @@ fetchData();
 const eventHandler = (event) => {
   if (event.target.classList.contains('activity-button')) {
     showActivityForm();
+  } else if (event.target.classList.contains('sleep-button')) {
+    showSleepForm();
   } else if (event.target.classList.contains('back-button')) {
     $('.pop-up-card').hide();
     $('.main-column-hydration, .main-column-activity, .main-column-sleep').removeClass('blur');
-  } else if (event.target.classList.contains('submit-button')) {
+  } else if (event.target.classList.contains('activity-submit-button')) {
     buildActivityPostObject();
+    $('.pop-up-card').hide();
+    $('.main-column-hydration, .main-column-activity, .main-column-sleep').removeClass('blur');
+  } else if (event.target.classList.contains('sleep-submit-button')) {
+    buildSleepPostObject();
     $('.pop-up-card').hide();
     $('.main-column-hydration, .main-column-activity, .main-column-sleep').removeClass('blur');
   }
@@ -297,7 +293,24 @@ const showActivityForm = () => {
       <input id="minutesActive" type="number" name="minutes-active"></input>
       <label for="flights-of-stairs">Flights of Stairs</label>
       <input id="flightsOfStairs" type="number" name="flights-of-stairs"></input>
-      <button class="submit-button" type="button" name="submit">Submit</button>
+      <button class="activity-submit-button" type="button" name="submit">Submit</button>
+      <button class="back-button" type="button" name="button">Back</button>
+    </form>
+  </section>`)
+  $('.main-column-hydration, .main-column-activity, .main-column-sleep').addClass('blur')
+}
+
+const showSleepForm = () => {
+  $('.body-main-infoContainter').prepend(
+    `<section class="pop-up-card">
+    <form method="post">
+      <label for="date">Date</label>
+      <input id="date" type="date" name="date" value="${moment().format("YYYY-MM-DD")}"></input>
+      <label for="hours-slept">Hours Slept</label>
+      <input id="hours-slept" type="number" name="hours-slept"></input>
+      <label for="sleep-quality">Sleep Quality</label>
+      <input id="sleep-quality" type="number" name="sleep-quality"></input>
+      <button class="sleep-submit-button" type="button" name="submit">Submit</button>
       <button class="back-button" type="button" name="button">Back</button>
     </form>
   </section>`)
@@ -307,7 +320,6 @@ const showActivityForm = () => {
 $('body').click(eventHandler);
 
 const buildActivityPostObject = () => {
-  console.log(userNowId);
   let activityObj = {
     "userID": Number(`${userNowId}`),
     "date": `${$('#date').val().split('-').join('/')}`,
@@ -315,6 +327,16 @@ const buildActivityPostObject = () => {
     "minutesActive": Number(`${$('#minutesActive').val()}`),
     "flightsOfStairs": Number(`${$('#flightsOfStairs').val()}`),
   }
-  console.log(activityObj);
   api.postActivityData(activityObj);
+}
+
+const buildSleepPostObject = () => {
+  let sleepObj = {
+    "userID": Number(`${userNowId}`),
+    "date": `${$('#date').val().split('-').join('/')}`,
+    "hoursSlept": Number(`${$('#hours-slept').val()}`),
+    "sleepQuality": Number(`${$('#sleep-quality').val()}`),
+  }
+  console.log(sleepObj)
+  api.postSleepData(sleepObj);
 }
