@@ -52,6 +52,20 @@ class ApiController {
       .catch(err => console.log(err.message));
   }
 
+
+  postHydrationData(hydrationObj) {
+    let url = `${this.rootUrl}/hydration/hydrationData`;
+    return fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(hydrationObj),
+    })
+      .then(response => console.log(response.json()))
+      .catch(err => console.log(err.message));
+  }
+
 }
 
 

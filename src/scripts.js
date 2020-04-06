@@ -278,8 +278,32 @@ const eventHandler = (event) => {
     buildSleepPostObject();
     $('.pop-up-card').hide();
     $('.main-column-hydration, .main-column-activity, .main-column-sleep').removeClass('blur');
+  } else if(event.target.classList.contains('hydration-button')) {
+    showHydrationForm()
+  } else if (event.target.classList.contains("hydration-submit-button")) {
+    buildHydrationPostObject();
+    $('.pop-up-card').hide();
+    $('.main-column-hydration, .main-column-activity, .main-column-sleep').removeClass('blur');
   }
+
 }
+
+const showHydrationForm = () => {
+  $('.body-main-infoContainter').prepend(
+    `<section class="pop-up-card">
+    <form method="post">
+      <label for="date">Date</label>
+      <input id="date" type="date" name="date" value="${moment().format("YYYY-MM-DD")}"></input>
+      <label for="number-of-oz">Number of Oz</label>
+      <input id="numOunces" type="number" name="number-of-ozs"></input>
+      <button class="hydration-submit-button" type="button" name="submit">Submit</button>
+      <button class="back-button" type="button" name="button">Back</button>
+    </form>
+  </section>`)
+  $('.main-column-hydration, .main-column-activity, .main-column-sleep').addClass('blur')
+}
+
+
 
 const showActivityForm = () => {
   $('.body-main-infoContainter').prepend(
@@ -317,7 +341,14 @@ const showSleepForm = () => {
   $('.main-column-hydration, .main-column-activity, .main-column-sleep').addClass('blur')
 }
 
-$('body').click(eventHandler);
+const buildHydrationPostObject = () => {
+  let hydrationObj = {
+    "userID": Number(`${userNowId}`),
+    "date": `${$('#date').val().split('-').join('/')}`,
+    "numOunces": Number(`${$("#numOunces").val()}`)
+  }
+  api.postHydrationData(hydrationObj);
+}
 
 const buildActivityPostObject = () => {
   let activityObj = {
@@ -340,3 +371,5 @@ const buildSleepPostObject = () => {
   console.log(sleepObj)
   api.postSleepData(sleepObj);
 }
+
+$('body').click(eventHandler);
