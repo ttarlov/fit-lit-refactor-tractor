@@ -97,11 +97,6 @@ function startApp(userData, hydrationData, sleepData, activityData) {
 
 }
 
-
-
-
-
-
 function makeUsers(userData, array) {
   userData.forEach(function(dataItem) {
     let user = new User(dataItem);
@@ -339,8 +334,8 @@ const buildSleepPostObject = () => {
   let sleepObj = {
     "userID": Number(`${userNowId}`),
     "date": `${$('#date').val().split('-').join('/')}`,
-    "hours-slept": Number(`${$('#hours-slept').val()}`),
-    "sleep-quality": Number(`${$('#sleep-quality').val()}`),
+    "hoursSlept": Number(`${$('#hours-slept').val()}`),
+    "sleepQuality": Number(`${$('#sleep-quality').val()}`),
   }
   console.log(sleepObj)
   api.postSleepData(sleepObj);
