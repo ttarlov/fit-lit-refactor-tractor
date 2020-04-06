@@ -334,3 +334,14 @@ const buildActivityPostObject = () => {
   }
   api.postActivityData(activityObj);
 }
+
+const buildSleepPostObject = () => {
+  let sleepObj = {
+    "userID": Number(`${userNowId}`),
+    "date": `${$('#date').val().split('-').join('/')}`,
+    "hours-slept": Number(`${$('#hours-slept').val()}`),
+    "sleep-quality": Number(`${$('#sleep-quality').val()}`),
+  }
+  console.log(sleepObj)
+  api.postSleepData(sleepObj);
+}
