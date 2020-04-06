@@ -15,16 +15,29 @@ class ApiController {
   }
 
 
- getSleepData() {
-   let url = `${this.rootUrl}/sleep/sleepData`
-   return fetch(url).then(response => response.json());
- }
+  getSleepData() {
+    let url = `${this.rootUrl}/sleep/sleepData`
+    return fetch(url).then(response => response.json());
+  }
 
 
- getHydrationData() {
-   let url = `${this.rootUrl}/hydration/hydrationData`
-   return fetch(url).then(response => response.json());
- }
+  getHydrationData() {
+    let url = `${this.rootUrl}/hydration/hydrationData`
+    return fetch(url).then(response => response.json());
+  }
+
+  postActivityData(activityObject) {
+    let url = `${this.rootUrl}/activity/activityData`;
+    return fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(activityObject),
+      })
+      .then(response => console.log(response.json()))
+      .catch(err => console.log(err.message));
+  }
 
 }
 

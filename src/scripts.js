@@ -1,3 +1,4 @@
+import moment from "moment";
 import './css/base.scss';
 import './css/style.scss';
 import $ from 'jquery'
@@ -16,6 +17,9 @@ import Hydration from './Hydration';
 import Sleep from './Sleep';
 import UserRepo from './User-repo';
 import ApiController from './api-controller';
+
+let m = moment();
+// console.log(m);
 
 // var historicalWeek = document.querySelectorAll('.historicalWeek');
 // var sidebarName = document.getElementById('sidebarName');
@@ -50,8 +54,7 @@ import ApiController from './api-controller';
 // var streakList = document.getElementById('streakList');
 // var streakListMinutes = document.getElementById('streakListMinutes')
 let api = new ApiController();
-
-
+let userNowId;
 
 
 
@@ -61,14 +64,14 @@ const fetchData = () => {
   let sleepData = api.getSleepData();
   let activityData = api.getActivityData();
 
-Promise.all([userData, hydrationData, sleepData, activityData])
-.then(finalValues => {
-  let userData = finalValues[0];
-  let hydrationData = finalValues[1];
-  let sleepData = finalValues[2];
-  let activityData = finalValues[3];
-  startApp(userData.userData, hydrationData.hydrationData, sleepData.sleepData, activityData.activityData);
-}).catch(error => console.log(error.message))
+  Promise.all([userData, hydrationData, sleepData, activityData])
+    .then(finalValues => {
+      let userData = finalValues[0];
+      let hydrationData = finalValues[1];
+      let sleepData = finalValues[2];
+      let activityData = finalValues[3];
+      startApp(userData.userData, hydrationData.hydrationData, sleepData.sleepData, activityData.activityData);
+    }).catch(error => console.log(error.message))
 
 }
 
@@ -84,7 +87,7 @@ function startApp(userData, hydrationData, sleepData, activityData) {
   console.log(hydrationRepo);
   let sleepRepo = new Sleep(sleepData);
   let activityRepo = new Activity(activityData);
-  var userNowId = pickUser();
+  userNowId = pickUser();
   let userNow = getUserById(userNowId, userRepo);
   let today = makeToday(userRepo, userNowId, hydrationData);
   let randomHistory = makeRandomDate(userRepo, userNowId, hydrationData);
@@ -96,6 +99,7 @@ function startApp(userData, hydrationData, sleepData, activityData) {
   let winnerNow = makeWinnerID(activityRepo, userNow, today, userRepo);
   addActivityInfo(userNowId, activityRepo, today, userRepo, randomHistory, userNow, winnerNow);
   addFriendGameInfo(userNowId, activityRepo, userRepo, today, randomHistory, userNow);
+
 }
 
 
@@ -141,7 +145,7 @@ function makeFriendHTML(user, userStorage) {
   return user.getFriendsNames(userStorage).map(friendName => `<li class='historical-list-listItem'>${friendName}</li>`).join('');
 }
 
-function makeWinnerID(activityInfo, user, dateString, userStorage){
+function makeWinnerID(activityInfo, user, dateString, userStorage) {
   return activityInfo.getWinnerId(user, dateString, userStorage)
 }
 
@@ -267,3 +271,50 @@ function makeStepStreakHTML(id, activityInfo, userStorage, method) {
 
 // startApp();
 fetchData();
+
+const eventHandler = (event) => {
+  if (event.target.classList.contains('activity-button')) {
+    showActivityForm();
+  } else if (event.target.classList.contains('back-button')) {
+    $('.pop-up-card').hide();
+    $('.main-column-hydration, .main-column-activity, .main-column-sleep').removeClass('blur');
+  } else if (event.target.classList.contains('submit-button')) {
+    buildActivityPostObject();
+    $('.pop-up-card').hide();
+    $('.main-column-hydration, .main-column-activity, .main-column-sleep').removeClass('blur');
+  }
+}
+
+const showActivityForm = () => {
+  $('.body-main-infoContainter').prepend(
+    `<section class="pop-up-card">
+    <form method="post">
+      <label for="date">Date</label>
+      <input id="date" type="date" name="date" value="${moment().format("YYYY-MM-DD")}"></input>
+      <label for="step-count">Step Count</label>
+      <input id="numSteps" type="number" name="step-count"></input>
+      <label for="minutes-active">Minutes Active</label>
+      <input id="minutesActive" type="number" name="minutes-active"></input>
+      <label for="flights-of-stairs">Flights of Stairs</label>
+      <input id="flightsOfStairs" type="number" name="flights-of-stairs"></input>
+      <button class="submit-button" type="button" name="submit">Submit</button>
+      <button class="back-button" type="button" name="button">Back</button>
+    </form>
+  </section>`)
+  $('.main-column-hydration, .main-column-activity, .main-column-sleep').addClass('blur')
+}
+
+$('body').click(eventHandler);
+
+const buildActivityPostObject = () => {
+  console.log(userNowId);
+  let activityObj = {
+    "userID": Number(`${userNowId}`),
+    "date": `${$('#date').val().split('-').join('/')}`,
+    "numSteps": Number(`${$('#numSteps').val()}`),
+    "minutesActive": Number(`${$('#minutesActive').val()}`),
+    "flightsOfStairs": Number(`${$('#flightsOfStairs').val()}`),
+  }
+  console.log(activityObj);
+  api.postActivityData(activityObj);
+}
