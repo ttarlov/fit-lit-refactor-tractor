@@ -82,7 +82,7 @@ const updateChart = (daysOftheWeek, ozAmounts, chartId) => {
       data: {
           labels: daysOftheWeek,
           datasets: [{
-              label: 'Ozs of Water Drank last week',
+              label: 'Ozs of Water',
               data: ozAmounts,
               backgroundColor: [
                   'rgba(255, 99, 132, 0.2)',
@@ -216,10 +216,10 @@ function addHydrationInfo(id, hydrationInfo, dateString, userStorage, laterDateS
   $('#hydrationAverage').prepend(`<p>Your average water intake is</p><p><span class="number">${hydrationInfo.calculateAverageOunces(id)}</span></p> <p>oz per day.</p>`)
   // hydrationThisWeek.insertAdjacentHTML('afterBegin', makeHydrationHTML(id, hydrationInfo, userStorage, hydrationInfo.calculateFirstWeekOunces(userStorage, id)));
   // $('#hydrationThisWeek').prepend(makeHydrationHTML(id, hydrationInfo, userStorage, hydrationInfo.calculateFirstWeekOunces(userStorage, id)))
-  $('#hydrationEarlierWeek').prepend(`<canvas id="thisWeekHydrationChart" style="display: block;height: 263px;width: 319px;"></canvas>`);
+  $('#hydrationEarlierWeek').prepend(`<canvas id="thisWeekHydrationChart" style="display: block;height: 206px; width: 251px;"></canvas>`);
   // hydrationEarlierWeek.insertAdjacentHTML('afterBegin', makeHydrationHTML(id, hydrationInfo, userStorage, hydrationInfo.calculateRandomWeekOunces(laterDateString, id, userStorage)));
   // $('#hydrationEarlierWeek').prepend(makeHydrationHTML(id, hydrationInfo, userStorage, hydrationInfo.calculateRandomWeekOunces(laterDateString, id, userStorage)))
-  $('#hydrationThisWeek').prepend(`<canvas id="earlyWeekHydrationChart" style="display: block;height: 263px;width: 319px;"></canvas>`);
+  $('#hydrationThisWeek').prepend(`<canvas id="earlyWeekHydrationChart" style="display: block;height: 206px;width: 251px;"></canvas>`);
   makeDataArray(hydrationInfo.calculateRandomWeekOunces(laterDateString, id, userStorage),"thisWeekHydrationChart");
   makeDataArray(hydrationInfo.calculateFirstWeekOunces(userStorage, id),"earlyWeekHydrationChart");
 }
