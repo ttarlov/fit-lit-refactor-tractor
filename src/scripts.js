@@ -116,7 +116,7 @@ const updateChart = (daysOftheWeek, ozAmounts, chartId) => {
 }
 
 
-const makeDataArray = (hydrationArry, chartId) => {
+const makeChartData = (hydrationArry, chartId) => {
   let hydrationDataForAWeek = hydrationArry;
   let ozAmounts = [];
   let daysOftheWeek = []
@@ -126,10 +126,8 @@ const makeDataArray = (hydrationArry, chartId) => {
   hydrationDataForAWeek.forEach(day => {
     daysOftheWeek.push(day.split(":").shift())
   })
-    console.log(daysOftheWeek)
-    console.log(ozAmounts)
   updateChart(daysOftheWeek, ozAmounts, chartId)
-}
+};
 
 
 
@@ -220,8 +218,8 @@ function addHydrationInfo(id, hydrationInfo, dateString, userStorage, laterDateS
   // hydrationEarlierWeek.insertAdjacentHTML('afterBegin', makeHydrationHTML(id, hydrationInfo, userStorage, hydrationInfo.calculateRandomWeekOunces(laterDateString, id, userStorage)));
   // $('#hydrationEarlierWeek').prepend(makeHydrationHTML(id, hydrationInfo, userStorage, hydrationInfo.calculateRandomWeekOunces(laterDateString, id, userStorage)))
   $('#hydrationThisWeek').prepend(`<canvas id="earlyWeekHydrationChart" style="display: block;height: 206px;width: 251px;"></canvas>`);
-  makeDataArray(hydrationInfo.calculateRandomWeekOunces(laterDateString, id, userStorage),"thisWeekHydrationChart");
-  makeDataArray(hydrationInfo.calculateFirstWeekOunces(userStorage, id),"earlyWeekHydrationChart");
+  makeChartData(hydrationInfo.calculateRandomWeekOunces(laterDateString, id, userStorage),"thisWeekHydrationChart");
+  makeChartData(hydrationInfo.calculateFirstWeekOunces(userStorage, id),"earlyWeekHydrationChart");
 }
 
 
@@ -265,7 +263,9 @@ function addActivityInfo(id, activityInfo, dateString, userStorage, laterDateStr
   // avgMinutesToday.insertAdjacentHTML("afterBegin", `<p>Active Minutes:</p><p>All Users</p><p><span class="number">${activityInfo.getAllUserAverageForDay(dateString, userStorage, 'minutesActive')}</span></p>`)
   $('#avgMinutesToday').prepend(`<p>Active Minutes:</p><p>All Users</p><p><span class="number">${activityInfo.getAllUserAverageForDay(dateString, userStorage, 'minutesActive')}</span></p>`)
   // userStepsThisWeek.insertAdjacentHTML("afterBegin", makeStepsHTML(id, activityInfo, userStorage, activityInfo.userDataForWeek(id, dateString, userStorage, "numSteps")));
-  $('#userStepsThisWeek').prepend(makeStepsHTML(id, activityInfo, userStorage, activityInfo.userDataForWeek(id, dateString, userStorage, "numSteps")))
+  // $('#userStepsThisWeek').prepend(makeStepsHTML(id, activityInfo, userStorage, activityInfo.userDataForWeek(id, dateString, userStorage, "numSteps")))
+  $('#userStepsThisWeek').prepend(`<canvas id="stepsThisWeekChart" style="display: block;height: 206px;width: 251px;"></canvas>`)
+  makeChartData(activityInfo.userDataForWeek(id, dateString, userStorage, "numSteps"),"stepsThisWeekChart");
   // userStairsThisWeek.insertAdjacentHTML("afterBegin", makeStairsHTML(id, activityInfo, userStorage, activityInfo.userDataForWeek(id, dateString, userStorage, "flightsOfStairs")));
   $('#userStairsThisWeek').prepend(makeStairsHTML(id, activityInfo, userStorage, activityInfo.userDataForWeek(id, dateString, userStorage, "flightsOfStairs")))
   // userMinutesThisWeek.insertAdjacentHTML("afterBegin", makeMinutesHTML(id, activityInfo, userStorage, activityInfo.userDataForWeek(id, dateString, userStorage, "minutesActive")));
