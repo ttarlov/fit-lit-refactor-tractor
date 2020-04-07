@@ -75,6 +75,65 @@ const fetchData = () => {
 
 }
 
+const updateChart = (daysOftheWeek, ozAmounts, chartId) => {
+  var ctx = document.getElementById(`${chartId}`).getContext('2d');
+  var myChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+          labels: daysOftheWeek,
+          datasets: [{
+              label: 'Ozs of Water Drank last week',
+              data: ozAmounts,
+              backgroundColor: [
+                  'rgba(255, 99, 132, 0.2)',
+                  'rgba(54, 162, 235, 0.2)',
+                  'rgba(255, 206, 86, 0.2)',
+                  'rgba(75, 192, 192, 0.2)',
+                  'rgba(153, 102, 255, 0.2)',
+                  'rgba(255, 159, 64, 0.2)'
+              ],
+              borderColor: [
+                  'rgba(255, 99, 132, 1)',
+                  'rgba(54, 162, 235, 1)',
+                  'rgba(255, 206, 86, 1)',
+                  'rgba(75, 192, 192, 1)',
+                  'rgba(153, 102, 255, 1)',
+                  'rgba(255, 159, 64, 1)'
+              ],
+              borderWidth: 1
+          }]
+      },
+      options: {
+          scales: {
+              yAxes: [{
+                  ticks: {
+                      beginAtZero: true
+                  }
+              }]
+          }
+      }
+  });
+}
+
+
+const makeDataArray = (hydrationArry, chartId) => {
+  let hydrationDataForAWeek = hydrationArry;
+  let ozAmounts = [];
+  let daysOftheWeek = []
+  hydrationDataForAWeek.forEach(day => {
+    ozAmounts.push(day.split(":").pop())
+  })
+  hydrationDataForAWeek.forEach(day => {
+    daysOftheWeek.push(day.split(":").shift())
+  })
+    console.log(daysOftheWeek)
+    console.log(ozAmounts)
+  updateChart(daysOftheWeek, ozAmounts, chartId)
+}
+
+
+
+
 function startApp(userData, hydrationData, sleepData, activityData) {
   let userList = [];
   makeUsers(userData, userList);
@@ -156,26 +215,15 @@ function addHydrationInfo(id, hydrationInfo, dateString, userStorage, laterDateS
   // hydrationAverage.insertAdjacentHTML('afterBegin', `<p>Your average water intake is</p><p><span class="number">${hydrationInfo.calculateAverageOunces(id)}</span></p> <p>oz per day.</p>`)
   $('#hydrationAverage').prepend(`<p>Your average water intake is</p><p><span class="number">${hydrationInfo.calculateAverageOunces(id)}</span></p> <p>oz per day.</p>`)
   // hydrationThisWeek.insertAdjacentHTML('afterBegin', makeHydrationHTML(id, hydrationInfo, userStorage, hydrationInfo.calculateFirstWeekOunces(userStorage, id)));
-  $('#hydrationThisWeek').prepend(makeHydrationHTML(id, hydrationInfo, userStorage, hydrationInfo.calculateFirstWeekOunces(userStorage, id)))
+  // $('#hydrationThisWeek').prepend(makeHydrationHTML(id, hydrationInfo, userStorage, hydrationInfo.calculateFirstWeekOunces(userStorage, id)))
+  $('#hydrationEarlierWeek').prepend(`<canvas id="thisWeekHydrationChart" style="display: block;height: 263px;width: 319px;"></canvas>`);
   // hydrationEarlierWeek.insertAdjacentHTML('afterBegin', makeHydrationHTML(id, hydrationInfo, userStorage, hydrationInfo.calculateRandomWeekOunces(laterDateString, id, userStorage)));
-  $('#hydrationEarlierWeek').prepend(makeHydrationHTML(id, hydrationInfo, userStorage, hydrationInfo.calculateRandomWeekOunces(laterDateString, id, userStorage)))
-
-  // makeDataArray(hydrationInfo.calculateRandomWeekOunces(laterDateString, id, userStorage))
+  // $('#hydrationEarlierWeek').prepend(makeHydrationHTML(id, hydrationInfo, userStorage, hydrationInfo.calculateRandomWeekOunces(laterDateString, id, userStorage)))
+  $('#hydrationThisWeek').prepend(`<canvas id="earlyWeekHydrationChart" style="display: block;height: 263px;width: 319px;"></canvas>`);
+  makeDataArray(hydrationInfo.calculateRandomWeekOunces(laterDateString, id, userStorage),"thisWeekHydrationChart");
+  makeDataArray(hydrationInfo.calculateFirstWeekOunces(userStorage, id),"earlyWeekHydrationChart");
 }
 
-// function makeDataArray(hydrationArry) {
-//   let hydrationDataForAWeek = hydrationArry;
-//   let ozAmounts = [];
-//   let daysOftheWeek = []
-//   hydrationDataForAWeek.forEach(day => {
-//     ozAmounts.push(day.split(":").pop())
-//   })
-//   hydrationDataForAWeek.forEach(day => {
-//     daysOftheWeek.push(day.split(":").shift())
-//   })
-//     console.log(daysOftheWeek)
-//     console.log(ozAmounts)
-// }
 
 
 function makeHydrationHTML(id, hydrationInfo, userStorage, method) {
