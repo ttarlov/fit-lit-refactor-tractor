@@ -2,7 +2,7 @@ import moment from "moment";
 import './css/base.scss';
 import './css/style.scss';
 import $ from 'jquery'
-
+import Chart from 'chart.js';
 import './images/person walking on path.jpg';
 import './images/The Rock.jpg';
 
