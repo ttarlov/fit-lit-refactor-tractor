@@ -236,9 +236,13 @@ function addSleepInfo(id, sleepInfo, dateString, userStorage, laterDateString) {
   // avUserSleepQuality.insertAdjacentHTML("afterBegin", `<p>The average user's sleep quality is</p> <p><span class="number">${Math.round(sleepInfo.calculateAllUserSleepQuality() *100)/100}</span></p><p>out of 5.</p>`);
   $('#avUserSleepQuality').prepend(`<p>The average user's sleep quality is</p> <p><span class="number">${Math.round(sleepInfo.calculateAllUserSleepQuality() *100)/100}</span></p><p>out of 5.</p>`)
   // sleepThisWeek.insertAdjacentHTML('afterBegin', makeSleepHTML(id, sleepInfo, userStorage, sleepInfo.calculateWeekSleep(dateString, id, userStorage)));
-  $('#sleepThisWeek').prepend(makeSleepHTML(id, sleepInfo, userStorage, sleepInfo.calculateWeekSleep(dateString, id, userStorage)))
+  // $('#sleepThisWeek').prepend(makeSleepHTML(id, sleepInfo, userStorage, sleepInfo.calculateWeekSleep(dateString, id, userStorage)))
+  $('#sleepThisWeek').prepend(`<canvas id="sleepThisWeekChart" style="display: block;height: 261px;width: 316px;"></canvas>`)
+  makeChartData(sleepInfo.calculateWeekSleep(dateString, id, userStorage),"sleepThisWeekChart", "Hours of Sleep");
   // sleepEarlierWeek.insertAdjacentHTML('afterBegin', makeSleepHTML(id, sleepInfo, userStorage, sleepInfo.calculateWeekSleep(laterDateString, id, userStorage)));
-  $('#sleepEarlierWeek').prepend(makeSleepHTML(id, sleepInfo, userStorage, sleepInfo.calculateWeekSleep(laterDateString, id, userStorage)))
+  // $('#sleepEarlierWeek').prepend(makeSleepHTML(id, sleepInfo, userStorage, sleepInfo.calculateWeekSleep(laterDateString, id, userStorage)))
+  $('#sleepEarlierWeek').prepend(`<canvas id="sleepEarlierWeekChart" style="display: block;height: 261px;width: 316px;"></canvas>`)
+  makeChartData(sleepInfo.calculateWeekSleep(laterDateString, id, userStorage),"sleepEarlierWeekChart", "Hours of Sleep");
 }
 
 function makeSleepHTML(id, sleepInfo, userStorage, method) {
@@ -264,19 +268,19 @@ function addActivityInfo(id, activityInfo, dateString, userStorage, laterDateStr
   $('#avgMinutesToday').prepend(`<p>Active Minutes:</p><p>All Users</p><p><span class="number">${activityInfo.getAllUserAverageForDay(dateString, userStorage, 'minutesActive')}</span></p>`)
   // userStepsThisWeek.insertAdjacentHTML("afterBegin", makeStepsHTML(id, activityInfo, userStorage, activityInfo.userDataForWeek(id, dateString, userStorage, "numSteps")));
   // $('#userStepsThisWeek').prepend(makeStepsHTML(id, activityInfo, userStorage, activityInfo.userDataForWeek(id, dateString, userStorage, "numSteps")))
-  $('#userStepsThisWeek').prepend(`<canvas id="stepsThisWeekChart" style="display: block;height: 206px;width: 251px;"></canvas>`)
+  $('#userStepsThisWeek').prepend(`<canvas id="stepsThisWeekChart" style="display: block;height: 261px;width: 316px;"></canvas>`)
   makeChartData(activityInfo.userDataForWeek(id, dateString, userStorage, "numSteps"),"stepsThisWeekChart", "Number of Steps");
   // userStairsThisWeek.insertAdjacentHTML("afterBegin", makeStairsHTML(id, activityInfo, userStorage, activityInfo.userDataForWeek(id, dateString, userStorage, "flightsOfStairs")));
   // $('#userStairsThisWeek').prepend(makeStairsHTML(id, activityInfo, userStorage, activityInfo.userDataForWeek(id, dateString, userStorage, "flightsOfStairs")))
-  $('#userStairsThisWeek').prepend(`<canvas id="stairsThisWeekChart" style="display: block;height: 206px;width: 251px;"></canvas>`)
+  $('#userStairsThisWeek').prepend(`<canvas id="stairsThisWeekChart" style="display: block;height: 261px;width: 316px;"></canvas>`)
   makeChartData(activityInfo.userDataForWeek(id, dateString, userStorage, "flightsOfStairs"), "stairsThisWeekChart", "Flights Of Stairs");
   // userMinutesThisWeek.insertAdjacentHTML("afterBegin", makeMinutesHTML(id, activityInfo, userStorage, activityInfo.userDataForWeek(id, dateString, userStorage, "minutesActive")));
   // $('#userMinutesThisWeek').prepend(makeMinutesHTML(id, activityInfo, userStorage, activityInfo.userDataForWeek(id, dateString, userStorage, "minutesActive")))
-  $('#userMinutesThisWeek').prepend(`<canvas id="minutesThisWeekChart" style="display: block;height: 206px;width: 251px;"></canvas>`)
+  $('#userMinutesThisWeek').prepend(`<canvas id="minutesThisWeekChart" style="display: block;height: 261px;width: 316px;"></canvas>`)
   makeChartData(activityInfo.userDataForWeek(id, dateString, userStorage, "minutesActive"), "minutesThisWeekChart", "Minutes of Activity");
   // bestUserSteps.insertAdjacentHTML("afterBegin", makeStepsHTML(user, activityInfo, userStorage, activityInfo.userDataForWeek(winnerId, dateString, userStorage, "numSteps")));
   // $('#bestUserSteps').prepend(makeStepsHTML(user, activityInfo, userStorage, activityInfo.userDataForWeek(winnerId, dateString, userStorage, "numSteps")))
-  $('#bestUserSteps').prepend(`<canvas id="bestUserStepsChart" style="display: block;height: 206px;width: 251px;"></canvas>`)
+  $('#bestUserSteps').prepend(`<canvas id="bestUserStepsChart" style="display: block;height: 261px;width: 316px;"></canvas>`)
   makeChartData(activityInfo.userDataForWeek(winnerId, dateString, userStorage, "numSteps"), "bestUserStepsChart", "Steps")
 }
 
