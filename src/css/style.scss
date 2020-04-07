@@ -150,11 +150,15 @@ body {
   display: flex;
   flex-direction: row;
   justify-content: space-around;
+  width: 100%;
+  height: 350px;
   overflow: scroll;
   width: 100%;
 }
 
 .infoContainer-cardContainer-card-vertical {
+  width: 100%;
+  height: 341px;
   background-color: white;
   border: 1px solid black;
   display: flex;
@@ -204,7 +208,10 @@ body {
 }
 
 .card-history-hydration {
-  background-color: #5BC8AC;
+  text-align: center;
+  font-size: 1em;
+  margin: .5em;
+  font-family: sans-serif;
   display: flex;
   flex-direction: column;
   font-family: sans-serif;
@@ -216,7 +223,10 @@ body {
 }
 
 .card-history-sleep {
-  background-color: #EC96A4;
+  text-align: center;
+  font-size: 1em;
+  margin: .5em;
+  font-family: sans-serif;
   display: flex;
   flex-direction: column;
   font-family: sans-serif;
@@ -228,11 +238,14 @@ body {
 }
 
 .card-history-activity {
-  background-color: #DFE166;
+  text-align: center;
+  font-size: 1em;
+  margin: .5em;
+  font-family: sans-serif;
   display: flex;
   flex-direction: column;
-  font-family: sans-serif;
-  font-size: 1em;
+  align-items: center;
+  width: 50%;
   height: 93%;
   justify-content: flex-start;
   margin: 0.5em;
