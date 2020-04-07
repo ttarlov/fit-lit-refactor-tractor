@@ -11,6 +11,7 @@ import './images/The Rock.jpg';
 // import sleepData from './data/sleep';
 // import activityData from './data/activity';
 
+import Calculator from './calculator';
 import User from './User';
 import Activity from './Activity';
 import Hydration from './Hydration';
@@ -146,7 +147,7 @@ function startApp(userData, hydrationData, sleepData, activityData) {
   // historicalWeek.forEach(instance => instance.insertAdjacentHTML('afterBegin', `Week of ${randomHistory}`));
   $('.historicalWeek').prepend(`Week of ${randomHistory}`)
   addInfoToSidebar(userNow, userRepo);
-  addHydrationInfo(userNowId, hydrationRepo, today, userRepo, randomHistory);
+  addHydrationInfo(userNowId, hydrationRepo, today, userRepo, randomHistory, hydrationData);
   addSleepInfo(userNowId, sleepRepo, today, userRepo, randomHistory);
   let winnerNow = makeWinnerID(activityRepo, userNow, today, userRepo);
   addActivityInfo(userNowId, activityRepo, today, userRepo, randomHistory, userNow, winnerNow);
@@ -207,11 +208,17 @@ function makeRandomDate(userStorage, id, dataSet) {
 
 }
 
-function addHydrationInfo(id, hydrationInfo, dateString, userStorage, laterDateString) {
+function addHydrationInfo(id, hydrationInfo, dateString, userStorage, laterDateString, hydrationData) {
   // hydrationToday.insertAdjacentHTML('afterBegin', `<p>You drank</p><p><span class="number">${hydrationInfo.calculateDailyOunces(id, dateString)}</span></p><p>oz water today.</p>`);
-  $('#hydrationToday').prepend(`<p>You drank</p><p><span class="number">${hydrationInfo.calculateDailyOunces(id, dateString)}</span></p><p>oz water today.</p>`)
+  // $('#hydrationToday').prepend(`<p>You drank</p><p><span class="number">${hydrationInfo.calculateDailyOunces(id, dateString)}</span></p><p>oz water today.</p>`)
+  $('#hydrationToday').prepend(`<p>You drank</p><p><span class="number">${hydrationInfo.calculateDailyData(hydrationData, id, dateString, "numOunces")}</span></p><p>oz water today.</p>`);
   // hydrationAverage.insertAdjacentHTML('afterBegin', `<p>Your average water intake is</p><p><span class="number">${hydrationInfo.calculateAverageOunces(id)}</span></p> <p>oz per day.</p>`)
-  $('#hydrationAverage').prepend(`<p>Your average water intake is</p><p><span class="number">${hydrationInfo.calculateAverageOunces(id).toFixed(1)}</span></p> <p>oz per day.</p>`)
+  // $('#hydrationAverage').prepend(`<p>Your average water intake is</p><p><span class="number">${hydrationInfo.calculateAverageOunces(id).toFixed(1)}</span></p> <p>oz per day.</p>`)
+
+
+  $('#hydrationAverage').prepend(`<p>Your average water intake is</p><p><span class="number">${hydrationInfo.calculateAverageData(hydrationData, id, "numOunces").toFixed(1)}</span></p> <p>oz per day.</p>`)
+  // hydrationAverage.insertAdjacentHTML('afterBegin', `<p>Your average water intake is</p><p><span class="number">${hydrationInfo.calculateAverageData(hydrationData, id).toFixed(1)}</span></p> <p>oz per day.</p>`)
+
   // hydrationThisWeek.insertAdjacentHTML('afterBegin', makeHydrationHTML(id, hydrationInfo, userStorage, hydrationInfo.calculateFirstWeekOunces(userStorage, id)));
   // $('#hydrationThisWeek').prepend(makeHydrationHTML(id, hydrationInfo, userStorage, hydrationInfo.calculateFirstWeekOunces(userStorage, id)))
   $('#hydrationEarlierWeek').prepend(`<canvas id="thisWeekHydrationChart" style="display: block;height: 206px; width: 251px;"></canvas>`);
