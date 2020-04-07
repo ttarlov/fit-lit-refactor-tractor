@@ -275,7 +275,9 @@ function addActivityInfo(id, activityInfo, dateString, userStorage, laterDateStr
   $('#userMinutesThisWeek').prepend(`<canvas id="minutesThisWeekChart" style="display: block;height: 206px;width: 251px;"></canvas>`)
   makeChartData(activityInfo.userDataForWeek(id, dateString, userStorage, "minutesActive"), "minutesThisWeekChart", "Minutes of Activity");
   // bestUserSteps.insertAdjacentHTML("afterBegin", makeStepsHTML(user, activityInfo, userStorage, activityInfo.userDataForWeek(winnerId, dateString, userStorage, "numSteps")));
-  $('#bestUserSteps').prepend(makeStepsHTML(user, activityInfo, userStorage, activityInfo.userDataForWeek(winnerId, dateString, userStorage, "numSteps")))
+  // $('#bestUserSteps').prepend(makeStepsHTML(user, activityInfo, userStorage, activityInfo.userDataForWeek(winnerId, dateString, userStorage, "numSteps")))
+  $('#bestUserSteps').prepend(`<canvas id="bestUserStepsChart" style="display: block;height: 206px;width: 251px;"></canvas>`)
+  makeChartData(activityInfo.userDataForWeek(winnerId, dateString, userStorage, "numSteps"), "bestUserStepsChart", "Steps")
 }
 
 function makeStepsHTML(id, activityInfo, userStorage, method) {
