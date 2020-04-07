@@ -292,12 +292,19 @@ const showHydrationForm = () => {
   $('.body-main-infoContainter').prepend(
     `<section class="pop-up-card">
     <form method="post">
+      <h3>Log your hydration</h3>
+      <div class="container">
       <label for="date">Date</label>
       <input id="date" type="date" name="date" value="${moment().format("YYYY-MM-DD")}"></input>
+      </div>
+      <div class="container">
       <label for="number-of-oz">Number of Oz</label>
       <input id="numOunces" type="number" name="number-of-ozs"></input>
+      </div>
+      <div class="container">
       <button class="hydration-submit-button" type="button" name="submit">Submit</button>
       <button class="back-button" type="button" name="button">Back</button>
+      </div>
     </form>
   </section>`)
   $('.main-column-hydration, .main-column-activity, .main-column-sleep').addClass('blur')
@@ -309,16 +316,27 @@ const showActivityForm = () => {
   $('.body-main-infoContainter').prepend(
     `<section class="pop-up-card">
     <form method="post">
+      <h3>Log your activity</h3>
+      <div class="container">
       <label for="date">Date</label>
       <input id="date" type="date" name="date" value="${moment().format("YYYY-MM-DD")}"></input>
+      </div>
+      <div class="container">
       <label for="step-count">Step Count</label>
       <input id="numSteps" type="number" name="step-count"></input>
+      </div>
+      <div class="container">
       <label for="minutes-active">Minutes Active</label>
       <input id="minutesActive" type="number" name="minutes-active"></input>
+      </div>
+      <div class="container">
       <label for="flights-of-stairs">Flights of Stairs</label>
       <input id="flightsOfStairs" type="number" name="flights-of-stairs"></input>
+      </div>
+      <div class="container">
       <button class="activity-submit-button" type="button" name="submit">Submit</button>
       <button class="back-button" type="button" name="button">Back</button>
+      </div>
     </form>
   </section>`)
   $('.main-column-hydration, .main-column-activity, .main-column-sleep').addClass('blur')
@@ -328,14 +346,23 @@ const showSleepForm = () => {
   $('.body-main-infoContainter').prepend(
     `<section class="pop-up-card">
     <form method="post">
+      <h3>Log your sleep</h3>
+      <div class="container">
       <label for="date">Date</label>
       <input id="date" type="date" name="date" value="${moment().format("YYYY-MM-DD")}"></input>
+      </div>
+      <div class="container">
       <label for="hours-slept">Hours Slept</label>
       <input id="hours-slept" type="number" name="hours-slept"></input>
+      </div>
+      <div class="container">
       <label for="sleep-quality">Sleep Quality</label>
       <input id="sleep-quality" type="number" name="sleep-quality"></input>
+      </div>
+      <div class="container">
       <button class="sleep-submit-button" type="button" name="submit">Submit</button>
       <button class="back-button" type="button" name="button">Back</button>
+      </div>
     </form>
   </section>`)
   $('.main-column-hydration, .main-column-activity, .main-column-sleep').addClass('blur')
