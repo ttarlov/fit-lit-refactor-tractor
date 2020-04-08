@@ -2,7 +2,7 @@ import moment from "moment";
 import './css/base.scss';
 import './css/style.scss';
 import $ from 'jquery'
-
+import Chart from 'chart.js';
 import './images/person walking on path.jpg';
 import './images/The Rock.jpg';
 
@@ -73,6 +73,63 @@ const fetchData = () => {
       startApp(userData.userData, hydrationData.hydrationData, sleepData.sleepData, activityData.activityData);
     }).catch(error => console.log(error.message))
 }
+
+const updateChart = (daysOftheWeek, data, chartId, chartLabel) => {
+  var ctx = document.getElementById(`${chartId}`).getContext('2d');
+  var myChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+          labels: daysOftheWeek,
+          datasets: [{
+              label: `${chartLabel}`,
+              data: data,
+              backgroundColor: [
+                  'rgba(255, 99, 132, 0.2)',
+                  'rgba(54, 162, 235, 0.2)',
+                  'rgba(255, 206, 86, 0.2)',
+                  'rgba(75, 192, 192, 0.2)',
+                  'rgba(153, 102, 255, 0.2)',
+                  'rgba(255, 159, 64, 0.2)'
+              ],
+              borderColor: [
+                  'rgba(255, 99, 132, 1)',
+                  'rgba(54, 162, 235, 1)',
+                  'rgba(255, 206, 86, 1)',
+                  'rgba(75, 192, 192, 1)',
+                  'rgba(153, 102, 255, 1)',
+                  'rgba(255, 159, 64, 1)'
+              ],
+              borderWidth: 1
+          }]
+      },
+      options: {
+          scales: {
+              yAxes: [{
+                  ticks: {
+                      beginAtZero: true
+                  }
+              }]
+          }
+      }
+  });
+}
+
+
+const makeChartData = (hydrationArry, chartId, chartLabel) => {
+  let hydrationDataForAWeek = hydrationArry;
+  let data = [];
+  let daysOftheWeek = []
+  hydrationDataForAWeek.forEach(day => {
+    data.push(day.split(":").pop())
+  })
+  hydrationDataForAWeek.forEach(day => {
+    daysOftheWeek.push(day.split(":").shift())
+  })
+  updateChart(daysOftheWeek, data, chartId, chartLabel)
+};
+
+
+
 
 function startApp(userData, hydrationData, sleepData, activityData) {
   let userList = [];
@@ -153,27 +210,20 @@ function addHydrationInfo(id, hydrationInfo, dateString, userStorage, laterDateS
   // hydrationToday.insertAdjacentHTML('afterBegin', `<p>You drank</p><p><span class="number">${hydrationInfo.calculateDailyOunces(id, dateString)}</span></p><p>oz water today.</p>`);
   $('#hydrationToday').prepend(`<p>You drank</p><p><span class="number">${hydrationInfo.calculateDailyOunces(id, dateString)}</span></p><p>oz water today.</p>`)
   // hydrationAverage.insertAdjacentHTML('afterBegin', `<p>Your average water intake is</p><p><span class="number">${hydrationInfo.calculateAverageOunces(id)}</span></p> <p>oz per day.</p>`)
-  $('#hydrationAverage').prepend(`<p>Your average water intake is</p><p><span class="number">${hydrationInfo.calculateAverageOunces(id)}</span></p> <p>oz per day.</p>`)
+  $('#hydrationAverage').prepend(`<p>Your average water intake is</p><p><span class="number">${hydrationInfo.calculateAverageOunces(id).toFixed(1)}</span></p> <p>oz per day.</p>`)
   // hydrationThisWeek.insertAdjacentHTML('afterBegin', makeHydrationHTML(id, hydrationInfo, userStorage, hydrationInfo.calculateFirstWeekOunces(userStorage, id)));
-  $('#hydrationThisWeek').prepend(makeHydrationHTML(id, hydrationInfo, userStorage, hydrationInfo.calculateFirstWeekOunces(userStorage, id)))
+  // $('#hydrationThisWeek').prepend(makeHydrationHTML(id, hydrationInfo, userStorage, hydrationInfo.calculateFirstWeekOunces(userStorage, id)))
+  $('#hydrationEarlierWeek').prepend(`<canvas id="thisWeekHydrationChart" style="display: block;height: 206px; width: 251px;"></canvas>`);
   // hydrationEarlierWeek.insertAdjacentHTML('afterBegin', makeHydrationHTML(id, hydrationInfo, userStorage, hydrationInfo.calculateRandomWeekOunces(laterDateString, id, userStorage)));
-  $('#hydrationEarlierWeek').prepend(makeHydrationHTML(id, hydrationInfo, userStorage, hydrationInfo.calculateRandomWeekOunces(laterDateString, id, userStorage)))
+  // $('#hydrationEarlierWeek').prepend(makeHydrationHTML(id, hydrationInfo, userStorage, hydrationInfo.calculateRandomWeekOunces(laterDateString, id, userStorage)))
   // makeDataArray(hydrationInfo.calculateRandomWeekOunces(laterDateString, id, userStorage))
+
+  // $('#hydrationEarlierWeek').prepend(makeHydrationHTML(id, hydrationInfo, userStorage, hydrationInfo.calculateRandomWeekOunces(laterDateString, id, userStorage)))
+  $('#hydrationThisWeek').prepend(`<canvas id="earlyWeekHydrationChart" style="display: block;height: 206px;width: 251px;"></canvas>`);
+  makeChartData(hydrationInfo.calculateRandomWeekOunces(laterDateString, id, userStorage),"thisWeekHydrationChart", "OZs of Water");
+  makeChartData(hydrationInfo.calculateFirstWeekOunces(userStorage, id),"earlyWeekHydrationChart","OZs of Water");
 }
 
-// function makeDataArray(hydrationArry) {
-//   let hydrationDataForAWeek = hydrationArry;
-//   let ozAmounts = [];
-//   let daysOftheWeek = []
-//   hydrationDataForAWeek.forEach(day => {
-//     ozAmounts.push(day.split(":").pop())
-//   })
-//   hydrationDataForAWeek.forEach(day => {
-//     daysOftheWeek.push(day.split(":").shift())
-//   })
-//     console.log(daysOftheWeek)
-//     console.log(ozAmounts)
-// }
 
 
 function makeHydrationHTML(id, hydrationInfo, userStorage, method) {
@@ -188,9 +238,13 @@ function addSleepInfo(id, sleepInfo, dateString, userStorage, laterDateString) {
   // avUserSleepQuality.insertAdjacentHTML("afterBegin", `<p>The average user's sleep quality is</p> <p><span class="number">${Math.round(sleepInfo.calculateAllUserSleepQuality() *100)/100}</span></p><p>out of 5.</p>`);
   $('#avUserSleepQuality').prepend(`<p>The average user's sleep quality is</p> <p><span class="number">${Math.round(sleepInfo.calculateAllUserSleepQuality() *100)/100}</span></p><p>out of 5.</p>`)
   // sleepThisWeek.insertAdjacentHTML('afterBegin', makeSleepHTML(id, sleepInfo, userStorage, sleepInfo.calculateWeekSleep(dateString, id, userStorage)));
-  $('#sleepThisWeek').prepend(makeSleepHTML(id, sleepInfo, userStorage, sleepInfo.calculateWeekSleep(dateString, id, userStorage)))
+  // $('#sleepThisWeek').prepend(makeSleepHTML(id, sleepInfo, userStorage, sleepInfo.calculateWeekSleep(dateString, id, userStorage)))
+  $('#sleepThisWeek').prepend(`<canvas id="sleepThisWeekChart" style="display: block;height: 261px;width: 316px;"></canvas>`)
+  makeChartData(sleepInfo.calculateWeekSleep(dateString, id, userStorage),"sleepThisWeekChart", "Hours of Sleep");
   // sleepEarlierWeek.insertAdjacentHTML('afterBegin', makeSleepHTML(id, sleepInfo, userStorage, sleepInfo.calculateWeekSleep(laterDateString, id, userStorage)));
-  $('#sleepEarlierWeek').prepend(makeSleepHTML(id, sleepInfo, userStorage, sleepInfo.calculateWeekSleep(laterDateString, id, userStorage)))
+  // $('#sleepEarlierWeek').prepend(makeSleepHTML(id, sleepInfo, userStorage, sleepInfo.calculateWeekSleep(laterDateString, id, userStorage)))
+  $('#sleepEarlierWeek').prepend(`<canvas id="sleepEarlierWeekChart" style="display: block;height: 261px;width: 316px;"></canvas>`)
+  makeChartData(sleepInfo.calculateWeekSleep(laterDateString, id, userStorage),"sleepEarlierWeekChart", "Hours of Sleep");
 }
 
 function makeSleepHTML(id, sleepInfo, userStorage, method) {
@@ -215,13 +269,21 @@ function addActivityInfo(id, activityInfo, dateString, userStorage, laterDateStr
   // avgMinutesToday.insertAdjacentHTML("afterBegin", `<p>Active Minutes:</p><p>All Users</p><p><span class="number">${activityInfo.getAllUserAverageForDay(dateString, userStorage, 'minutesActive')}</span></p>`)
   $('#avgMinutesToday').prepend(`<p>Active Minutes:</p><p>All Users</p><p><span class="number">${activityInfo.getAllUserAverageForDay(dateString, userStorage, 'minutesActive')}</span></p>`)
   // userStepsThisWeek.insertAdjacentHTML("afterBegin", makeStepsHTML(id, activityInfo, userStorage, activityInfo.userDataForWeek(id, dateString, userStorage, "numSteps")));
-  $('#userStepsThisWeek').prepend(makeStepsHTML(id, activityInfo, userStorage, activityInfo.userDataForWeek(id, dateString, userStorage, "numSteps")))
+  // $('#userStepsThisWeek').prepend(makeStepsHTML(id, activityInfo, userStorage, activityInfo.userDataForWeek(id, dateString, userStorage, "numSteps")))
+  $('#userStepsThisWeek').prepend(`<canvas id="stepsThisWeekChart" style="display: block;height: 261px;width: 316px;"></canvas>`)
+  makeChartData(activityInfo.userDataForWeek(id, dateString, userStorage, "numSteps"),"stepsThisWeekChart", "Number of Steps");
   // userStairsThisWeek.insertAdjacentHTML("afterBegin", makeStairsHTML(id, activityInfo, userStorage, activityInfo.userDataForWeek(id, dateString, userStorage, "flightsOfStairs")));
-  $('#userStairsThisWeek').prepend(makeStairsHTML(id, activityInfo, userStorage, activityInfo.userDataForWeek(id, dateString, userStorage, "flightsOfStairs")))
+  // $('#userStairsThisWeek').prepend(makeStairsHTML(id, activityInfo, userStorage, activityInfo.userDataForWeek(id, dateString, userStorage, "flightsOfStairs")))
+  $('#userStairsThisWeek').prepend(`<canvas id="stairsThisWeekChart" style="display: block;height: 261px;width: 316px;"></canvas>`)
+  makeChartData(activityInfo.userDataForWeek(id, dateString, userStorage, "flightsOfStairs"), "stairsThisWeekChart", "Flights Of Stairs");
   // userMinutesThisWeek.insertAdjacentHTML("afterBegin", makeMinutesHTML(id, activityInfo, userStorage, activityInfo.userDataForWeek(id, dateString, userStorage, "minutesActive")));
-  $('#userMinutesThisWeek').prepend(makeMinutesHTML(id, activityInfo, userStorage, activityInfo.userDataForWeek(id, dateString, userStorage, "minutesActive")))
+  // $('#userMinutesThisWeek').prepend(makeMinutesHTML(id, activityInfo, userStorage, activityInfo.userDataForWeek(id, dateString, userStorage, "minutesActive")))
+  $('#userMinutesThisWeek').prepend(`<canvas id="minutesThisWeekChart" style="display: block;height: 261px;width: 316px;"></canvas>`)
+  makeChartData(activityInfo.userDataForWeek(id, dateString, userStorage, "minutesActive"), "minutesThisWeekChart", "Minutes of Activity");
   // bestUserSteps.insertAdjacentHTML("afterBegin", makeStepsHTML(user, activityInfo, userStorage, activityInfo.userDataForWeek(winnerId, dateString, userStorage, "numSteps")));
-  $('#bestUserSteps').prepend(makeStepsHTML(user, activityInfo, userStorage, activityInfo.userDataForWeek(winnerId, dateString, userStorage, "numSteps")))
+  // $('#bestUserSteps').prepend(makeStepsHTML(user, activityInfo, userStorage, activityInfo.userDataForWeek(winnerId, dateString, userStorage, "numSteps")))
+  $('#bestUserSteps').prepend(`<canvas id="bestUserStepsChart" style="display: block;height: 261px;width: 316px;"></canvas>`)
+  makeChartData(activityInfo.userDataForWeek(winnerId, dateString, userStorage, "numSteps"), "bestUserStepsChart", "Steps")
 }
 
 function makeStepsHTML(id, activityInfo, userStorage, method) {
@@ -289,12 +351,19 @@ const showHydrationForm = () => {
   $('.body-main-infoContainter').prepend(
     `<section class="pop-up-card">
     <form method="post">
+      <h3>Log your hydration</h3>
+      <div class="container">
       <label for="date">Date</label>
       <input id="date" type="date" name="date" value="${moment().format("YYYY-MM-DD")}"></input>
+      </div>
+      <div class="container">
       <label for="number-of-oz">Number of Oz</label>
       <input id="numOunces" type="number" name="number-of-ozs"></input>
+      </div>
+      <div class="container">
       <button class="hydration-submit-button" type="button" name="submit">Submit</button>
       <button class="back-button" type="button" name="button">Back</button>
+      </div>
     </form>
   </section>`)
   $('.main-column-hydration, .main-column-activity, .main-column-sleep').addClass('blur')
@@ -304,16 +373,27 @@ const showActivityForm = () => {
   $('.body-main-infoContainter').prepend(
     `<section class="pop-up-card">
     <form method="post">
+      <h3>Log your activity</h3>
+      <div class="container">
       <label for="date">Date</label>
       <input id="date" type="date" name="date" value="${moment().format("YYYY-MM-DD")}"></input>
+      </div>
+      <div class="container">
       <label for="step-count">Step Count</label>
       <input id="numSteps" type="number" name="step-count"></input>
+      </div>
+      <div class="container">
       <label for="minutes-active">Minutes Active</label>
       <input id="minutesActive" type="number" name="minutes-active"></input>
+      </div>
+      <div class="container">
       <label for="flights-of-stairs">Flights of Stairs</label>
       <input id="flightsOfStairs" type="number" name="flights-of-stairs"></input>
+      </div>
+      <div class="container">
       <button class="activity-submit-button" type="button" name="submit">Submit</button>
       <button class="back-button" type="button" name="button">Back</button>
+      </div>
     </form>
   </section>`)
   $('.main-column-hydration, .main-column-activity, .main-column-sleep').addClass('blur')
@@ -323,14 +403,23 @@ const showSleepForm = () => {
   $('.body-main-infoContainter').prepend(
     `<section class="pop-up-card">
     <form method="post">
+      <h3>Log your sleep</h3>
+      <div class="container">
       <label for="date">Date</label>
       <input id="date" type="date" name="date" value="${moment().format("YYYY-MM-DD")}"></input>
+      </div>
+      <div class="container">
       <label for="hours-slept">Hours Slept</label>
       <input id="hours-slept" type="number" name="hours-slept"></input>
+      </div>
+      <div class="container">
       <label for="sleep-quality">Sleep Quality</label>
       <input id="sleep-quality" type="number" name="sleep-quality"></input>
+      </div>
+      <div class="container">
       <button class="sleep-submit-button" type="button" name="submit">Submit</button>
       <button class="back-button" type="button" name="button">Back</button>
+      </div>
     </form>
   </section>`)
   $('.main-column-hydration, .main-column-activity, .main-column-sleep').addClass('blur')

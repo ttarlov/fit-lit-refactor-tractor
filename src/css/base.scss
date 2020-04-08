@@ -4,3 +4,29 @@ $primary-background: pink;
 body {
   background-color: $primary-background;
 }
+
+
+// variables defined it its own file
+
+// standardize margin and padding throughout 
+// standardize colors
+// rgba / hex for colors  - separate selector for opacity
+
+
+// nesting creates more priority than cascading 
+
+.card {
+  display: flex;
+  flex-direction: column;
+  .line-break {
+    color: $priority
+  }
+}
+
+.line-break {
+  color: $whatever !important;
+}
+
+// !important -- override any priority / nesting etc 
+// ^^ great for edge cases
+
