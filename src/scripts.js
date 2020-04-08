@@ -72,7 +72,7 @@ const fetchData = () => {
       let sleepData = finalValues[2];
       let activityData = finalValues[3];
       startApp(userData.userData, hydrationData.hydrationData, sleepData.sleepData, activityData.activityData);
-    }).catch(error => console.log(error.message))
+    })//.catch(error => console.log(error.message))
 
 }
 
@@ -146,7 +146,9 @@ function startApp(userData, hydrationData, sleepData, activityData) {
   userNowId = pickUser();
   let activityRepo = new Activity(activityData);
   let userNow = getUserById(userNowId, userRepo);
-  let today = makeToday(userRepo, userNowId, hydrationData);
+  // let today = makeToday(userRepo, userNowId, hydrationData);
+  let today = moment().format("YYYY-MM-DD").split('-').join('/');
+  console.log(today);
   let randomHistory = makeRandomDate(userRepo, userNowId, hydrationData);
   // historicalWeek.forEach(instance => instance.insertAdjacentHTML('afterBegin', `Week of ${randomHistory}`));
   $('.historicalWeek').prepend(`Week of ${randomHistory}`)
@@ -167,6 +169,7 @@ function makeUsers(userData, array) {
 }
 
 function pickUser() {
+  // return 20;
   return Math.floor(Math.random() * 50);
 }
 
@@ -203,7 +206,11 @@ function makeWinnerID(activityInfo, user, dateString, userStorage) {
 
 function makeToday(userStorage, id, dataSet) {
   var sortedArray = userStorage.makeSortedUserArray(id, dataSet);
+  // console.log(sortedArray[0].date);
+  // console.log(moment().format("YYYY-MM-DD").split('-').join('/'));
+  // console.log(sortedArray[0].date);
   return sortedArray[0].date;
+  // return moment().format("YYYY-MM-DD").split('-').join('/')
 }
 
 function makeRandomDate(userStorage, id, dataSet) {
