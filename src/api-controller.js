@@ -69,4 +69,4 @@ class ApiController {
 }
 
 
-module.exports = ApiController;
+export default ApiController;

@@ -11,6 +11,7 @@ import './images/The Rock.jpg';
 // import sleepData from './data/sleep';
 // import activityData from './data/activity';
 
+import Calculator from './calculator';
 import User from './User';
 import Activity from './Activity';
 import Hydration from './Hydration';
@@ -19,7 +20,8 @@ import UserRepo from './User-repo';
 import ApiController from './api-controller';
 
 let m = moment();
-// console.log(m);
+console.log(moment().format("YYYY-MM-DD").split('-').join('/'));
+console.log(moment().subtract(7, 'days').format("YYYY-MM-DD").split('-').join('/'));
 
 // var historicalWeek = document.querySelectorAll('.historicalWeek');
 // var sidebarName = document.getElementById('sidebarName');
@@ -71,11 +73,11 @@ const fetchData = () => {
       let sleepData = finalValues[2];
       let activityData = finalValues[3];
       startApp(userData.userData, hydrationData.hydrationData, sleepData.sleepData, activityData.activityData);
-    }).catch(error => console.log(error.message))
+    })//.catch(error => console.log(error.message))
 
 }
 
-const updateChart = (daysOftheWeek, data, chartId, chartLabel) => {
+const updateChart = (daysOftheWeek, data, chartId, chartLabel, units) => {
   var ctx = document.getElementById(`${chartId}`).getContext('2d');
   var myChart = new Chart(ctx, {
       type: 'bar',
@@ -108,7 +110,11 @@ const updateChart = (daysOftheWeek, data, chartId, chartLabel) => {
               yAxes: [{
                   ticks: {
                       beginAtZero: true
-                  }
+                  },
+                  scaleLabel: {
+                  display: true,
+                  labelString: units
+                }
               }]
           }
       }
@@ -116,7 +122,7 @@ const updateChart = (daysOftheWeek, data, chartId, chartLabel) => {
 }
 
 
-const makeChartData = (hydrationArry, chartId, chartLabel) => {
+const makeChartData = (hydrationArry, chartId, chartLabel, units) => {
   let hydrationDataForAWeek = hydrationArry;
   let data = [];
   let daysOftheWeek = []
@@ -126,7 +132,7 @@ const makeChartData = (hydrationArry, chartId, chartLabel) => {
   hydrationDataForAWeek.forEach(day => {
     daysOftheWeek.push(day.split(":").shift())
   })
-  updateChart(daysOftheWeek, data, chartId, chartLabel)
+  updateChart(daysOftheWeek, data, chartId, chartLabel, units)
 };
 
 
@@ -141,7 +147,9 @@ function startApp(userData, hydrationData, sleepData, activityData) {
   userNowId = pickUser();
   let activityRepo = new Activity(activityData);
   let userNow = getUserById(userNowId, userRepo);
-  let today = makeToday(userRepo, userNowId, hydrationData);
+  // let today = makeToday(userRepo, userNowId, hydrationData);
+  let today = moment().format("YYYY-MM-DD").split('-').join('/');
+  // console.log(today);
   let randomHistory = makeRandomDate(userRepo, userNowId, hydrationData);
   // historicalWeek.forEach(instance => instance.insertAdjacentHTML('afterBegin', `Week of ${randomHistory}`));
   $('.historicalWeek').prepend(`Week of ${randomHistory}`)
@@ -162,6 +170,7 @@ function makeUsers(userData, array) {
 }
 
 function pickUser() {
+  // return 1;
   return Math.floor(Math.random() * 50);
 }
 
@@ -198,7 +207,11 @@ function makeWinnerID(activityInfo, user, dateString, userStorage) {
 
 function makeToday(userStorage, id, dataSet) {
   var sortedArray = userStorage.makeSortedUserArray(id, dataSet);
+  // console.log(sortedArray[0].date);
+  // console.log(moment().format("YYYY-MM-DD").split('-').join('/'));
+  // console.log(sortedArray[0].date);
   return sortedArray[0].date;
+  // return moment().format("YYYY-MM-DD").split('-').join('/')
 }
 
 function makeRandomDate(userStorage, id, dataSet) {
@@ -209,17 +222,23 @@ function makeRandomDate(userStorage, id, dataSet) {
 
 function addHydrationInfo(id, hydrationInfo, dateString, userStorage, laterDateString) {
   // hydrationToday.insertAdjacentHTML('afterBegin', `<p>You drank</p><p><span class="number">${hydrationInfo.calculateDailyOunces(id, dateString)}</span></p><p>oz water today.</p>`);
-  $('#hydrationToday').prepend(`<p>You drank</p><p><span class="number">${hydrationInfo.calculateDailyOunces(id, dateString)}</span></p><p>oz water today.</p>`)
+  // $('#hydrationToday').prepend(`<p>You drank</p><p><span class="number">${hydrationInfo.calculateDailyOunces(id, dateString)}</span></p><p>oz water today.</p>`)
+  $('#hydrationToday').prepend(`<p>You drank</p><p><span class="number">${hydrationInfo.calculateDailyData("hydrationData", id, dateString, "numOunces")}</span></p><p>oz water today.</p>`);
   // hydrationAverage.insertAdjacentHTML('afterBegin', `<p>Your average water intake is</p><p><span class="number">${hydrationInfo.calculateAverageOunces(id)}</span></p> <p>oz per day.</p>`)
-  $('#hydrationAverage').prepend(`<p>Your average water intake is</p><p><span class="number">${hydrationInfo.calculateAverageOunces(id).toFixed(1)}</span></p> <p>oz per day.</p>`)
+  // $('#hydrationAverage').prepend(`<p>Your average water intake is</p><p><span class="number">${hydrationInfo.calculateAverageOunces(id).toFixed(1)}</span></p> <p>oz per day.</p>`)
+
+
+  $('#hydrationAverage').prepend(`<p>Your average water intake is</p><p><span class="number">${hydrationInfo.calculateAverageData("hydrationData", id, "numOunces").toFixed(1)}</span></p> <p>oz per day.</p>`)
+  // hydrationAverage.insertAdjacentHTML('afterBegin', `<p>Your average water intake is</p><p><span class="number">${hydrationInfo.calculateAverageData(hydrationData, id).toFixed(1)}</span></p> <p>oz per day.</p>`)
+
   // hydrationThisWeek.insertAdjacentHTML('afterBegin', makeHydrationHTML(id, hydrationInfo, userStorage, hydrationInfo.calculateFirstWeekOunces(userStorage, id)));
   // $('#hydrationThisWeek').prepend(makeHydrationHTML(id, hydrationInfo, userStorage, hydrationInfo.calculateFirstWeekOunces(userStorage, id)))
-  $('#hydrationEarlierWeek').prepend(`<canvas id="thisWeekHydrationChart" style="display: block;height: 206px; width: 251px;"></canvas>`);
+  $('#hydrationEarlierWeek').prepend(`<canvas id="randomWeekHydrationChart" style="display: block;height: 206px; width: 251px;"></canvas>`);
   // hydrationEarlierWeek.insertAdjacentHTML('afterBegin', makeHydrationHTML(id, hydrationInfo, userStorage, hydrationInfo.calculateRandomWeekOunces(laterDateString, id, userStorage)));
   // $('#hydrationEarlierWeek').prepend(makeHydrationHTML(id, hydrationInfo, userStorage, hydrationInfo.calculateRandomWeekOunces(laterDateString, id, userStorage)))
-  $('#hydrationThisWeek').prepend(`<canvas id="earlyWeekHydrationChart" style="display: block;height: 206px;width: 251px;"></canvas>`);
-  makeChartData(hydrationInfo.calculateRandomWeekOunces(laterDateString, id, userStorage),"thisWeekHydrationChart", "OZs of Water");
-  makeChartData(hydrationInfo.calculateFirstWeekOunces(userStorage, id),"earlyWeekHydrationChart","OZs of Water");
+  $('#hydrationThisWeek').prepend(`<canvas id="thisWeekHydrationChart" style="display: block;height: 206px;width: 251px;"></canvas>`);
+  makeChartData(hydrationInfo.calculateRandomWeekOunces(laterDateString, id, userStorage),"randomWeekHydrationChart", "OZs of Water", "Ounces");
+  makeChartData(hydrationInfo.calculateFirstWeekOunces(userStorage, id),"thisWeekHydrationChart","OZs of Water", "Ounces");
 }
 
 
@@ -230,7 +249,8 @@ function makeHydrationHTML(id, hydrationInfo, userStorage, method) {
 
 function addSleepInfo(id, sleepInfo, dateString, userStorage, laterDateString) {
   // sleepToday.insertAdjacentHTML("afterBegin", `<p>You slept</p> <p><span class="number">${sleepInfo.calculateDailySleep(id, dateString)}</span></p> <p>hours today.</p>`);
-  $('#sleepToday').prepend(`<p>You slept</p> <p><span class="number">${sleepInfo.calculateDailySleep(id, dateString)}</span></p> <p>hours today.</p>`)
+  // $('#sleepToday').prepend(`<p>You slept</p> <p><span class="number">${sleepInfo.calculateDailySleep(id, dateString)}</span></p> <p>hours today.</p>`)
+  $('#sleepToday').prepend(`<p>You slept</p> <p><span class="number">${sleepInfo.calculateDailyData("sleepData", id, dateString, "hoursSlept")}</span></p> <p>hours today.</p>`)
   // sleepQualityToday.insertAdjacentHTML("afterBegin", `<p>Your sleep quality was</p> <p><span class="number">${sleepInfo.calculateDailySleepQuality(id, dateString)}</span></p><p>out of 5.</p>`);
   $('#sleepQualityToday').prepend(`<p>Your sleep quality was</p> <p><span class="number">${sleepInfo.calculateDailySleepQuality(id, dateString)}</span></p><p>out of 5.</p>`)
   // avUserSleepQuality.insertAdjacentHTML("afterBegin", `<p>The average user's sleep quality is</p> <p><span class="number">${Math.round(sleepInfo.calculateAllUserSleepQuality() *100)/100}</span></p><p>out of 5.</p>`);
@@ -238,11 +258,11 @@ function addSleepInfo(id, sleepInfo, dateString, userStorage, laterDateString) {
   // sleepThisWeek.insertAdjacentHTML('afterBegin', makeSleepHTML(id, sleepInfo, userStorage, sleepInfo.calculateWeekSleep(dateString, id, userStorage)));
   // $('#sleepThisWeek').prepend(makeSleepHTML(id, sleepInfo, userStorage, sleepInfo.calculateWeekSleep(dateString, id, userStorage)))
   $('#sleepThisWeek').prepend(`<canvas id="sleepThisWeekChart" style="display: block;height: 261px;width: 316px;"></canvas>`)
-  makeChartData(sleepInfo.calculateWeekSleep(dateString, id, userStorage),"sleepThisWeekChart", "Hours of Sleep");
+  makeChartData(sleepInfo.calculateWeekSleep(dateString, id, userStorage),"sleepThisWeekChart", "Hours of Sleep", "hours");
   // sleepEarlierWeek.insertAdjacentHTML('afterBegin', makeSleepHTML(id, sleepInfo, userStorage, sleepInfo.calculateWeekSleep(laterDateString, id, userStorage)));
   // $('#sleepEarlierWeek').prepend(makeSleepHTML(id, sleepInfo, userStorage, sleepInfo.calculateWeekSleep(laterDateString, id, userStorage)))
   $('#sleepEarlierWeek').prepend(`<canvas id="sleepEarlierWeekChart" style="display: block;height: 261px;width: 316px;"></canvas>`)
-  makeChartData(sleepInfo.calculateWeekSleep(laterDateString, id, userStorage),"sleepEarlierWeekChart", "Hours of Sleep");
+  makeChartData(sleepInfo.calculateRandomWeekSleep(laterDateString, id, userStorage),"sleepEarlierWeekChart", "Hours of Sleep", "hours");
 }
 
 function makeSleepHTML(id, sleepInfo, userStorage, method) {
@@ -269,19 +289,19 @@ function addActivityInfo(id, activityInfo, dateString, userStorage, laterDateStr
   // userStepsThisWeek.insertAdjacentHTML("afterBegin", makeStepsHTML(id, activityInfo, userStorage, activityInfo.userDataForWeek(id, dateString, userStorage, "numSteps")));
   // $('#userStepsThisWeek').prepend(makeStepsHTML(id, activityInfo, userStorage, activityInfo.userDataForWeek(id, dateString, userStorage, "numSteps")))
   $('#userStepsThisWeek').prepend(`<canvas id="stepsThisWeekChart" style="display: block;height: 261px;width: 316px;"></canvas>`)
-  makeChartData(activityInfo.userDataForWeek(id, dateString, userStorage, "numSteps"),"stepsThisWeekChart", "Number of Steps");
+  makeChartData(activityInfo.userDataForWeek(id, dateString, userStorage, "numSteps"),"stepsThisWeekChart", "Number of Steps", "Steps");
   // userStairsThisWeek.insertAdjacentHTML("afterBegin", makeStairsHTML(id, activityInfo, userStorage, activityInfo.userDataForWeek(id, dateString, userStorage, "flightsOfStairs")));
   // $('#userStairsThisWeek').prepend(makeStairsHTML(id, activityInfo, userStorage, activityInfo.userDataForWeek(id, dateString, userStorage, "flightsOfStairs")))
   $('#userStairsThisWeek').prepend(`<canvas id="stairsThisWeekChart" style="display: block;height: 261px;width: 316px;"></canvas>`)
-  makeChartData(activityInfo.userDataForWeek(id, dateString, userStorage, "flightsOfStairs"), "stairsThisWeekChart", "Flights Of Stairs");
+  makeChartData(activityInfo.userDataForWeek(id, dateString, userStorage, "flightsOfStairs"), "stairsThisWeekChart", "Flights Of Stairs", "Number of Stairs");
   // userMinutesThisWeek.insertAdjacentHTML("afterBegin", makeMinutesHTML(id, activityInfo, userStorage, activityInfo.userDataForWeek(id, dateString, userStorage, "minutesActive")));
   // $('#userMinutesThisWeek').prepend(makeMinutesHTML(id, activityInfo, userStorage, activityInfo.userDataForWeek(id, dateString, userStorage, "minutesActive")))
   $('#userMinutesThisWeek').prepend(`<canvas id="minutesThisWeekChart" style="display: block;height: 261px;width: 316px;"></canvas>`)
-  makeChartData(activityInfo.userDataForWeek(id, dateString, userStorage, "minutesActive"), "minutesThisWeekChart", "Minutes of Activity");
+  makeChartData(activityInfo.userDataForWeek(id, dateString, userStorage, "minutesActive"), "minutesThisWeekChart", "Minutes of Activity", "Minutes");
   // bestUserSteps.insertAdjacentHTML("afterBegin", makeStepsHTML(user, activityInfo, userStorage, activityInfo.userDataForWeek(winnerId, dateString, userStorage, "numSteps")));
   // $('#bestUserSteps').prepend(makeStepsHTML(user, activityInfo, userStorage, activityInfo.userDataForWeek(winnerId, dateString, userStorage, "numSteps")))
   $('#bestUserSteps').prepend(`<canvas id="bestUserStepsChart" style="display: block;height: 261px;width: 316px;"></canvas>`)
-  makeChartData(activityInfo.userDataForWeek(winnerId, dateString, userStorage, "numSteps"), "bestUserStepsChart", "Steps")
+  makeChartData(activityInfo.userDataForWeek(winnerId, dateString, userStorage, "numSteps"), "bestUserStepsChart", "Steps", "Steps")
 }
 
 function makeStepsHTML(id, activityInfo, userStorage, method) {
