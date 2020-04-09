@@ -29,15 +29,23 @@ class Activity {
     return this.activityData.filter(data => id === data.userID).reduce((acc, elem) => (elem.flightsOfStairs > acc) ? elem.flightsOfStairs : acc, 0);
   }
   getAllUserAverageForDay(date, userRepo, relevantData) {
+    console.log(date);
     let selectedDayData = userRepo.chooseDayDataForAllUsers(this.activityData, date);
+    console.log(selectedDayData);
     return parseFloat((selectedDayData.reduce((acc, elem) => acc += elem[relevantData], 0) / selectedDayData.length).toFixed(1));
   }
   userDataForToday(id, date, userRepo, relevantData) {
     let userData = userRepo.getDataFromUserID(id, this.activityData);
-    return userData.find(data => data.date === date)[relevantData];
+    let userDataByData =  userData.find(data => data.date === date);
+    if(userDataByData === undefined) {
+      return "0"
+    } else {
+      return userDataByData[relevantData];
+    }
   }
   userDataForWeek(id, date, userRepo, releventData) {
-    return userRepo.getWeekFromDate(date, id, this.activityData).map((data) => `${data.date}: ${data[releventData]}`);
+    // return userRepo.getWeekFromDate(date, id, this.activityData).map((data) => `${data.date}: ${data[releventData]}`);
+    return userRepo.getFirstWeek(id, this.activityData).map((data) => `${data.date}: ${data[releventData]}`);
   }
 
   // Friends
@@ -84,6 +92,9 @@ class Activity {
   }
   getWinnerId(user, date, userRepo) {
     let rankedList = this.getFriendsAverageStepsForWeek(user, date, userRepo);
+    if(rankedList.length === 0) {
+      return "0"
+    }
     let keysList = rankedList.map(listItem => Object.keys(listItem));
     return parseInt(keysList[0].join(''))
   }

@@ -27,11 +27,22 @@ class Sleep extends Calculator {
 
   calculateDailySleepQuality(id, date) {
     let findSleepQualityByDate = this.sleepData.find((data) => id === data.userID && date === data.date);
-    return findSleepQualityByDate.sleepQuality;
+    if(findSleepQualityByDate === undefined) {
+      return "0"
+    } else {
+      return findSleepQualityByDate.sleepQuality;
+    }
   }
+
   calculateWeekSleep(date, id, userRepo) {
+    // return userRepo.getWeekFromDate(date, id, this.sleepData).map((data) => `${data.date}: ${data.hoursSlept}`);
+    return userRepo.getFirstWeek(id, this.sleepData).map((data) => `${data.date}: ${data.hoursSlept}`);
+  }
+
+  calculateRandomWeekSleep(date, id, userRepo) {
     return userRepo.getWeekFromDate(date, id, this.sleepData).map((data) => `${data.date}: ${data.hoursSlept}`);
   }
+
   calculateWeekSleepQuality(date, id, userRepo) {
     return userRepo.getWeekFromDate(date, id, this.sleepData).map((data) => `${data.date}: ${data.sleepQuality}`);
   }

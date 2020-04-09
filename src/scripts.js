@@ -20,7 +20,8 @@ import UserRepo from './User-repo';
 import ApiController from './api-controller';
 
 let m = moment();
-// console.log(m);
+console.log(moment().format("YYYY-MM-DD").split('-').join('/'));
+console.log(moment().subtract(7, 'days').format("YYYY-MM-DD").split('-').join('/'));
 
 // var historicalWeek = document.querySelectorAll('.historicalWeek');
 // var sidebarName = document.getElementById('sidebarName');
@@ -149,7 +150,7 @@ function startApp(userData, hydrationData, sleepData, activityData) {
   let userNow = getUserById(userNowId, userRepo);
   // let today = makeToday(userRepo, userNowId, hydrationData);
   let today = moment().format("YYYY-MM-DD").split('-').join('/');
-  console.log(today);
+  // console.log(today);
   let randomHistory = makeRandomDate(userRepo, userNowId, hydrationData);
   // historicalWeek.forEach(instance => instance.insertAdjacentHTML('afterBegin', `Week of ${randomHistory}`));
   $('.historicalWeek').prepend(`Week of ${randomHistory}`)
@@ -170,7 +171,7 @@ function makeUsers(userData, array) {
 }
 
 function pickUser() {
-  // return 20;
+  // return 1;
   return Math.floor(Math.random() * 50);
 }
 
@@ -233,15 +234,21 @@ function addHydrationInfo(id, hydrationInfo, dateString, userStorage, laterDateS
 
   // hydrationThisWeek.insertAdjacentHTML('afterBegin', makeHydrationHTML(id, hydrationInfo, userStorage, hydrationInfo.calculateFirstWeekOunces(userStorage, id)));
   // $('#hydrationThisWeek').prepend(makeHydrationHTML(id, hydrationInfo, userStorage, hydrationInfo.calculateFirstWeekOunces(userStorage, id)))
-  $('#hydrationEarlierWeek').prepend(`<canvas id="thisWeekHydrationChart" style="display: block;height: 206px; width: 251px;"></canvas>`);
+  $('#hydrationEarlierWeek').prepend(`<canvas id="randomWeekHydrationChart" style="display: block;height: 206px; width: 251px;"></canvas>`);
   // hydrationEarlierWeek.insertAdjacentHTML('afterBegin', makeHydrationHTML(id, hydrationInfo, userStorage, hydrationInfo.calculateRandomWeekOunces(laterDateString, id, userStorage)));
   // $('#hydrationEarlierWeek').prepend(makeHydrationHTML(id, hydrationInfo, userStorage, hydrationInfo.calculateRandomWeekOunces(laterDateString, id, userStorage)))
+<<<<<<< HEAD
   // makeDataArray(hydrationInfo.calculateRandomWeekOunces(laterDateString, id, userStorage))
 
   // $('#hydrationEarlierWeek').prepend(makeHydrationHTML(id, hydrationInfo, userStorage, hydrationInfo.calculateRandomWeekOunces(laterDateString, id, userStorage)))
   $('#hydrationThisWeek').prepend(`<canvas id="earlyWeekHydrationChart" style="display: block;height: 206px;width: 251px;"></canvas>`);
   makeChartData(hydrationInfo.calculateRandomWeekOunces(laterDateString, id, userStorage),"thisWeekHydrationChart", "OZs of Water", "Ounces");
   makeChartData(hydrationInfo.calculateFirstWeekOunces(userStorage, id),"earlyWeekHydrationChart","OZs of Water", "Ounces");
+=======
+  $('#hydrationThisWeek').prepend(`<canvas id="thisWeekHydrationChart" style="display: block;height: 206px;width: 251px;"></canvas>`);
+  makeChartData(hydrationInfo.calculateRandomWeekOunces(laterDateString, id, userStorage),"randomWeekHydrationChart", "OZs of Water", "Ounces");
+  makeChartData(hydrationInfo.calculateFirstWeekOunces(userStorage, id),"thisWeekHydrationChart","OZs of Water", "Ounces");
+>>>>>>> e67f356e41fabf4a409fb380b212c5191688b0d9
 }
 
 
@@ -265,7 +272,7 @@ function addSleepInfo(id, sleepInfo, dateString, userStorage, laterDateString) {
   // sleepEarlierWeek.insertAdjacentHTML('afterBegin', makeSleepHTML(id, sleepInfo, userStorage, sleepInfo.calculateWeekSleep(laterDateString, id, userStorage)));
   // $('#sleepEarlierWeek').prepend(makeSleepHTML(id, sleepInfo, userStorage, sleepInfo.calculateWeekSleep(laterDateString, id, userStorage)))
   $('#sleepEarlierWeek').prepend(`<canvas id="sleepEarlierWeekChart" style="display: block;height: 261px;width: 316px;"></canvas>`)
-  makeChartData(sleepInfo.calculateWeekSleep(laterDateString, id, userStorage),"sleepEarlierWeekChart", "Hours of Sleep", "hours");
+  makeChartData(sleepInfo.calculateRandomWeekSleep(laterDateString, id, userStorage),"sleepEarlierWeekChart", "Hours of Sleep", "hours");
 }
 
 function makeSleepHTML(id, sleepInfo, userStorage, method) {
