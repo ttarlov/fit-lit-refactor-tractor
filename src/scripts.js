@@ -5,7 +5,7 @@ import $ from 'jquery'
 import Chart from 'chart.js';
 import './images/person walking on path.jpg';
 import './images/The Rock.jpg';
-
+import domUpdates from './dom-updates.js'
 // import userData from './data/users';
 // import hydrationData from './data/hydration';
 // import sleepData from './data/sleep';
@@ -152,14 +152,14 @@ function startApp(userData, hydrationData, sleepData, activityData) {
   // console.log(today);
   let randomHistory = makeRandomDate(userRepo, userNowId, hydrationData);
   // historicalWeek.forEach(instance => instance.insertAdjacentHTML('afterBegin', `Week of ${randomHistory}`));
-  $('.historicalWeek').prepend(`Week of ${randomHistory}`)
-  addInfoToSidebar(userNow, userRepo);
+  // $('.historicalWeek').prepend(`Week of ${randomHistory}`)
+  // addInfoToSidebar(userNow, userRepo);
+  domUpdates.addInfoToSidebar(userNow, userRepo, randomHistory)
   addHydrationInfo(userNowId, hydrationRepo, today, userRepo, randomHistory);
   addSleepInfo(userNowId, sleepRepo, today, userRepo, randomHistory);
   let winnerNow = makeWinnerID(activityRepo, userNow, today, userRepo);
   addActivityInfo(userNowId, activityRepo, today, userRepo, randomHistory, userNow, winnerNow);
   addFriendGameInfo(userNowId, activityRepo, userRepo, today, randomHistory, userNow);
-
 }
 
 function makeUsers(userData, array) {
@@ -179,27 +179,27 @@ function getUserById(id, listRepo) {
 };
 
 
-function addInfoToSidebar(user, userStorage) {
-  // sidebarName.innerText = user.name;
-  $('#sidebarName').text(user.name)
-  // headerText.innerText = `${user.getFirstName()}'s Activity Tracker`;
-  $('#headerText').text(`${user.getFirstName()}'s Activity Tracker`)
-  // stepGoalCard.innerText = `Your daily step goal is ${user.dailyStepGoal}.`
-  $('#stepGoalCard').text(`Your daily step goal is ${user.dailyStepGoal}.`)
-  avStepGoalCard.innerText = `The average daily step goal is ${userStorage.calculateAverageStepGoal()}`;
-  // userAddress.innerText = user.address;
-  $('#userAddress').text(user.address)
-  // userEmail.innerText = user.email;
-  $('#userEmail').text(user.email)
-  // userStridelength.innerText = `Your stridelength is ${user.strideLength} meters.`;
-  $('#userStridelength').text(`Your stridelength is ${user.strideLength} meters.`)
-  // friendList.insertAdjacentHTML('afterBegin', makeFriendHTML(user, userStorage))
-  $('#friendList').prepend(makeFriendHTML(user, userStorage))
-};
+// function addInfoToSidebar(user, userStorage) {
+//   // sidebarName.innerText = user.name;
+//   $('#sidebarName').text(user.name)
+//   // headerText.innerText = `${user.getFirstName()}'s Activity Tracker`;
+//   $('#headerText').text(`${user.getFirstName()}'s Activity Tracker`)
+//   // stepGoalCard.innerText = `Your daily step goal is ${user.dailyStepGoal}.`
+//   $('#stepGoalCard').text(`Your daily step goal is ${user.dailyStepGoal}.`)
+//   avStepGoalCard.innerText = `The average daily step goal is ${userStorage.calculateAverageStepGoal()}`;
+//   // userAddress.innerText = user.address;
+//   $('#userAddress').text(user.address)
+//   // userEmail.innerText = user.email;
+//   $('#userEmail').text(user.email)
+//   // userStridelength.innerText = `Your stridelength is ${user.strideLength} meters.`;
+//   $('#userStridelength').text(`Your stridelength is ${user.strideLength} meters.`)
+//   // friendList.insertAdjacentHTML('afterBegin', makeFriendHTML(user, userStorage))
+//   $('#friendList').prepend(makeFriendHTML(user, userStorage))
+// };
 
-function makeFriendHTML(user, userStorage) {
-  return user.getFriendsNames(userStorage).map(friendName => `<li class='historical-list-listItem'>${friendName}</li>`).join('');
-}
+// function makeFriendHTML(user, userStorage) {
+//   return user.getFriendsNames(userStorage).map(friendName => `<li class='historical-list-listItem'>${friendName}</li>`).join('');
+// }
 
 function makeWinnerID(activityInfo, user, dateString, userStorage) {
   return activityInfo.getWinnerId(user, dateString, userStorage)
