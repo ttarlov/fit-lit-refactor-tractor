@@ -1,32 +1,66 @@
-/* This is an example of using Sass, otherwise plain CSS works too*/
-$primary-background: pink;
+@import 'variables';
+@import 'nav';
+@import 'main';
+@import 'sidebar'; 
+
+* {
+  margin: 0;
+  z-index: 0;
+  box-sizing: border-box;
+}
 
 body {
-  background-color: $primary-background;
+  background-color: #4d4e4f;
+  font-family: 'Open Sans';
+  height: auto;
+  margin: 0;
+
+  // added the ones below
+  width: 100vw;
+  height: 100vh;
 }
 
+.main {
+  display: flex;
+  flex-direction: row;
+  // height: 1500px;
+}
 
-// variables defined it its own file
+// .hidden {
+//   visibility: none;
+// }
 
-// standardize margin and padding throughout 
-// standardize colors
-// rgba / hex for colors  - separate selector for opacity
+.blur {
+  filter: blur(5px);
+}
 
+//form and pop-up-card
+.pop-up-card {
+  background-color: #9a9dab;
+  border: 2px solid black;
+  height: 20em;
+  margin-left: 3em;
+  position: absolute;
+  right: 470px;
+  top: 145px;
+  width: 30em;
+  z-index: 1;
+}
 
-// nesting creates more priority than cascading 
-
-.card {
+form {
+  align-items: center;
   display: flex;
   flex-direction: column;
-  .line-break {
-    color: $priority
-  }
+  height: 20em;
+  justify-content: space-evenly;
 }
 
-.line-break {
-  color: $whatever !important;
+.container {
+  align-items: space-evenly;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 20em;
 }
 
-// !important -- override any priority / nesting etc 
-// ^^ great for edge cases
 
