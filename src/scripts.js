@@ -74,8 +74,6 @@ const fetchData = () => {
       let activityData = finalValues[3];
       startApp(userData.userData, hydrationData.hydrationData, sleepData.sleepData, activityData.activityData);
     }).catch(error => console.log(error.message))
-    }).catch(error => console.log(error.message))
-
 }
 
 const updateChart = (daysOftheWeek, data, chartId, chartLabel, units) => {
@@ -237,18 +235,9 @@ function addHydrationInfo(id, hydrationInfo, dateString, userStorage, laterDateS
   $('#hydrationEarlierWeek').prepend(`<canvas id="randomWeekHydrationChart" style="display: block;height: 206px; width: 251px;"></canvas>`);
   // hydrationEarlierWeek.insertAdjacentHTML('afterBegin', makeHydrationHTML(id, hydrationInfo, userStorage, hydrationInfo.calculateRandomWeekOunces(laterDateString, id, userStorage)));
   // $('#hydrationEarlierWeek').prepend(makeHydrationHTML(id, hydrationInfo, userStorage, hydrationInfo.calculateRandomWeekOunces(laterDateString, id, userStorage)))
-<<<<<<< HEAD
-  // makeDataArray(hydrationInfo.calculateRandomWeekOunces(laterDateString, id, userStorage))
-
-  // $('#hydrationEarlierWeek').prepend(makeHydrationHTML(id, hydrationInfo, userStorage, hydrationInfo.calculateRandomWeekOunces(laterDateString, id, userStorage)))
-  $('#hydrationThisWeek').prepend(`<canvas id="earlyWeekHydrationChart" style="display: block;height: 206px;width: 251px;"></canvas>`);
-  makeChartData(hydrationInfo.calculateRandomWeekOunces(laterDateString, id, userStorage),"thisWeekHydrationChart", "OZs of Water", "Ounces");
-  makeChartData(hydrationInfo.calculateFirstWeekOunces(userStorage, id),"earlyWeekHydrationChart","OZs of Water", "Ounces");
-=======
   $('#hydrationThisWeek').prepend(`<canvas id="thisWeekHydrationChart" style="display: block;height: 206px;width: 251px;"></canvas>`);
   makeChartData(hydrationInfo.calculateRandomWeekOunces(laterDateString, id, userStorage),"randomWeekHydrationChart", "OZs of Water", "Ounces");
   makeChartData(hydrationInfo.calculateFirstWeekOunces(userStorage, id),"thisWeekHydrationChart","OZs of Water", "Ounces");
->>>>>>> e67f356e41fabf4a409fb380b212c5191688b0d9
 }
 
 
