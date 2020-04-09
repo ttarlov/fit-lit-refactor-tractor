@@ -13,8 +13,11 @@ class Calculator {
 
   calculateDailyData(fullData, id, date, property) {
     let findDataByDate = this[fullData].find((data) => id === data.userID && date === data.date);
-    console.log(findDataByDate);
-    return findDataByDate[property];
+    if(findDataByDate === undefined) {
+      return "0"
+    } else {
+      return findDataByDate[property];
+    }
   }
 
 
