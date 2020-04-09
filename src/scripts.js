@@ -326,7 +326,7 @@ function addFriendGameInfo(id, activityInfo, userStorage, dateString, laterDateS
   // friendChallengeListHistory.insertAdjacentHTML("afterBegin", makeFriendChallengeHTML(id, activityInfo, userStorage, activityInfo.showChallengeListAndWinner(user, dateString, userStorage)));
   $('#friendChallengeListHistory').prepend(makeFriendChallengeHTML(id, activityInfo, userStorage, activityInfo.showChallengeListAndWinner(user, dateString, userStorage)))
   // bigWinner.insertAdjacentHTML('afterBegin', `THIS WEEK'S WINNER! ${activityInfo.showcaseWinner(user, dateString, userStorage)} steps`)
-  $('#bigWinner').prepend(`THIS WEEK'S WINNER! ${activityInfo.showcaseWinner(user, dateString, userStorage)} steps`)
+  $('#bigWinner').prepend(`THIS WEEK'S WINNER! <p>${activityInfo.showcaseWinner(user, dateString, userStorage)}</p>`)
 }
 
 function makeFriendChallengeHTML(id, activityInfo, userStorage, method) {
