@@ -73,8 +73,7 @@ const fetchData = () => {
       let sleepData = finalValues[2];
       let activityData = finalValues[3];
       startApp(userData.userData, hydrationData.hydrationData, sleepData.sleepData, activityData.activityData);
-    })//.catch(error => console.log(error.message))
-
+    }).catch(error => console.log(error.message))
 }
 
 const updateChart = (daysOftheWeek, data, chartId, chartLabel, units) => {
@@ -363,7 +362,6 @@ const eventHandler = (event) => {
     $('.pop-up-card').hide();
     $('.main-column-hydration, .main-column-activity, .main-column-sleep').removeClass('blur');
   }
-
 }
 
 const showHydrationForm = () => {
@@ -387,8 +385,6 @@ const showHydrationForm = () => {
   </section>`)
   $('.main-column-hydration, .main-column-activity, .main-column-sleep').addClass('blur')
 }
-
-
 
 const showActivityForm = () => {
   $('.body-main-infoContainter').prepend(
@@ -473,7 +469,6 @@ const buildSleepPostObject = () => {
     "hoursSlept": Number(`${$('#hours-slept').val()}`),
     "sleepQuality": Number(`${$('#sleep-quality').val()}`),
   }
-  console.log(sleepObj)
   api.postSleepData(sleepObj);
 }
 

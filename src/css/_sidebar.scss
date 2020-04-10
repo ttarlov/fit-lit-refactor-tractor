@@ -1,0 +1,85 @@
+.main-sidebar-body {
+  width: 25%;
+}
+
+.body-sidebar-sidebarContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: $general-color;
+  border: 1px solid $primary-text-color;
+  text-align: center;
+  width: 100%;
+  h2 {
+    font-size: 1.5vw;
+  }
+}
+
+.sidebar-header-userInfo {
+  font-family: sans-serif;
+  font-size: 1.2vw;
+  font-weight: bold;
+  margin: 0.5em;
+  width: inherit;
+}
+
+.sidebar-header-line {
+  border: 1px solid complement($primary-text-color);
+  color: $white;
+  height: 0;
+  margin: 1em 1em 0;
+  width: 80%;
+}
+
+.sidebar-header-userImage {
+  border: 1px solid $primary-text-color;
+  border-radius: 50%;
+  justify-content: center;
+  margin: 4px 2px 2px;
+  width: 86%;
+  height: 86%;
+}
+
+.sidebar-friendContainer-listItems {
+  text-align: center;
+}
+
+.sidebar-body-friendContainer {
+  max-height: 831px;
+  overflow: scroll;
+}
+
+.right {
+  max-height: 940px;
+}
+
+.number {
+  color: $main-background;
+  font-kerning: normal;
+  font-size: 2.5vw;
+  font-weight: bolder;
+}
+
+.historicalWeek {
+  color: $primary-text-color;
+  font-size: 1vw;
+  font-weight: bolder;
+  margin: 0.5em;
+  text-align: center;
+}
+
+.thisWeek {
+  @extend .historicalWeek;
+}
+
+.card-vertical-list {
+  font-weight: lighter;
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.historical-list-listItem {
+  font-family: sans-serif;
+  font-weight: bold;
+  padding: 0.3em;
+}
