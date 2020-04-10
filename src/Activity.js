@@ -29,9 +29,11 @@ class Activity {
     return this.activityData.filter(data => id === data.userID).reduce((acc, elem) => (elem.flightsOfStairs > acc) ? elem.flightsOfStairs : acc, 0);
   }
   getAllUserAverageForDay(date, userRepo, relevantData) {
-    // console.log(date);
+    console.log(date);
     let selectedDayData = userRepo.chooseDayDataForAllUsers(this.activityData, date);
-    // console.log(selectedDayData);
+        if(selectedDayData.length === 0) {
+          return "0"
+        }
     return parseFloat((selectedDayData.reduce((acc, elem) => acc += elem[relevantData], 0) / selectedDayData.length).toFixed(1));
   }
   userDataForToday(id, date, userRepo, relevantData) {
