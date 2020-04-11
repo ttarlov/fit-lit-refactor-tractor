@@ -6,9 +6,6 @@ import Chart from 'chart.js';
 let domUpdates = {
 
 
-  // displayFirstName(firstName) {
-  //   $('#headerText').text(`${firstName}'s Activity Tracker`)
-  // },
 
   displayAverageStepGoal(averageStepGoal) {
     $('#avStepGoalCard').text(`The average daily step goal is ${averageStepGoal}`);
@@ -21,7 +18,7 @@ let domUpdates = {
     $('#sidebarName').text(user.name);
     $('#headerText').text(`${user.getFirstName()}'s Activity Tracker`);
     $('#stepGoalCard').text(`Your daily step goal is ${user.dailyStepGoal}.`);
-    // $('#avStepGoalCard').text(`The average daily step goal is ${userStorage.calculateAverageStepGoal()}`);
+    $('#avStepGoalCard').text(`The average daily step goal is ${userStorage.calculateAverageStepGoal()}`);
     $('#userAddress').text(user.address);
     $('#userEmail').text(user.email);
     $('#userStridelength').text(`Your stridelength is ${user.strideLength} meters.`);
