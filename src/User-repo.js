@@ -1,4 +1,5 @@
 import moment from "moment";
+import domUpdates from './dom-updates.js'
 
 class UserRepo {
   constructor(users) {
@@ -17,7 +18,9 @@ class UserRepo {
     var totalStepGoal = this.users.reduce((sumSoFar, data) => {
       return sumSoFar = sumSoFar + data.dailyStepGoal;
     }, 0);
-    return totalStepGoal / this.users.length;
+    let averageStepGoal = totalStepGoal / this.users.length
+    domUpdates.displayAverageStepGoal(averageStepGoal)
+    return averageStepGoal
   };
 
   makeSortedUserArray(id, dataSet) {
@@ -42,9 +45,9 @@ class UserRepo {
             matchedDays.push(dailyLog)
           }
     })
+
     return matchedDays;
 
-    // return this.makeSortedUserArray(id, dataSet).slice(0, 7);
   };
 
   getWeekFromDate(date, id, dataSet) {
