@@ -26,7 +26,15 @@ class ApiController {
     return fetch(url).then(response => response.json());
   }
 
-  postActivityData(activityObject) {
+  postActivityData(id, date, numSteps, minutesActive, flightsOfStairs) {
+    let activityObject = {
+      "userID": Number(id),
+      "date": date,
+      "numSteps": Number(numSteps),
+      "minutesActive": Number(minutesActive),
+      "flightsOfStairs": Number(flightsOfStairs)
+    }
+    console.log(activityObject);
     let url = `${this.rootUrl}/activity/activityData`;
     return fetch(url, {
       method: 'POST',
@@ -39,31 +47,45 @@ class ApiController {
       .catch(err => console.log(err.message));
   }
 
-  postSleepData(sleepObject) {
+
+  postSleepData(id, date, hoursSlept, sleepQuality) {
+    let sleepObj = {
+      "userID": Number(id),
+      "date": date,
+      "hoursSlept": Number(hoursSlept),
+      "sleepQuality": Number(sleepQuality),
+    }
+
     let url = `${this.rootUrl}/sleep/sleepData`;
     return fetch(url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(sleepObject),
+      body: JSON.stringify(sleepObj),
     })
       .then(response => console.log(response.json()))
       .catch(err => console.log(err.message));
   }
 
 
-  postHydrationData(hydrationObj) {
+  postHydrationData(id, date, numOunces) {
+    let hydrationObj = {
+      "userID": Number(id),
+      "date": date,
+      "numOunces": Number(numOunces)
+    }
+
     let url = `${this.rootUrl}/hydration/hydrationData`;
-    return fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(hydrationObj),
-    })
-      .then(response => console.log(response.json()))
-      .catch(err => console.log(err.message));
+      return fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(hydrationObj),
+      })
+        .then(response => console.log(response.json()))
+        .catch(err => console.log(err.message));
   }
 
 }
