@@ -78,7 +78,10 @@ class Activity {
   showcaseWinner(user, date, userRepo) {
     let namedList = this.showChallengeListAndWinner(user, date, userRepo);
     let winner = this.showChallengeListAndWinner(user, date, userRepo).shift();
-    return winner;
+    if(winner == undefined) {
+      return "No Winner This Week"
+    }
+    return `${winner} steps`;
   }
   getStreak(userRepo, id, relevantData) {
     let data = this.activityData;

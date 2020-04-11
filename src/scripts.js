@@ -37,7 +37,6 @@ const fetchData = () => {
       let activityData = finalValues[3];
       startApp(userData.userData, hydrationData.hydrationData, sleepData.sleepData, activityData.activityData);
     }).catch(error => console.log(error.message))
-
 }
 
 const updateChart = (daysOftheWeek, data, chartId, chartLabel, units) => {
@@ -185,7 +184,6 @@ const eventHandler = (event) => {
     $('.pop-up-card').hide();
     $('.main-column-hydration, .main-column-activity, .main-column-sleep').removeClass('blur');
   }
-
 }
 
 

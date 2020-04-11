@@ -2,6 +2,8 @@
 <html>
 <head>
   <meta charset="UTF-8">
+  <!-- Ruby mentioned that this is missing for the media selectors  -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Activity Tracker</title>
   <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Open+Sans:400,800&display=swap" rel="stylesheet" />
 </head>
@@ -28,21 +30,20 @@
         <p class="sidebar-header-userInfo" id="userStridelength"></p>
         <div class="sidebar-header-line"></div>
         <p class="sidebar-header-userInfo" id="stepGoalCard"></p>
-        <p class="sidebar-header-userInfo" id="avStepGoalCard"></p>
-            <div class="sidebar-header-line"></div>
-            <section class="sidebar-body-friendContainer">
-              <p class="sidebar-header-userInfo">Friends</p>
-              <section class="sidebar-friendContainer-listItems">
-                <ul class="card-vertical-list" id="friendList">
-                  <!-- friend list goes here -->
-                </ul>
-              </section>
-              <div class="sidebar-header-line"></div>
-              <p class="thisWeek">Keep up the good work! You were increasingly active on these dates:</p>
-              <ul class="card-vertical-list" id="streakListMinutes">
-                <!-- friend list goes here -->
-              </ul>
-            </section>
+        <div class="sidebar-header-line"></div>
+          <section class="sidebar-body-friendContainer">
+          <p class="sidebar-header-userInfo">Friends</p>
+          <section class="sidebar-friendContainer-listItems">
+            <ul class="card-vertical-list" id="friendList">
+              <!-- friend list goes here -->
+             </ul>
+           </section>
+          <div class="sidebar-header-line"></div>
+          <p class="thisWeek">Keep up the good work! You were increasingly active on these dates:</p>
+           <ul class="card-vertical-list" id="streakListMinutes">
+            <!-- friend list goes here -->
+           </ul>
+         </section>
       </section>
     </section>
     <section class="body-main-infoContainter">
@@ -55,7 +56,7 @@
             <p id="hydrationAverage"></p>
           </div>
         </section>
-        <section class="infoContainer-cardContainer-card-vertical">
+        <section class="infoContainer-cardContainer-card-vertical-top">
           <div class="card-history-hydration">
             <p class="thisWeek">Water intake this week:</p>
             <div class="sidebar-header-line"></div>
@@ -99,7 +100,7 @@
             </div>
           </section>
         </section>
-        <section class="infoContainer-cardContainer-card-horizontal">
+        <section class="infoContainer-cardContainer-card-horizontal-chart">
           <section class="horizontalCard-activity-container">
             <div class="card-history-activity">
               <p class="thisWeek">Your steps this week</p>
@@ -173,9 +174,8 @@
         <p class="sidebar-header-userInfo" id="bigWinner"></p>
         <div class="sidebar-header-line"></div>
         <p class="sidebar-header-userInfo" id="stepGoalCard"></p>
-        <p class="sidebar-header-userInfo" id="avStepGoalCard">
-          <p>
-            <section class="sidebar-body-friendContainer">
+        <p class="sidebar-header-userInfo" id="avStepGoalCard"></p>
+            <section class="right sidebar-body-friendContainer">
               <section class="sidebar-friendContainer-listItems">
                 <p class="thisWeek">Rank this week</p>
                 <ul class="card-vertical-list" id="friendChallengeListToday">

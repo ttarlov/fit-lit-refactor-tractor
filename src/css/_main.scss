@@ -1,0 +1,114 @@
+.body-main-infoContainter {
+  @include flexin(column);
+  border: 1px solid $primary-text-color;
+  position: relative;
+  width: 100%;
+  height: fit-content;
+}
+
+.main-column-hydration {
+  @include flexin(row);
+}
+
+.main-column-activity {
+  @include flexin(row);
+}
+
+.main-column-sleep {
+  @include flexin(row);
+}
+
+.infoContainer-cardContainer-card-horizontal {
+  @include flexin(column);
+  background-color: $white;
+  border: 1px solid lighten($primary-text-color, 35%);
+  margin: 1%;
+  justify-content: space-around;
+}
+
+.infoContainer-cardContainer-card-horizontal-chart {
+  @include flexin(column);
+  align-items: center;
+  background-color: $white;
+  border: 1px solid $primary-text-color;
+  margin: 1%;
+  justify-content: space-around;
+}
+
+
+.horizontalCard-activity-container {
+  @include flexin(row);
+}
+
+.infoContainer-cardContainer-card-vertical-top {
+  @include flexin(row);
+  background-color: $white;
+  border: 1px solid $primary-text-color;
+  margin: 1%;
+}
+
+.infoContainer-cardContainer-card-vertical {
+  @include flexin(row);
+  background-color: $white;
+  border: 1px solid $primary-text-color;
+  margin: 1%;
+  width: 86%;
+}
+
+
+.card-today-hydration {
+  @include flexin(column);
+  background-color: lighten($hydration-background, 20%);
+  font-family: sans-serif;
+  font-size: 1.5vw;
+  justify-content: space-between;
+  margin: 0.5em;
+  text-align: center;
+  height: auto;
+  padding: 5px;
+}
+
+.card-today-sleep {
+  @include flexin(column);
+  background-color: lighten($sleep-background, 10%);
+  font-family: sans-serif;
+  font-size: 1.5vw;
+  justify-content: space-between;
+  margin: 0.5em;
+  text-align: center;
+  height: auto;
+  padding: 5px;
+}
+
+.card-today-activity {
+  @include flexin(column);
+  background-color: lighten($activity-background, 10%);
+  font-family: sans-serif;
+  font-size: 1.5vw;
+  justify-content: space-between;
+  margin: 0.3em;
+  text-align: center;
+  height: auto;
+  padding: 5px;
+}
+
+.card-history-hydration {
+  @include flexin(column);
+  text-align: center;
+  font-size: 1vw;
+  margin: .5em;
+  font-family: sans-serif;
+  justify-content: flex-start;
+  width: 50%;
+  padding: 5px;
+}
+
+.card-history-sleep {
+  @include flexin(column);
+  @extend .card-history-hydration;
+}
+
+.card-history-activity {
+  @include flexin(column);
+  @extend .card-history-hydration;
+}

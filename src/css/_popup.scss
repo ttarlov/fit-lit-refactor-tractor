@@ -1,0 +1,25 @@
+.pop-up-card {
+  background-color: lighten($general-color, 10%);
+  border: 2px solid $primary-text-color;
+  height: 20em;
+  margin-left: 3em;
+  position: absolute;
+  right: 200px;
+  top: 145px;
+  width: 30em;
+  z-index: 1;
+}
+
+form {
+  @include flexin(column);
+  align-items: center;
+  height: 20em;
+  justify-content: space-evenly;
+}
+
+.container {
+  @include flexin(row);
+  align-items: space-evenly;
+  justify-content: space-between;
+  width: 20em;
+}

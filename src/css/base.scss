@@ -1,6 +1,29 @@
-/* This is an example of using Sass, otherwise plain CSS works too*/
-$primary-background: pink;
+@import 'variables';
+@import 'nav';
+@import 'main';
+@import 'sidebar'; 
+@import 'popup';
+
+* {
+  margin: 0;
+  z-index: 0;
+  box-sizing: border-box;
+}
 
 body {
-  background-color: $primary-background;
+  background-color: $main-background;
+  font-family: 'Open Sans';
+  margin: 0;
 }
+
+.main {
+  display: flex;
+  flex-direction: row;
+  max-height: 100vh;
+  max-width: 100vw;
+}
+
+.blur {
+  filter: blur(5px);
+}
+
