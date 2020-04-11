@@ -141,28 +141,46 @@ const makeChartData = (hydrationArry, chartId, chartLabel, units) => {
 function startApp(userData, hydrationData, sleepData, activityData) {
   let userList = [];
   makeUsers(userData, userList);
-  let userRepo = new UserRepo(userList);
+  let calc = new Calculator()
+  let userRepo = new UserRepo(userList, domUpdates);
   let hydrationRepo = new Hydration(hydrationData);
   let sleepRepo = new Sleep(sleepData);
   userNowId = pickUser();
   let activityRepo = new Activity(activityData);
   let userNow = getUserById(userNowId, userRepo);
-  // let today = makeToday(userRepo, userNowId, hydrationData);
   let today = moment().format("YYYY-MM-DD").split('-').join('/');
+  let randomHistory = calc.makeRandomDate(userRepo, userNowId, hydrationData)
+  let winnerNow = makeWinnerID(activityRepo, userNow, today, userRepo);
+  // let today = makeToday(userRepo, userNowId, hydrationData);
   // console.log(today);
-  let randomHistory = makeRandomDate(userRepo, userNowId, hydrationData);
+  // let randomHistory = makeRandomDate(userRepo, userNowId, hydrationData);
   // historicalWeek.forEach(instance => instance.insertAdjacentHTML('afterBegin', `Week of ${randomHistory}`));
   // $('.historicalWeek').prepend(`Week of ${randomHistory}`)
   // addInfoToSidebar(userNow, userRepo);
+  userRepo.calculateAverageStepGoal();
   domUpdates.addInfoToSidebar(userNow, userRepo, randomHistory)
+
   domUpdates.addHydrationInfo(userNowId, hydrationRepo, today, userRepo, randomHistory)
   makeChartData(hydrationRepo.calculateRandomWeekOunces(randomHistory, userNowId, userRepo),"randomWeekHydrationChart", "OZs of Water", "Ounces");
   makeChartData(hydrationRepo.calculateFirstWeekOunces(userRepo, userNowId),"thisWeekHydrationChart","OZs of Water", "Ounces");
+
+  domUpdates.addSleepInfo(userNowId, sleepRepo, today, userRepo, randomHistory)
+  makeChartData(sleepRepo.calculateRandomWeekSleep(randomHistory, userNowId, userRepo),"sleepEarlierWeekChart", "Hours of Sleep", "hours");
+  makeChartData(sleepRepo.calculateWeekSleep(today, userNowId, userRepo),"sleepThisWeekChart", "Hours of Sleep", "hours");
+  sleepRepo.calculateAverageSleepQuality(userNowId)
+
+
+  domUpdates.addActivityInfo(userNowId, activityRepo, today, userRepo, randomHistory, userNow, winnerNow)
+  makeChartData(activityRepo.userDataForWeek(userNowId, today, userRepo, "numSteps"),"stepsThisWeekChart", "Number of Steps", "Steps");
+  makeChartData(activityRepo.userDataForWeek(userNowId, today, userRepo, "flightsOfStairs"), "stairsThisWeekChart", "Flights Of Stairs", "Number of Stairs");
+  makeChartData(activityRepo.userDataForWeek(userNowId, today, userRepo, "minutesActive"), "minutesThisWeekChart", "Minutes of Activity", "Minutes");
+  makeChartData(activityRepo.userDataForWeek(winnerNow, today, userRepo, "numSteps"), "bestUserStepsChart", "Steps", "Steps")
+
   // addHydrationInfo(userNowId, hydrationRepo, today, userRepo, randomHistory);
-  addSleepInfo(userNowId, sleepRepo, today, userRepo, randomHistory);
-  let winnerNow = makeWinnerID(activityRepo, userNow, today, userRepo);
-  addActivityInfo(userNowId, activityRepo, today, userRepo, randomHistory, userNow, winnerNow);
-  addFriendGameInfo(userNowId, activityRepo, userRepo, today, randomHistory, userNow);
+  // addSleepInfo(userNowId, sleepRepo, today, userRepo, randomHistory);
+  // addActivityInfo(userNowId, activityRepo, today, userRepo, randomHistory, userNow, winnerNow);
+  // addFriendGameInfo(userNowId, activityRepo, userRepo, today, randomHistory, userNow);
+  domUpdates.addFriendGameInfo(userNowId, activityRepo, userRepo, today, randomHistory, userNow)
 }
 
 function makeUsers(userData, array) {
@@ -173,7 +191,7 @@ function makeUsers(userData, array) {
 }
 
 function pickUser() {
-  // return 1;
+  // return 27;
   return Math.floor(Math.random() * 50);
 }
 
@@ -217,11 +235,11 @@ function makeToday(userStorage, id, dataSet) {
   // return moment().format("YYYY-MM-DD").split('-').join('/')
 }
 
-function makeRandomDate(userStorage, id, dataSet) {
-  var sortedArray = userStorage.makeSortedUserArray(id, dataSet);
-  return sortedArray[Math.floor(Math.random() * sortedArray.length + 1)].date
-
-}
+// function makeRandomDate(userStorage, id, dataSet) {
+//   var sortedArray = userStorage.makeSortedUserArray(id, dataSet);
+//   return sortedArray[Math.floor(Math.random() * sortedArray.length + 1)].date
+//
+// }
 
 // function addHydrationInfo(id, hydrationInfo, dateString, userStorage, laterDateString) {
 //   // hydrationToday.insertAdjacentHTML('afterBegin', `<p>You drank</p><p><span class="number">${hydrationInfo.calculateDailyOunces(id, dateString)}</span></p><p>oz water today.</p>`);
@@ -250,234 +268,242 @@ function makeRandomDate(userStorage, id, dataSet) {
 //   return method.map(drinkData => `<li class="historical-list-listItem">On ${drinkData}oz</li>`).join('');
 // }
 
-function addSleepInfo(id, sleepInfo, dateString, userStorage, laterDateString) {
-  // sleepToday.insertAdjacentHTML("afterBegin", `<p>You slept</p> <p><span class="number">${sleepInfo.calculateDailySleep(id, dateString)}</span></p> <p>hours today.</p>`);
-  // $('#sleepToday').prepend(`<p>You slept</p> <p><span class="number">${sleepInfo.calculateDailySleep(id, dateString)}</span></p> <p>hours today.</p>`)
-  $('#sleepToday').prepend(`<p>You slept</p> <p><span class="number">${sleepInfo.calculateDailyData("sleepData", id, dateString, "hoursSlept")}</span></p> <p>hours today.</p>`)
-  // sleepQualityToday.insertAdjacentHTML("afterBegin", `<p>Your sleep quality was</p> <p><span class="number">${sleepInfo.calculateDailySleepQuality(id, dateString)}</span></p><p>out of 5.</p>`);
-  $('#sleepQualityToday').prepend(`<p>Your sleep quality was</p> <p><span class="number">${sleepInfo.calculateDailySleepQuality(id, dateString)}</span></p><p>out of 5.</p>`)
-  // avUserSleepQuality.insertAdjacentHTML("afterBegin", `<p>The average user's sleep quality is</p> <p><span class="number">${Math.round(sleepInfo.calculateAllUserSleepQuality() *100)/100}</span></p><p>out of 5.</p>`);
-  $('#avUserSleepQuality').prepend(`<p>The average user's sleep quality is</p> <p><span class="number">${Math.round(sleepInfo.calculateAllUserSleepQuality() *100)/100}</span></p><p>out of 5.</p>`)
-  // sleepThisWeek.insertAdjacentHTML('afterBegin', makeSleepHTML(id, sleepInfo, userStorage, sleepInfo.calculateWeekSleep(dateString, id, userStorage)));
-  // $('#sleepThisWeek').prepend(makeSleepHTML(id, sleepInfo, userStorage, sleepInfo.calculateWeekSleep(dateString, id, userStorage)))
-  $('#sleepThisWeek').prepend(`<canvas id="sleepThisWeekChart" style="display: block;height: 261px;width: 316px;"></canvas>`)
-  makeChartData(sleepInfo.calculateWeekSleep(dateString, id, userStorage),"sleepThisWeekChart", "Hours of Sleep", "hours");
-  // sleepEarlierWeek.insertAdjacentHTML('afterBegin', makeSleepHTML(id, sleepInfo, userStorage, sleepInfo.calculateWeekSleep(laterDateString, id, userStorage)));
-  // $('#sleepEarlierWeek').prepend(makeSleepHTML(id, sleepInfo, userStorage, sleepInfo.calculateWeekSleep(laterDateString, id, userStorage)))
-  $('#sleepEarlierWeek').prepend(`<canvas id="sleepEarlierWeekChart" style="display: block;height: 261px;width: 316px;"></canvas>`)
-  makeChartData(sleepInfo.calculateRandomWeekSleep(laterDateString, id, userStorage),"sleepEarlierWeekChart", "Hours of Sleep", "hours");
-}
+// function addSleepInfo(id, sleepInfo, dateString, userStorage, laterDateString) {
+//   // sleepToday.insertAdjacentHTML("afterBegin", `<p>You slept</p> <p><span class="number">${sleepInfo.calculateDailySleep(id, dateString)}</span></p> <p>hours today.</p>`);
+//   // $('#sleepToday').prepend(`<p>You slept</p> <p><span class="number">${sleepInfo.calculateDailySleep(id, dateString)}</span></p> <p>hours today.</p>`)
+//   $('#sleepToday').prepend(`<p>You slept</p> <p><span class="number">${sleepInfo.calculateDailyData("sleepData", id, dateString, "hoursSlept")}</span></p> <p>hours today.</p>`)
+//   // sleepQualityToday.insertAdjacentHTML("afterBegin", `<p>Your sleep quality was</p> <p><span class="number">${sleepInfo.calculateDailySleepQuality(id, dateString)}</span></p><p>out of 5.</p>`);
+//   $('#sleepQualityToday').prepend(`<p>Your sleep quality was</p> <p><span class="number">${sleepInfo.calculateDailySleepQuality(id, dateString)}</span></p><p>out of 5.</p>`)
+//   // avUserSleepQuality.insertAdjacentHTML("afterBegin", `<p>The average user's sleep quality is</p> <p><span class="number">${Math.round(sleepInfo.calculateAllUserSleepQuality() *100)/100}</span></p><p>out of 5.</p>`);
+//   $('#avUserSleepQuality').prepend(`<p>The average user's sleep quality is</p> <p><span class="number">${Math.round(sleepInfo.calculateAllUserSleepQuality() *100)/100}</span></p><p>out of 5.</p>`)
+//   // sleepThisWeek.insertAdjacentHTML('afterBegin', makeSleepHTML(id, sleepInfo, userStorage, sleepInfo.calculateWeekSleep(dateString, id, userStorage)));
+//   // $('#sleepThisWeek').prepend(makeSleepHTML(id, sleepInfo, userStorage, sleepInfo.calculateWeekSleep(dateString, id, userStorage)))
+//   $('#sleepThisWeek').prepend(`<canvas id="sleepThisWeekChart" style="display: block;height: 261px;width: 316px;"></canvas>`)
+//   makeChartData(sleepInfo.calculateWeekSleep(dateString, id, userStorage),"sleepThisWeekChart", "Hours of Sleep", "hours");
+//   // sleepEarlierWeek.insertAdjacentHTML('afterBegin', makeSleepHTML(id, sleepInfo, userStorage, sleepInfo.calculateWeekSleep(laterDateString, id, userStorage)));
+//   // $('#sleepEarlierWeek').prepend(makeSleepHTML(id, sleepInfo, userStorage, sleepInfo.calculateWeekSleep(laterDateString, id, userStorage)))
+//   $('#sleepEarlierWeek').prepend(`<canvas id="sleepEarlierWeekChart" style="display: block;height: 261px;width: 316px;"></canvas>`)
+//   makeChartData(sleepInfo.calculateRandomWeekSleep(laterDateString, id, userStorage),"sleepEarlierWeekChart", "Hours of Sleep", "hours");
+// }
 
-function makeSleepHTML(id, sleepInfo, userStorage, method) {
-  return method.map(sleepData => `<li class="historical-list-listItem">On ${sleepData} hours</li>`).join('');
-}
+// function makeSleepHTML(id, sleepInfo, userStorage, method) {
+//   return method.map(sleepData => `<li class="historical-list-listItem">On ${sleepData} hours</li>`).join('');
+// }
 
-function makeSleepQualityHTML(id, sleepInfo, userStorage, method) {
-  return method.map(sleepQualityData => `<li class="historical-list-listItem">On ${sleepQualityData}/5 quality of sleep</li>`).join('');
-}
+// function makeSleepQualityHTML(id, sleepInfo, userStorage, method) {
+//   return method.map(sleepQualityData => `<li class="historical-list-listItem">On ${sleepQualityData}/5 quality of sleep</li>`).join('');
+// }
 
-function addActivityInfo(id, activityInfo, dateString, userStorage, laterDateString, user, winnerId) {
-  // userStairsToday.insertAdjacentHTML("afterBegin", `<p>Stair Count:</p><p>You</><p><span class="number">${activityInfo.userDataForToday(id, dateString, userStorage, 'flightsOfStairs')}</span></p>`)
-  $('#userStairsToday').prepend(`<p>Stair Count:</p><p>You</><p><span class="number">${activityInfo.userDataForToday(id, dateString, userStorage, 'flightsOfStairs')}</span></p>`)
-  // avgStairsToday.insertAdjacentHTML("afterBegin", `<p>Stair Count: </p><p>All Users</p><p><span class="number">${activityInfo.getAllUserAverageForDay(dateString, userStorage, 'flightsOfStairs')}</span></p>`)
-  $('#avgStairsToday').prepend(`<p>Stair Count: </p><p>All Users</p><p><span class="number">${activityInfo.getAllUserAverageForDay(dateString, userStorage, 'flightsOfStairs')}</span></p>`)
-  // userStepsToday.insertAdjacentHTML("afterBegin", `<p>Step Count:</p><p>You</p><p><span class="number">${activityInfo.userDataForToday(id, dateString, userStorage, 'numSteps')}</span></p>`)
-  $('#userStepsToday').prepend(`<p>Step Count:</p><p>You</p><p><span class="number">${activityInfo.userDataForToday(id, dateString, userStorage, 'numSteps')}</span></p>`)
-  // avgStepsToday.insertAdjacentHTML("afterBegin", `<p>Step Count:</p><p>All Users</p><p><span class="number">${activityInfo.getAllUserAverageForDay(dateString, userStorage, 'numSteps')}</span></p>`)
-  $('#avgStepsToday').prepend(`<p>Step Count:</p><p>All Users</p><p><span class="number">${activityInfo.getAllUserAverageForDay(dateString, userStorage, 'numSteps')}</span></p>`)
-  // userMinutesToday.insertAdjacentHTML("afterBegin", `<p>Active Minutes:</p><p>You</p><p><span class="number">${activityInfo.userDataForToday(id, dateString, userStorage, 'minutesActive')}</span></p>`)
-  $('#userMinutesToday').prepend(`<p>Active Minutes:</p><p>You</p><p><span class="number">${activityInfo.userDataForToday(id, dateString, userStorage, 'minutesActive')}</span></p>`)
-  // avgMinutesToday.insertAdjacentHTML("afterBegin", `<p>Active Minutes:</p><p>All Users</p><p><span class="number">${activityInfo.getAllUserAverageForDay(dateString, userStorage, 'minutesActive')}</span></p>`)
-  $('#avgMinutesToday').prepend(`<p>Active Minutes:</p><p>All Users</p><p><span class="number">${activityInfo.getAllUserAverageForDay(dateString, userStorage, 'minutesActive')}</span></p>`)
-  // userStepsThisWeek.insertAdjacentHTML("afterBegin", makeStepsHTML(id, activityInfo, userStorage, activityInfo.userDataForWeek(id, dateString, userStorage, "numSteps")));
-  // $('#userStepsThisWeek').prepend(makeStepsHTML(id, activityInfo, userStorage, activityInfo.userDataForWeek(id, dateString, userStorage, "numSteps")))
-  $('#userStepsThisWeek').prepend(`<canvas id="stepsThisWeekChart" style="display: block;height: 261px;width: 316px;"></canvas>`)
-  makeChartData(activityInfo.userDataForWeek(id, dateString, userStorage, "numSteps"),"stepsThisWeekChart", "Number of Steps", "Steps");
-  // userStairsThisWeek.insertAdjacentHTML("afterBegin", makeStairsHTML(id, activityInfo, userStorage, activityInfo.userDataForWeek(id, dateString, userStorage, "flightsOfStairs")));
-  // $('#userStairsThisWeek').prepend(makeStairsHTML(id, activityInfo, userStorage, activityInfo.userDataForWeek(id, dateString, userStorage, "flightsOfStairs")))
-  $('#userStairsThisWeek').prepend(`<canvas id="stairsThisWeekChart" style="display: block;height: 261px;width: 316px;"></canvas>`)
-  makeChartData(activityInfo.userDataForWeek(id, dateString, userStorage, "flightsOfStairs"), "stairsThisWeekChart", "Flights Of Stairs", "Number of Stairs");
-  // userMinutesThisWeek.insertAdjacentHTML("afterBegin", makeMinutesHTML(id, activityInfo, userStorage, activityInfo.userDataForWeek(id, dateString, userStorage, "minutesActive")));
-  // $('#userMinutesThisWeek').prepend(makeMinutesHTML(id, activityInfo, userStorage, activityInfo.userDataForWeek(id, dateString, userStorage, "minutesActive")))
-  $('#userMinutesThisWeek').prepend(`<canvas id="minutesThisWeekChart" style="display: block;height: 261px;width: 316px;"></canvas>`)
-  makeChartData(activityInfo.userDataForWeek(id, dateString, userStorage, "minutesActive"), "minutesThisWeekChart", "Minutes of Activity", "Minutes");
-  // bestUserSteps.insertAdjacentHTML("afterBegin", makeStepsHTML(user, activityInfo, userStorage, activityInfo.userDataForWeek(winnerId, dateString, userStorage, "numSteps")));
-  // $('#bestUserSteps').prepend(makeStepsHTML(user, activityInfo, userStorage, activityInfo.userDataForWeek(winnerId, dateString, userStorage, "numSteps")))
-  $('#bestUserSteps').prepend(`<canvas id="bestUserStepsChart" style="display: block;height: 261px;width: 316px;"></canvas>`)
-  makeChartData(activityInfo.userDataForWeek(winnerId, dateString, userStorage, "numSteps"), "bestUserStepsChart", "Steps", "Steps")
-}
+// function addActivityInfo(id, activityInfo, dateString, userStorage, laterDateString, user, winnerId) {
+//   // userStairsToday.insertAdjacentHTML("afterBegin", `<p>Stair Count:</p><p>You</><p><span class="number">${activityInfo.userDataForToday(id, dateString, userStorage, 'flightsOfStairs')}</span></p>`)
+//   $('#userStairsToday').prepend(`<p>Stair Count:</p><p>You</><p><span class="number">${activityInfo.userDataForToday(id, dateString, userStorage, 'flightsOfStairs')}</span></p>`)
+//   // avgStairsToday.insertAdjacentHTML("afterBegin", `<p>Stair Count: </p><p>All Users</p><p><span class="number">${activityInfo.getAllUserAverageForDay(dateString, userStorage, 'flightsOfStairs')}</span></p>`)
+//   $('#avgStairsToday').prepend(`<p>Stair Count: </p><p>All Users</p><p><span class="number">${activityInfo.getAllUserAverageForDay(dateString, userStorage, 'flightsOfStairs')}</span></p>`)
+//   // userStepsToday.insertAdjacentHTML("afterBegin", `<p>Step Count:</p><p>You</p><p><span class="number">${activityInfo.userDataForToday(id, dateString, userStorage, 'numSteps')}</span></p>`)
+//   $('#userStepsToday').prepend(`<p>Step Count:</p><p>You</p><p><span class="number">${activityInfo.userDataForToday(id, dateString, userStorage, 'numSteps')}</span></p>`)
+//   // avgStepsToday.insertAdjacentHTML("afterBegin", `<p>Step Count:</p><p>All Users</p><p><span class="number">${activityInfo.getAllUserAverageForDay(dateString, userStorage, 'numSteps')}</span></p>`)
+//   $('#avgStepsToday').prepend(`<p>Step Count Today:</p><p>All Users</p><p><span class="number">${activityInfo.getAllUserAverageForDay(dateString, userStorage, 'numSteps')}</span></p>`)
+//   // userMinutesToday.insertAdjacentHTML("afterBegin", `<p>Active Minutes:</p><p>You</p><p><span class="number">${activityInfo.userDataForToday(id, dateString, userStorage, 'minutesActive')}</span></p>`)
+//   $('#userMinutesToday').prepend(`<p>Active Minutes:</p><p>You</p><p><span class="number">${activityInfo.userDataForToday(id, dateString, userStorage, 'minutesActive')}</span></p>`)
+//   // avgMinutesToday.insertAdjacentHTML("afterBegin", `<p>Active Minutes:</p><p>All Users</p><p><span class="number">${activityInfo.getAllUserAverageForDay(dateString, userStorage, 'minutesActive')}</span></p>`)
+//   $('#avgMinutesToday').prepend(`<p>Active Minutes:</p><p>All Users</p><p><span class="number">${activityInfo.getAllUserAverageForDay(dateString, userStorage, 'minutesActive')}</span></p>`)
+//   // userStepsThisWeek.insertAdjacentHTML("afterBegin", makeStepsHTML(id, activityInfo, userStorage, activityInfo.userDataForWeek(id, dateString, userStorage, "numSteps")));
+//   // $('#userStepsThisWeek').prepend(makeStepsHTML(id, activityInfo, userStorage, activityInfo.userDataForWeek(id, dateString, userStorage, "numSteps")))
+//   $('#userStepsThisWeek').prepend(`<canvas id="stepsThisWeekChart" style="display: block;height: 261px;width: 316px;"></canvas>`)
+//   makeChartData(activityInfo.userDataForWeek(id, dateString, userStorage, "numSteps"),"stepsThisWeekChart", "Number of Steps", "Steps");
+//   // userStairsThisWeek.insertAdjacentHTML("afterBegin", makeStairsHTML(id, activityInfo, userStorage, activityInfo.userDataForWeek(id, dateString, userStorage, "flightsOfStairs")));
+//   // $('#userStairsThisWeek').prepend(makeStairsHTML(id, activityInfo, userStorage, activityInfo.userDataForWeek(id, dateString, userStorage, "flightsOfStairs")))
+//   $('#userStairsThisWeek').prepend(`<canvas id="stairsThisWeekChart" style="display: block;height: 261px;width: 316px;"></canvas>`)
+//   makeChartData(activityInfo.userDataForWeek(id, dateString, userStorage, "flightsOfStairs"), "stairsThisWeekChart", "Flights Of Stairs", "Number of Stairs");
+//   // userMinutesThisWeek.insertAdjacentHTML("afterBegin", makeMinutesHTML(id, activityInfo, userStorage, activityInfo.userDataForWeek(id, dateString, userStorage, "minutesActive")));
+//   // $('#userMinutesThisWeek').prepend(makeMinutesHTML(id, activityInfo, userStorage, activityInfo.userDataForWeek(id, dateString, userStorage, "minutesActive")))
+//   $('#userMinutesThisWeek').prepend(`<canvas id="minutesThisWeekChart" style="display: block;height: 261px;width: 316px;"></canvas>`)
+//   makeChartData(activityInfo.userDataForWeek(id, dateString, userStorage, "minutesActive"), "minutesThisWeekChart", "Minutes of Activity", "Minutes");
+//   // bestUserSteps.insertAdjacentHTML("afterBegin", makeStepsHTML(user, activityInfo, userStorage, activityInfo.userDataForWeek(winnerId, dateString, userStorage, "numSteps")));
+//   // $('#bestUserSteps').prepend(makeStepsHTML(user, activityInfo, userStorage, activityInfo.userDataForWeek(winnerId, dateString, userStorage, "numSteps")))
+//   $('#bestUserSteps').prepend(`<canvas id="bestUserStepsChart" style="display: block;height: 261px;width: 316px;"></canvas>`)
+//   makeChartData(activityInfo.userDataForWeek(winnerId, dateString, userStorage, "numSteps"), "bestUserStepsChart", "Steps", "Steps")
+// }
 
-function makeStepsHTML(id, activityInfo, userStorage, method) {
-  return method.map(activityData => `<li class="historical-list-listItem">On ${activityData} steps</li>`).join('');
-}
+// function makeStepsHTML(id, activityInfo, userStorage, method) {
+//   return method.map(activityData => `<li class="historical-list-listItem">On ${activityData} steps</li>`).join('');
+// }
+//
+// function makeStairsHTML(id, activityInfo, userStorage, method) {
+//   return method.map(data => `<li class="historical-list-listItem">On ${data} flights</li>`).join('');
+// }
+//
+// function makeMinutesHTML(id, activityInfo, userStorage, method) {
+//   return method.map(data => `<li class="historical-list-listItem">On ${data} minutes</li>`).join('');
+// }
 
-function makeStairsHTML(id, activityInfo, userStorage, method) {
-  return method.map(data => `<li class="historical-list-listItem">On ${data} flights</li>`).join('');
-}
+// function addFriendGameInfo(id, activityInfo, userStorage, dateString, laterDateString, user) {
+//   // friendChallengeListToday.insertAdjacentHTML("afterBegin", makeFriendChallengeHTML(id, activityInfo, userStorage, activityInfo.showChallengeListAndWinner(user, dateString, userStorage)));
+//   $('#friendChallengeListToday').prepend(makeFriendChallengeHTML(id, activityInfo, userStorage, activityInfo.showChallengeListAndWinner(user, dateString, userStorage)))
+//   // streakList.insertAdjacentHTML("afterBegin", makeStepStreakHTML(id, activityInfo, userStorage, activityInfo.getStreak(userStorage, id, 'numSteps')));
+//   $('#streakList').prepend(makeStepStreakHTML(id, activityInfo, userStorage, activityInfo.getStreak(userStorage, id, 'numSteps')))
+//   // streakListMinutes.insertAdjacentHTML("afterBegin", makeStepStreakHTML(id, activityInfo, userStorage, activityInfo.getStreak(userStorage, id, 'minutesActive')));
+//   $('#streakListMinutes').prepend(makeStepStreakHTML(id, activityInfo, userStorage, activityInfo.getStreak(userStorage, id, 'minutesActive')))
+//   // friendChallengeListHistory.insertAdjacentHTML("afterBegin", makeFriendChallengeHTML(id, activityInfo, userStorage, activityInfo.showChallengeListAndWinner(user, dateString, userStorage)));
+//   $('#friendChallengeListHistory').prepend(makeFriendChallengeHTML(id, activityInfo, userStorage, activityInfo.showChallengeListAndWinner(user, dateString, userStorage)))
+//   // bigWinner.insertAdjacentHTML('afterBegin', `THIS WEEK'S WINNER! ${activityInfo.showcaseWinner(user, dateString, userStorage)} steps`)
+//   $('#bigWinner').prepend(`THIS WEEK'S WINNER! ${activityInfo.showcaseWinner(user, dateString, userStorage)} steps`)
+// }
 
-function makeMinutesHTML(id, activityInfo, userStorage, method) {
-  return method.map(data => `<li class="historical-list-listItem">On ${data} minutes</li>`).join('');
-}
+// function makeFriendChallengeHTML(id, activityInfo, userStorage, method) {
+//   return method.map(friendChallengeData => `<li class="historical-list-listItem">Your friend ${friendChallengeData} average steps.</li>`).join('');
+// }
 
-function addFriendGameInfo(id, activityInfo, userStorage, dateString, laterDateString, user) {
-  // friendChallengeListToday.insertAdjacentHTML("afterBegin", makeFriendChallengeHTML(id, activityInfo, userStorage, activityInfo.showChallengeListAndWinner(user, dateString, userStorage)));
-  $('#friendChallengeListToday').prepend(makeFriendChallengeHTML(id, activityInfo, userStorage, activityInfo.showChallengeListAndWinner(user, dateString, userStorage)))
-  // streakList.insertAdjacentHTML("afterBegin", makeStepStreakHTML(id, activityInfo, userStorage, activityInfo.getStreak(userStorage, id, 'numSteps')));
-  $('#streakList').prepend(makeStepStreakHTML(id, activityInfo, userStorage, activityInfo.getStreak(userStorage, id, 'numSteps')))
-  // streakListMinutes.insertAdjacentHTML("afterBegin", makeStepStreakHTML(id, activityInfo, userStorage, activityInfo.getStreak(userStorage, id, 'minutesActive')));
-  $('#streakListMinutes').prepend(makeStepStreakHTML(id, activityInfo, userStorage, activityInfo.getStreak(userStorage, id, 'minutesActive')))
-  // friendChallengeListHistory.insertAdjacentHTML("afterBegin", makeFriendChallengeHTML(id, activityInfo, userStorage, activityInfo.showChallengeListAndWinner(user, dateString, userStorage)));
-  $('#friendChallengeListHistory').prepend(makeFriendChallengeHTML(id, activityInfo, userStorage, activityInfo.showChallengeListAndWinner(user, dateString, userStorage)))
-  // bigWinner.insertAdjacentHTML('afterBegin', `THIS WEEK'S WINNER! ${activityInfo.showcaseWinner(user, dateString, userStorage)} steps`)
-  $('#bigWinner').prepend(`THIS WEEK'S WINNER! ${activityInfo.showcaseWinner(user, dateString, userStorage)} steps`)
-}
-
-function makeFriendChallengeHTML(id, activityInfo, userStorage, method) {
-  return method.map(friendChallengeData => `<li class="historical-list-listItem">Your friend ${friendChallengeData} average steps.</li>`).join('');
-}
-
-function makeStepStreakHTML(id, activityInfo, userStorage, method) {
-  return method.map(streakData => `<li class="historical-list-listItem">${streakData}!</li>`).join('');
-}
+// function makeStepStreakHTML(id, activityInfo, userStorage, method) {
+//   return method.map(streakData => `<li class="historical-list-listItem">${streakData}!</li>`).join('');
+// }
 
 // startApp();
 fetchData();
 
 const eventHandler = (event) => {
   if (event.target.classList.contains('activity-button')) {
-    showActivityForm();
+    domUpdates.showActivityForm();
   } else if (event.target.classList.contains('sleep-button')) {
-    showSleepForm();
+    domUpdates.showSleepForm();
   } else if (event.target.classList.contains('back-button')) {
     $('.pop-up-card').hide();
     $('.main-column-hydration, .main-column-activity, .main-column-sleep').removeClass('blur');
   } else if (event.target.classList.contains('activity-submit-button')) {
-    buildActivityPostObject();
+    // buildActivityPostObject();
+    api.postActivityData(userNowId, $('#date').val().split('-').join('/'), $('#numSteps').val(), $('#minutesActive').val(), $('#flightsOfStairs').val())
     $('.pop-up-card').hide();
     $('.main-column-hydration, .main-column-activity, .main-column-sleep').removeClass('blur');
   } else if (event.target.classList.contains('sleep-submit-button')) {
-    buildSleepPostObject();
+    // buildSleepPostObject();
+    api.postSleepData(userNowId, $('#date').val().split('-').join('/'), $('#hours-slept').val(), $('#sleep-quality').val())
     $('.pop-up-card').hide();
     $('.main-column-hydration, .main-column-activity, .main-column-sleep').removeClass('blur');
   } else if(event.target.classList.contains('hydration-button')) {
-    showHydrationForm()
+    domUpdates.showHydrationForm()
   } else if (event.target.classList.contains("hydration-submit-button")) {
-    buildHydrationPostObject();
+    // buildHydrationPostObject();
+    api.postHydrationData(userNowId, $('#date').val().split('-').join('/'), $("#numOunces").val())
     $('.pop-up-card').hide();
     $('.main-column-hydration, .main-column-activity, .main-column-sleep').removeClass('blur');
   }
 
 }
 
-const showHydrationForm = () => {
-  $('.body-main-infoContainter').prepend(
-    `<section class="pop-up-card">
-    <form method="post">
-      <h3>Log your hydration</h3>
-      <div class="container">
-      <label for="date">Date</label>
-      <input id="date" type="date" name="date" value="${moment().format("YYYY-MM-DD")}"></input>
-      </div>
-      <div class="container">
-      <label for="number-of-oz">Number of Oz</label>
-      <input id="numOunces" type="number" name="number-of-ozs"></input>
-      </div>
-      <div class="container">
-      <button class="hydration-submit-button" type="button" name="submit">Submit</button>
-      <button class="back-button" type="button" name="button">Back</button>
-      </div>
-    </form>
-  </section>`)
-  $('.main-column-hydration, .main-column-activity, .main-column-sleep').addClass('blur')
-}
+// const showHydrationForm = () => {
+//   $('.body-main-infoContainter').prepend(
+//     `<section class="pop-up-card">
+//     <form method="post">
+//       <h3>Log your hydration</h3>
+//       <div class="container">
+//       <label for="date">Date</label>
+//       <input id="date" type="date" name="date" value="${moment().format("YYYY-MM-DD")}"></input>
+//       </div>
+//       <div class="container">
+//       <label for="number-of-oz">Number of Oz</label>
+//       <input id="numOunces" type="number" name="number-of-ozs"></input>
+//       </div>
+//       <div class="container">
+//       <button class="hydration-submit-button" type="button" name="submit">Submit</button>
+//       <button class="back-button" type="button" name="button">Back</button>
+//       </div>
+//     </form>
+//   </section>`)
+//   $('.main-column-hydration, .main-column-activity, .main-column-sleep').addClass('blur')
+// }
 
 
 
-const showActivityForm = () => {
-  $('.body-main-infoContainter').prepend(
-    `<section class="pop-up-card">
-    <form method="post">
-      <h3>Log your activity</h3>
-      <div class="container">
-      <label for="date">Date</label>
-      <input id="date" type="date" name="date" value="${moment().format("YYYY-MM-DD")}"></input>
-      </div>
-      <div class="container">
-      <label for="step-count">Step Count</label>
-      <input id="numSteps" type="number" name="step-count"></input>
-      </div>
-      <div class="container">
-      <label for="minutes-active">Minutes Active</label>
-      <input id="minutesActive" type="number" name="minutes-active"></input>
-      </div>
-      <div class="container">
-      <label for="flights-of-stairs">Flights of Stairs</label>
-      <input id="flightsOfStairs" type="number" name="flights-of-stairs"></input>
-      </div>
-      <div class="container">
-      <button class="activity-submit-button" type="button" name="submit">Submit</button>
-      <button class="back-button" type="button" name="button">Back</button>
-      </div>
-    </form>
-  </section>`)
-  $('.main-column-hydration, .main-column-activity, .main-column-sleep').addClass('blur')
-}
+// const showActivityForm = () => {
+//   $('.body-main-infoContainter').prepend(
+//     `<section class="pop-up-card">
+//     <form method="post">
+//       <h3>Log your activity</h3>
+//       <div class="container">
+//       <label for="date">Date</label>
+//       <input id="date" type="date" name="date" value="${moment().format("YYYY-MM-DD")}"></input>
+//       </div>
+//       <div class="container">
+//       <label for="step-count">Step Count</label>
+//       <input id="numSteps" type="number" name="step-count"></input>
+//       </div>
+//       <div class="container">
+//       <label for="minutes-active">Minutes Active</label>
+//       <input id="minutesActive" type="number" name="minutes-active"></input>
+//       </div>
+//       <div class="container">
+//       <label for="flights-of-stairs">Flights of Stairs</label>
+//       <input id="flightsOfStairs" type="number" name="flights-of-stairs"></input>
+//       </div>
+//       <div class="container">
+//       <button class="activity-submit-button" type="button" name="submit">Submit</button>
+//       <button class="back-button" type="button" name="button">Back</button>
+//       </div>
+//     </form>
+//   </section>`)
+//   $('.main-column-hydration, .main-column-activity, .main-column-sleep').addClass('blur')
+// }
 
-const showSleepForm = () => {
-  $('.body-main-infoContainter').prepend(
-    `<section class="pop-up-card">
-    <form method="post">
-      <h3>Log your sleep</h3>
-      <div class="container">
-      <label for="date">Date</label>
-      <input id="date" type="date" name="date" value="${moment().format("YYYY-MM-DD")}"></input>
-      </div>
-      <div class="container">
-      <label for="hours-slept">Hours Slept</label>
-      <input id="hours-slept" type="number" name="hours-slept"></input>
-      </div>
-      <div class="container">
-      <label for="sleep-quality">Sleep Quality</label>
-      <input id="sleep-quality" type="number" name="sleep-quality"></input>
-      </div>
-      <div class="container">
-      <button class="sleep-submit-button" type="button" name="submit">Submit</button>
-      <button class="back-button" type="button" name="button">Back</button>
-      </div>
-    </form>
-  </section>`)
-  $('.main-column-hydration, .main-column-activity, .main-column-sleep').addClass('blur')
-}
+// const showSleepForm = () => {
+//   $('.body-main-infoContainter').prepend(
+//     `<section class="pop-up-card">
+//     <form method="post">
+//       <h3>Log your sleep</h3>
+//       <div class="container">
+//       <label for="date">Date</label>
+//       <input id="date" type="date" name="date" value="${moment().format("YYYY-MM-DD")}"></input>
+//       </div>
+//       <div class="container">
+//       <label for="hours-slept">Hours Slept</label>
+//       <input id="hours-slept" type="number" name="hours-slept"></input>
+//       </div>
+//       <div class="container">
+//       <label for="sleep-quality">Sleep Quality</label>
+//       <input id="sleep-quality" type="number" name="sleep-quality"></input>
+//       </div>
+//       <div class="container">
+//       <button class="sleep-submit-button" type="button" name="submit">Submit</button>
+//       <button class="back-button" type="button" name="button">Back</button>
+//       </div>
+//     </form>
+//   </section>`)
+//   $('.main-column-hydration, .main-column-activity, .main-column-sleep').addClass('blur')
+// }
 
-const buildHydrationPostObject = () => {
-  let hydrationObj = {
-    "userID": Number(`${userNowId}`),
-    "date": `${$('#date').val().split('-').join('/')}`,
-    "numOunces": Number(`${$("#numOunces").val()}`)
-  }
-  api.postHydrationData(hydrationObj);
-}
+// const buildHydrationPostObject = () => {
+//   let hydrationObj = {
+//     "userID": Number(`${userNowId}`),
+//     "date": `${$('#date').val().split('-').join('/')}`,
+//     "numOunces": Number(`${$("#numOunces").val()}`)
+//   }
+//   api.postHydrationData(hydrationObj);
+// }
 
-const buildActivityPostObject = () => {
-  let activityObj = {
-    "userID": Number(`${userNowId}`),
-    "date": `${$('#date').val().split('-').join('/')}`,
-    "numSteps": Number(`${$('#numSteps').val()}`),
-    "minutesActive": Number(`${$('#minutesActive').val()}`),
-    "flightsOfStairs": Number(`${$('#flightsOfStairs').val()}`),
-  }
-  api.postActivityData(activityObj);
-}
 
-const buildSleepPostObject = () => {
-  let sleepObj = {
-    "userID": Number(`${userNowId}`),
-    "date": `${$('#date').val().split('-').join('/')}`,
-    "hoursSlept": Number(`${$('#hours-slept').val()}`),
-    "sleepQuality": Number(`${$('#sleep-quality').val()}`),
-  }
-  console.log(sleepObj)
-  api.postSleepData(sleepObj);
-}
+// const buildActivityPostObject = () => {
+//   let activityObj = {
+//     "userID": Number(`${userNowId}`),
+//     "date": `${$('#date').val().split('-').join('/')}`,
+//     "numSteps": Number(`${$('#numSteps').val()}`),
+//     "minutesActive": Number(`${$('#minutesActive').val()}`),
+//     "flightsOfStairs": Number(`${$('#flightsOfStairs').val()}`),
+//   }
+//   api.postActivityData(activityObj);
+// }
+
+
+// const buildSleepPostObject = () => {
+//   let sleepObj = {
+//     "userID": Number(`${userNowId}`),
+//     "date": `${$('#date').val().split('-').join('/')}`,
+//     "hoursSlept": Number(`${$('#hours-slept').val()}`),
+//     "sleepQuality": Number(`${$('#sleep-quality').val()}`),
+//   }
+//   console.log(sleepObj)
+//   api.postSleepData(sleepObj);
+// }
+
+
+
 
 $('body').click(eventHandler);
