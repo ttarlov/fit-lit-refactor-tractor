@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-
+import moment from "moment";
 import UserRepo from '../src/User-repo';
 import User from '../src/User';
 
@@ -9,6 +9,7 @@ describe('User Repo', function() {
   let user2;
   let user;
   let userRepo;
+  let users;
 
   beforeEach(function() {
     user1 = new User({
@@ -158,6 +159,21 @@ describe('User Repo', function() {
           "userID": 4,
           "date": "2019/04/15",
           "numOunces": 36
+        },
+        {
+          "userID": 4,
+          "date": `${moment().add(1, 'days').format("YYYY-MM-DD")}`,
+          "numOunces": 55
+        },
+        {
+          "userID": 4,
+          "date": `${moment().subtract(1, 'days').format("YYYY-MM-DD")}`,
+          "numOunces": 65
+        },
+        {
+          "userID": 4,
+          "date": `${moment().subtract(2, 'days').format("YYYY-MM-DD")}`,
+          "numOunces": 75
         },
         {
           "userID": 2,
@@ -473,12 +489,27 @@ describe('User Repo', function() {
       ]);
     });
     it('should get a users most recent date using the app', function() {
-      expect(userRepo.getToday(4, hydrationData)).to.eql("2019/09/20");
+      expect(userRepo.getToday(4, hydrationData)).to.eql("2020-04-10");
     });
-    it('should sort data by date and extract its week', function() {
 
-      expect(userRepo.getFirstWeek(4, hydrationData)[3].date).to.eql("2019/09/17");
+    describe('getFirstWeek Method', function(){
+
+      it('should return an array of data for today and up to 7 days prior', function() {
+        expect(userRepo.getFirstWeek(4, hydrationData)).to.deep.eq([
+                                                                      { userID: 4, date: '2020-04-08', numOunces: 65 },
+                                                                      { userID: 4, date: '2020-04-07', numOunces: 75 }
+                                                                    ]);
+      });
+
+      it('Should return an empty array if no matching data is found', function(){
+          expect(userRepo.getFirstWeek(1, hydrationData)).to.deep.eq([])
+      });
+
+
+
     });
+
+
     it('should get a sorted week of data for a single user from a date', function() {
       expect(userRepo.getWeekFromDate('2019/09/17', 4, hydrationData)[3].date).to.eql("2019/04/15");
       expect(userRepo.getWeekFromDate('2019/09/18', 4, hydrationData)[3].date).to.eql("2019/09/15");

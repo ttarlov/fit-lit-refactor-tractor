@@ -1,4 +1,5 @@
 // import sleepData from './data/sleep';
+import domUpdates from './dom-updates.js'
 import Calculator from './calculator';
 
 class Sleep extends Calculator {
@@ -15,11 +16,14 @@ class Sleep extends Calculator {
   }
   calculateAverageSleepQuality(id) {
     let perDaySleepQuality = this.sleepData.filter((data) => id === data.userID);
-    return perDaySleepQuality.reduce((sumSoFar, data) => {
+    let averageSleepQuality = perDaySleepQuality.reduce((sumSoFar, data) => {
       return sumSoFar += data.sleepQuality;
     }, 0) / perDaySleepQuality.length;
+    domUpdates.displayAverageUserSleepQuality(Math.round(averageSleepQuality * 100) / 100);
+    return Math.round(averageSleepQuality * 100) / 100;
   }
 
+//This method seems to not being used
   // calculateDailySleep(id, date) {
   //   let findSleepByDate = this.sleepData.find((data) => id === data.userID && date === data.date);
   //   return findSleepByDate.hoursSlept;
@@ -35,7 +39,6 @@ class Sleep extends Calculator {
   }
 
   calculateWeekSleep(date, id, userRepo) {
-    // return userRepo.getWeekFromDate(date, id, this.sleepData).map((data) => `${data.date}: ${data.hoursSlept}`);
     return userRepo.getFirstWeek(id, this.sleepData).map((data) => `${data.date}: ${data.hoursSlept}`);
   }
 

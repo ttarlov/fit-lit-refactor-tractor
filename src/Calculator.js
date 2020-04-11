@@ -1,3 +1,5 @@
+import domUpdates from './dom-updates.js'
+
 class Calculator {
   constructor() {
 
@@ -19,6 +21,14 @@ class Calculator {
       return findDataByDate[property];
     }
   }
+
+
+  makeRandomDate(userStorage, id, dataSet) {
+    let sortedArray = userStorage.makeSortedUserArray(id, dataSet);
+    let calculatedSortedArray = sortedArray[Math.floor(Math.random() * sortedArray.length + 1)].date
+    return calculatedSortedArray
+  }
+
 
 
 }

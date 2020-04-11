@@ -31,7 +31,9 @@ class Activity {
   getAllUserAverageForDay(date, userRepo, relevantData) {
     console.log(date);
     let selectedDayData = userRepo.chooseDayDataForAllUsers(this.activityData, date);
-    console.log(selectedDayData);
+        if(selectedDayData.length === 0) {
+          return "0"
+        }
     return parseFloat((selectedDayData.reduce((acc, elem) => acc += elem[relevantData], 0) / selectedDayData.length).toFixed(1));
   }
   userDataForToday(id, date, userRepo, relevantData) {
