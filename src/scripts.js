@@ -192,7 +192,8 @@ function makeUsers(userData, array) {
 
 function pickUser() {
   // return 27;
-  return Math.floor(Math.random() * 50);
+  // return Math.floor(Math.random() * 50);
+return Math.floor(1 + Math.random() * 50)
 }
 
 function getUserById(id, listRepo) {
