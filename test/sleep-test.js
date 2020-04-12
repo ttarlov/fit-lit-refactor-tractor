@@ -7,11 +7,11 @@ chai.use(spies);
 
 import domUpdates from "../src/dom-updates.js"
 
-chai.spy.on(domUpdates, "displayAverageUserSleepQuality", () => {});
 
 import Sleep from '../src/Sleep';
 import UserRepo from '../src/User-repo';
 import User from '../src/User';
+import moment from "moment";
 
 describe('Sleep', function() {
   let sleepData;
@@ -23,7 +23,7 @@ describe('Sleep', function() {
   let user5;
   let users;
   let userRepo;
-
+  let today;
 
   afterEach(() => {
     chai.spy.restore(domUpdates);
@@ -31,6 +31,11 @@ describe('Sleep', function() {
 
 
   beforeEach(function() {
+
+    chai.spy.on(domUpdates, "displayAverageUserSleepQuality", () => {});
+
+
+    today = moment().format("YYYY-MM-DD")
     sleepData = [{
         "userID": 1,
         "date": "2017/06/15",
@@ -147,19 +152,19 @@ describe('Sleep', function() {
       },
       {
         "userID": 4,
-        "date": "2019/06/17",
+        "date": today,
         "hoursSlept": 5.9,
         "sleepQuality": 1.6
       },
       {
         "userID": 4,
-        "date": "2019/06/16",
+        "date":`${moment().subtract(1, 'days').format("YYYY-MM-DD")}`,
         "hoursSlept": 9.6,
         "sleepQuality": 1
       },
       {
         "userID": 4,
-        "date": "2019/06/15",
+        "date": `${moment().subtract(2, 'days').format("YYYY-MM-DD")}`,
         "hoursSlept": 9,
         "sleepQuality": 3.1
       },
@@ -335,25 +340,29 @@ describe('Sleep', function() {
   });
 
 
-  it('should find sleep by day for that days week', function() {
-
-    expect(sleep.calculateWeekSleep('2019/06/18', 4, userRepo)[0]).to.eql('2019/06/18: 7.9');
-    expect(sleep.calculateWeekSleep('2019/06/18', 4, userRepo)[6]).to.eql('2017/06/15: 5.4');
+  it('should find sleep data for current week', function() {
+    expect(sleep.calculateWeekSleep(today, 4, userRepo)).to.deep.eq([ '2020-04-12: 5.9', ' 2020-04-11: 9.6', '2020-04-10: 9' ]);
   })
 
-  it('should find sleep quality by day for that days week', function() {
 
-    expect(sleep.calculateWeekSleepQuality('2019/06/18', 4, userRepo)[0]).to.eql('2019/06/18: 1.6');
-    expect(sleep.calculateWeekSleepQuality('2019/06/18', 4, userRepo)[6]).to.eql('2017/06/15: 3');
-  })
+  //TEST FOR UNUSED METHOD
+  // it.only('should find sleep quality by day for that days week', function() {
+  //
+  //   expect(sleep.calculateWeekSleepQuality('2019/06/18', 4, userRepo)[0]).to.eql('2019/06/18: 1.6');
+  //   expect(sleep.calculateWeekSleepQuality('2019/06/18', 4, userRepo)[6]).to.eql('2017/06/15: 3');
+  // })
+
+
   it('should determine the best quality sleepers for a week', function() {
 
     expect(sleep.determineBestSleepers("2019/06/21", userRepo)).to.eql(["Allie McCarthy", "Bugs Bunny"]);
   })
+
   it('should return person with best quality sleep for the week', function() {
 
     expect(sleep.determineSleepWinnerForWeek("2019/06/21", userRepo)).to.eql(["Bugs Bunny"]);
   })
+
   it('should return all qualifying users if best quality sleep is a tie', function() {
     sleepData = sleepData.push({
       "userID": 6,
@@ -380,6 +389,7 @@ describe('Sleep', function() {
 
     expect(sleep.determineSleepHoursWinnerForDay('2019/06/21', userRepo)).to.eql(["Bugs Bunny"]);
   })
+
   it('should return all qualifying users if longest sleep is a tie', function() {
     sleepData = sleepData.push({
       "userID": 6,
@@ -401,5 +411,4 @@ describe('Sleep', function() {
 
     expect(sleep.determineSleepHoursWinnerForDay('2019/06/21', userRepo)).to.eql(["Bugs Bunny", "Richmond"]);
   })
-  //make this test fail when user is NOT best in week
 });
