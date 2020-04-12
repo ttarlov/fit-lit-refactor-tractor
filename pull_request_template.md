@@ -18,7 +18,6 @@ Were there any challenges that arose while implementing this feature? If so, how
 
 Files modified:
  - [ ] index.html
- - [ ] styles.scss
  - [ ] base.scss
  - [ ] scripts.js
  - [ ] User.js
@@ -26,6 +25,9 @@ Files modified:
  - [ ] Activity.js
  - [ ] Hydration.js
  - [ ] Sleep.js
+ - [ ] api-Controller.js
+ - [ ] Calculator.js
+ - [ ] dom-Updates.js
  
  
  Other files: 
