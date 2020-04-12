@@ -17,7 +17,7 @@ class Activity {
   }
   accomplishStepGoal(id, date, userRepo) {
     let userStepsByDate = this.activityData.find(data => id === data.userID && date === data.date);
-    if (userStepsByDate.numSteps === userRepo.dailyStepGoal) {
+    if (userStepsByDate.numSteps > userRepo.dailyStepGoal) {
       return true;
     }
     return false
@@ -29,7 +29,6 @@ class Activity {
     return this.activityData.filter(data => id === data.userID).reduce((acc, elem) => (elem.flightsOfStairs > acc) ? elem.flightsOfStairs : acc, 0);
   }
   getAllUserAverageForDay(date, userRepo, relevantData) {
-    console.log(date);
     let selectedDayData = userRepo.chooseDayDataForAllUsers(this.activityData, date);
         if(selectedDayData.length === 0) {
           return "0"
