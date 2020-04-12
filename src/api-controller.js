@@ -3,7 +3,6 @@ class ApiController {
     this.rootUrl = "https://fe-apps.herokuapp.com/api/v1/fitlit/1908"
   }
 
-
   getUsersData() {
     let url = `${this.rootUrl}/users/userData`
     return fetch(url).then(response => response.json());
@@ -14,12 +13,10 @@ class ApiController {
     return fetch(url).then(response => response.json());
   }
 
-
   getSleepData() {
     let url = `${this.rootUrl}/sleep/sleepData`
     return fetch(url).then(response => response.json());
   }
-
 
   getHydrationData() {
     let url = `${this.rootUrl}/hydration/hydrationData`
@@ -34,7 +31,6 @@ class ApiController {
       "minutesActive": Number(minutesActive),
       "flightsOfStairs": Number(flightsOfStairs)
     }
-    console.log(activityObject);
     let url = `${this.rootUrl}/activity/activityData`;
     return fetch(url, {
       method: 'POST',
@@ -46,7 +42,6 @@ class ApiController {
       .then(response => console.log(response.json()))
       .catch(err => console.log(err.message));
   }
-
 
   postSleepData(id, date, hoursSlept, sleepQuality) {
     let sleepObj = {
@@ -68,7 +63,6 @@ class ApiController {
       .catch(err => console.log(err.message));
   }
 
-
   postHydrationData(id, date, numOunces) {
     let hydrationObj = {
       "userID": Number(id),
@@ -77,17 +71,16 @@ class ApiController {
     }
 
     let url = `${this.rootUrl}/hydration/hydrationData`;
-      return fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(hydrationObj),
-      })
-        .then(response => console.log(response.json()))
-        .catch(err => console.log(err.message));
+    return fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(hydrationObj),
+    })
+      .then(response => console.log(response.json()))
+      .catch(err => console.log(err.message));
   }
-
 }
 
 

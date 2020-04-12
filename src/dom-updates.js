@@ -5,14 +5,11 @@ import Chart from 'chart.js';
 
 let domUpdates = {
 
-
-
   displayAverageStepGoal(averageStepGoal) {
     $('#avStepGoalCard').text(`The average daily step goal is ${averageStepGoal}`);
   },
 
   addInfoToSidebar(user, userStorage,randomHistory) {
-
     $('.historicalWeek').prepend(`Week of ${randomHistory}`);
 
     $('#sidebarName').text(user.name);
@@ -23,7 +20,6 @@ let domUpdates = {
     $('#userEmail').text(user.email);
     $('#userStridelength').text(`Your stridelength is ${user.strideLength} meters.`);
     $('#friendList').prepend(this.makeFriendHTML(user, userStorage));
-
   },
 
   makeFriendHTML(user, userStorage) {
@@ -91,7 +87,7 @@ let domUpdates = {
         </div>
         <div class="container">
         <label for="number-of-oz">Number of Oz</label>
-        <input id="numOunces" type="number" name="number-of-ozs"></input>
+        <input id="numOunces" type="number" name="number-of-ozs" min="0" max="1000"></input>
         </div>
         <div class="container">
         <button class="hydration-submit-button" type="button" name="submit">Submit</button>
@@ -113,15 +109,15 @@ let domUpdates = {
         </div>
         <div class="container">
         <label for="step-count">Step Count</label>
-        <input id="numSteps" type="number" name="step-count"></input>
+        <input id="numSteps" type="number" name="step-count" min="0" max="10000"></input>
         </div>
         <div class="container">
         <label for="minutes-active">Minutes Active</label>
-        <input id="minutesActive" type="number" name="minutes-active"></input>
+        <input id="minutesActive" type="number" name="minutes-active" min="0" max="1000"></input>
         </div>
         <div class="container">
         <label for="flights-of-stairs">Flights of Stairs</label>
-        <input id="flightsOfStairs" type="number" name="flights-of-stairs"></input>
+        <input id="flightsOfStairs" type="number" name="flights-of-stairs" min="0" max="1000"></input>
         </div>
         <div class="container">
         <button class="activity-submit-button" type="button" name="submit">Submit</button>
@@ -143,11 +139,11 @@ let domUpdates = {
         </div>
         <div class="container">
         <label for="hours-slept">Hours Slept</label>
-        <input id="hours-slept" type="number" name="hours-slept"></input>
+        <input id="hours-slept" type="number" name="hours-slept" min="0" max="24"></input>
         </div>
         <div class="container">
         <label for="sleep-quality">Sleep Quality</label>
-        <input id="sleep-quality" type="number" name="sleep-quality"></input>
+        <input id="sleep-quality" type="number" name="sleep-quality" min="0" max="5"></input>
         </div>
         <div class="container">
         <button class="sleep-submit-button" type="button" name="submit">Submit</button>
@@ -157,10 +153,6 @@ let domUpdates = {
     </section>`)
     $('.main-column-hydration, .main-column-activity, .main-column-sleep').addClass('blur')
   }
-
-
-
 }
-
 
 export default domUpdates
