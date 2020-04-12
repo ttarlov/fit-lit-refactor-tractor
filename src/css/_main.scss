@@ -33,11 +33,13 @@
   border: 1px solid $primary-text-color;
   margin: 1%;
   justify-content: space-around;
+  width: 100%;
 }
 
 
 .horizontalCard-activity-container {
   @include flexin(row);
+  width: 100%;
 }
 
 .infoContainer-cardContainer-card-vertical-top {
@@ -45,6 +47,7 @@
   background-color: $white;
   border: 1px solid $primary-text-color;
   margin: 1%;
+  width: 100%;
 }
 
 .infoContainer-cardContainer-card-vertical {
@@ -84,7 +87,7 @@
   @include flexin(column);
   background-color: lighten($activity-background, 10%);
   font-family: sans-serif;
-  font-size: 1.5vw;
+  font-size: 1.35vw;
   justify-content: space-between;
   margin: 0.3em;
   text-align: center;

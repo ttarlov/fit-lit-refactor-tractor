@@ -1,4 +1,13 @@
-import { expect } from 'chai';
+// import { expect } from 'chai';
+import $ from 'jquery'
+const chai = require("chai");
+const expect = chai.expect;
+const spies = require("chai-spies");
+chai.use(spies);
+
+import domUpdates from "../src/dom-updates.js"
+
+chai.spy.on(domUpdates, "displayAverageUserSleepQuality", () => {});
 
 import Sleep from '../src/Sleep';
 import UserRepo from '../src/User-repo';
@@ -14,6 +23,12 @@ describe('Sleep', function() {
   let user5;
   let users;
   let userRepo;
+
+
+  afterEach(() => {
+    chai.spy.restore(domUpdates);
+  });
+
 
   beforeEach(function() {
     sleepData = [{
@@ -299,8 +314,9 @@ describe('Sleep', function() {
     expect(sleep.calculateAverageSleep(3)).to.equal(3);
   });
 
-  it('should find the average sleep quality per day for a user', function() {
+  it.only('should find the average sleep quality per day for a user', function() {
     expect(sleep.calculateAverageSleepQuality(3)).to.equal(2);
+    expect(domUpdates.displayAverageUserSleepQuality).to.have.been.called(1);
   });
 
   it('should find the sleep hours for a user on a specified date', function() {
