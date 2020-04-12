@@ -25,6 +25,23 @@ class Calculator {
     let calculatedSortedArray = sortedArray[Math.floor(Math.random() * sortedArray.length + 1)].date
     return calculatedSortedArray
   }
+
+
+  // new abstraction
+  calculateWeeklyData(date, id, userStorage, dataSet, property) {
+    return userStorage.getFirstWeek(id, this[dataSet]).map((data) => {
+      `${data[date]}: ${data[property]}`
+    });
+  }
+
+  calculateRandomWeekData(date, id, userStorage, dataSet, property) {
+    console.log('date', date)
+    console.log('id', id)
+    console.log('userRepo', userStorage)
+    console.log('data', dataSet)
+    console.log('ounces', property)
+    return userStorage.getWeekFromDate(date, id, this[dataSet]).map((data) => `${data[date]}: ${data[property]}`);
+  }
 }
 
 export default Calculator
