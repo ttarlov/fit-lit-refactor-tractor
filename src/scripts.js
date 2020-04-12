@@ -6,7 +6,6 @@ import './images/The Rock.jpg';
 import moment from "moment";
 import domUpdates from './dom-updates.js'
 
-
 import Chart from 'chart.js';
 import Calculator from './calculator';
 import User from './User';
@@ -16,12 +15,8 @@ import Sleep from './Sleep';
 import UserRepo from './User-repo';
 import ApiController from './api-controller';
 
-
-
 let api = new ApiController();
 let userNowId;
-
-
 
 const fetchData = () => {
   let userData = api.getUsersData()
@@ -42,47 +37,46 @@ const fetchData = () => {
 const updateChart = (daysOftheWeek, data, chartId, chartLabel, units) => {
   var ctx = document.getElementById(`${chartId}`).getContext('2d');
   var myChart = new Chart(ctx, {
-      type: 'bar',
-      data: {
-          labels: daysOftheWeek,
-          datasets: [{
-              label: `${chartLabel}`,
-              data: data,
-              backgroundColor: [
-                  'rgba(255, 99, 132, 0.2)',
-                  'rgba(54, 162, 235, 0.2)',
-                  'rgba(255, 206, 86, 0.2)',
-                  'rgba(75, 192, 192, 0.2)',
-                  'rgba(153, 102, 255, 0.2)',
-                  'rgba(255, 159, 64, 0.2)'
-              ],
-              borderColor: [
-                  'rgba(255, 99, 132, 1)',
-                  'rgba(54, 162, 235, 1)',
-                  'rgba(255, 206, 86, 1)',
-                  'rgba(75, 192, 192, 1)',
-                  'rgba(153, 102, 255, 1)',
-                  'rgba(255, 159, 64, 1)'
-              ],
-              borderWidth: 1
-          }]
-      },
-      options: {
-          scales: {
-              yAxes: [{
-                  ticks: {
-                      beginAtZero: true
-                  },
-                  scaleLabel: {
-                  display: true,
-                  labelString: units
-                }
-              }]
+    type: 'bar',
+    data: {
+      labels: daysOftheWeek,
+      datasets: [{
+        label: `${chartLabel}`,
+        data: data,
+        backgroundColor: [
+          'rgba(255, 99, 132, 0.2)',
+          'rgba(54, 162, 235, 0.2)',
+          'rgba(255, 206, 86, 0.2)',
+          'rgba(75, 192, 192, 0.2)',
+          'rgba(153, 102, 255, 0.2)',
+          'rgba(255, 159, 64, 0.2)'
+        ],
+        borderColor: [
+          'rgba(255, 99, 132, 1)',
+          'rgba(54, 162, 235, 1)',
+          'rgba(255, 206, 86, 1)',
+          'rgba(75, 192, 192, 1)',
+          'rgba(153, 102, 255, 1)',
+          'rgba(255, 159, 64, 1)'
+        ],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      scales: {
+        yAxes: [{
+          ticks: {
+            beginAtZero: true
+          },
+          scaleLabel: {
+            display: true,
+            labelString: units
           }
+        }]
       }
+    }
   });
 }
-
 
 const makeChartData = (hydrationArry, chartId, chartLabel, units) => {
   let hydrationDataForAWeek = hydrationArry;
@@ -96,9 +90,6 @@ const makeChartData = (hydrationArry, chartId, chartLabel, units) => {
   })
   updateChart(daysOftheWeek, data, chartId, chartLabel, units)
 };
-
-
-
 
 function startApp(userData, hydrationData, sleepData, activityData) {
   let userList = [];
@@ -126,13 +117,11 @@ function startApp(userData, hydrationData, sleepData, activityData) {
   makeChartData(sleepRepo.calculateWeekSleep(today, userNowId, userRepo),"sleepThisWeekChart", "Hours of Sleep", "hours");
   sleepRepo.calculateAverageSleepQuality(userNowId)
 
-
   domUpdates.addActivityInfo(userNowId, activityRepo, today, userRepo, randomHistory, userNow, winnerNow)
   makeChartData(activityRepo.userDataForWeek(userNowId, today, userRepo, "numSteps"),"stepsThisWeekChart", "Number of Steps", "Steps");
   makeChartData(activityRepo.userDataForWeek(userNowId, today, userRepo, "flightsOfStairs"), "stairsThisWeekChart", "Flights Of Stairs", "Number of Stairs");
   makeChartData(activityRepo.userDataForWeek(userNowId, today, userRepo, "minutesActive"), "minutesThisWeekChart", "Minutes of Activity", "Minutes");
   makeChartData(activityRepo.userDataForWeek(winnerNow, today, userRepo, "numSteps"), "bestUserStepsChart", "Steps", "Steps")
-
 
   domUpdates.addFriendGameInfo(userNowId, activityRepo, userRepo, today, randomHistory, userNow)
 }
@@ -154,12 +143,9 @@ function getUserById(id, listRepo) {
   return listRepo.getDataFromID(id);
 };
 
-
 function makeWinnerID(activityInfo, user, dateString, userStorage) {
   return activityInfo.getWinnerId(user, dateString, userStorage)
 }
-
-
 
 const eventHandler = (event) => {
   if (event.target.classList.contains('activity-button')) {
@@ -185,7 +171,6 @@ const eventHandler = (event) => {
     $('.main-column-hydration, .main-column-activity, .main-column-sleep').removeClass('blur');
   }
 }
-
 
 fetchData();
 $('body').click(eventHandler);
