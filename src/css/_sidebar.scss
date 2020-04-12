@@ -34,11 +34,10 @@
 
 .sidebar-header-userImage {
   border: 1px solid $primary-text-color;
-  border-radius: 50%;
+  border-radius: 1000px;
   justify-content: center;
-  margin: 4px 2px 2px;
-  width: 86%;
-  height: 18%;
+  margin: 1em 0;
+  width: 75%;
 }
 
 .sidebar-friendContainer-listItems {
