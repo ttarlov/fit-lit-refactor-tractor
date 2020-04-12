@@ -341,7 +341,7 @@ describe('Sleep', function() {
 
 
   it('should find sleep data for current week', function() {
-    expect(sleep.calculateWeekSleep(today, 4, userRepo)).to.deep.eq([ '2020-04-12: 5.9', ' 2020-04-11: 9.6', '2020-04-10: 9' ]);
+    expect(sleep.calculateWeekSleep(today, 4, userRepo)).to.deep.eq([ '2020-04-12: 5.9', '2020-04-11: 9.6', '2020-04-10: 9' ]);
   })
 
 
