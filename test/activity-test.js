@@ -13,8 +13,11 @@ describe('Activity', function() {
   let users;
   let userRepo;
   let activity;
+  let today;
 
   beforeEach(function() {
+    today = moment().format("YYYY-MM-DD")
+
     activityData = [{
         "userID": 1,
         "date": "2019/06/15",
@@ -38,10 +41,38 @@ describe('Activity', function() {
       },
       {
         "userID": 4,
-        "date": "2019/06/15",
+        "date": `${moment().subtract(1, 'days').format("YYYY-MM-DD")}`,
         "numSteps": 3486,
         "minutesActive": 114,
         "flightsOfStairs": 32
+      },
+      {
+        "userID": 4,
+        "date": `${moment().subtract(2, 'days').format("YYYY-MM-DD")}`,
+        "numSteps": 4050,
+        "minutesActive": 90,
+        "flightsOfStairs": 60
+      },
+      {
+        "userID": 4,
+        "date": `${moment().subtract(3, 'days').format("YYYY-MM-DD")}`,
+        "numSteps": 2890,
+        "minutesActive": 45,
+        "flightsOfStairs": 28
+      },
+      {
+        "userID": 4,
+        "date": "2019/06/15",
+        "numSteps": 1000,
+        "minutesActive": 90,
+        "flightsOfStairs": 70
+      },
+      {
+        "userID": 4,
+        "date": "2019/06/16",
+        "numSteps": 50000,
+        "minutesActive": 120,
+        "flightsOfStairs": 200
       },
       {
         "userID": 5,
@@ -193,7 +224,7 @@ describe('Activity', function() {
       address: "A rock in the ocean",
       email: "thebigpstar@pacificocean.net",
       strideLength: .2,
-      dailyStepGoal: 13000,
+      dailyStepGoal: 2000,
       friends: [1, 2]
     });
     users = [user1, user2, user3, user4];
@@ -202,10 +233,10 @@ describe('Activity', function() {
   });
   it('should take in data', function() {
     expect(activity.activityData[0].userID).to.eql(1);
-    expect(activity.activityData[4].date).to.eql("2019/06/15");
+    expect(activity.activityData[2].date).to.eql('2019/06/15');
     expect(activity.activityData[3].numSteps).to.eql(3486);
-    expect(activity.activityData[8].minutesActive).to.eql(41);
-    expect(activity.activityData[10].flightsOfStairs).to.eql(24);
+    expect(activity.activityData[8].minutesActive).to.eql(213);
+    expect(activity.activityData[10].flightsOfStairs).to.eql(5);
   });
   it('should return the miles a given user has walked on a given date', function() {
     expect(activity.getMilesFromStepsByDate(1, "2019/06/15", userRepo.users[0])).to.eql(2.9);
@@ -216,9 +247,19 @@ describe('Activity', function() {
   it('should return average active minutes in a given week', function() {
     expect(activity.calculateActiveAverageForWeek(1, "2019/06/21", userRepo)).to.eql(40.4);
   });
-  it('should return true/false if the given user met their step goal on a given day', function() {
+
+describe('accomplishStepGoal Method', function(){
+
+  it('should return false if the given user DID NOT meet their step goal on a given day', function() {
     expect(activity.accomplishStepGoal(4, "2019/06/15", userRepo.users[3])).to.eql(false);
   });
+
+  it('should return true if the given user DID meet their step goal on a given day', function() {
+    expect(activity.accomplishStepGoal(4, "2019/06/16", userRepo.users[3])).to.eql(true);
+  });
+});
+
+
   it('should return all days that a given user exceeded their step goal', function() {
     expect(activity.getDaysGoalExceeded(1, userRepo.users[0])).to.eql([
       "2019/06/17",
@@ -234,7 +275,7 @@ describe('Activity', function() {
   });
 
   it('should return the average flight of stairs for all users on given day', function() {
-    expect(activity.getAllUserAverageForDay("2019/06/15", userRepo, "flightsOfStairs")).to.eql(21.2)
+    expect(activity.getAllUserAverageForDay("2019/06/15", userRepo, "flightsOfStairs")).to.eql(24.3)
   })
 
   it('should return average steps taken for given date for all users', function() {
@@ -290,17 +331,15 @@ describe('Activity', function() {
     expect(activity.userDataForToday(1, "2019/06/18", userRepo, 'minutesActive')).to.eql(62);
   });
 
-  it.skip('should return a weeks worth steps for a given user', function() {
-    expect(activity.userDataForWeek(1, "2019/06/23", userRepo, 'numSteps')[0]).to.eql("2019/06/23: 9000");
-    expect(activity.userDataForWeek(1, "2019/06/23", userRepo, 'numSteps')[3]).to.eql("2019/06/20: 9303");
+  it('should return steps data for today and up to 7 days prior', function() {
+    expect(activity.userDataForWeek(4, today, userRepo, 'numSteps')).to.deep.eq([ '2020-04-11: 3486', '2020-04-10: 4050', '2020-04-09: 2890' ]);
+    // expect(activity.userDataForWeek(1, "2019/06/23", userRepo, 'numSteps')[3]).to.eql("2019/06/20: 9303");
   });
-  it('should return a weeks worth active minutes for a given user', function() {
-    expect(activity.userDataForWeek(1, "2019/06/23", userRepo, 'minutesActive')[0]).to.eql("2019/06/23: 8");
-    expect(activity.userDataForWeek(1, "2019/06/23", userRepo, 'minutesActive')[3]).to.eql("2019/06/20: 7");
+  it('should return minutes active for today and up to 7 days prior', function() {
+    expect(activity.userDataForWeek(4, today, userRepo, 'minutesActive')).to.eql([ '2020-04-11: 114', '2020-04-10: 90', '2020-04-09: 45' ]);
   });
-  it('should return a weeks worth stairs for a given user', function() {
-    expect(activity.userDataForWeek(1, "2019/06/23", userRepo, 'flightsOfStairs')[0]).to.eql("2019/06/23: 9");
-    expect(activity.userDataForWeek(1, "2019/06/23", userRepo, 'flightsOfStairs')[3]).to.eql("2019/06/20: 4");
+  it('should return flights of stairs for today and up to 7 days prior', function() {
+    expect(activity.userDataForWeek(4, today, userRepo, 'flightsOfStairs')).to.eql([ '2020-04-11: 32', '2020-04-10: 60', '2020-04-09: 28' ]);
   });
 })
 
