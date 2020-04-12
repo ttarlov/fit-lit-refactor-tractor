@@ -1,7 +1,6 @@
 // import sleepData from './data/sleep';
 import domUpdates from './dom-updates.js'
 import Calculator from './calculator';
-
 class Sleep extends Calculator {
   constructor(sleepData) {
     super()
@@ -46,9 +45,12 @@ class Sleep extends Calculator {
     return userRepo.getWeekFromDate(date, id, this.sleepData).map((data) => `${data.date}: ${data.hoursSlept}`);
   }
 
-  calculateWeekSleepQuality(date, id, userRepo) {
-    return userRepo.getWeekFromDate(date, id, this.sleepData).map((data) => `${data.date}: ${data.sleepQuality}`);
-  }
+//UNUSED METHOD
+  // calculateWeekSleepQuality(date, id, userRepo) {
+  //   return userRepo.getWeekFromDate(date, id, this.sleepData).map((data) => `${data.date}: ${data.sleepQuality}`);
+  // }
+
+
   calculateAllUserSleepQuality() {
     var totalSleepQuality = this.sleepData.reduce(function(sumSoFar, dataItem) {
       sumSoFar += dataItem.sleepQuality;
