@@ -1,4 +1,14 @@
-import { expect } from 'chai';
+import $ from 'jquery'
+const chai = require("chai");
+const expect = chai.expect;
+const spies = require("chai-spies");
+chai.use(spies);
+
+import domUpdates from "../src/dom-updates.js"
+
+
+
+
 import moment from "moment";
 import UserRepo from '../src/User-repo';
 import User from '../src/User';
@@ -11,7 +21,14 @@ describe('User Repo', function() {
   let userRepo;
   let users;
 
+  afterEach(() => {
+    chai.spy.restore(domUpdates);
+  });
+
   beforeEach(function() {
+
+    chai.spy.on(domUpdates, "displayAverageStepGoal", () => {});
+
     user1 = new User({
       id: 1,
       name: "Alex Roth",
@@ -72,11 +89,8 @@ describe('User Repo', function() {
   });
 
   it('should return the average of all users step goals', function() {
-
-
-    userRepo.calculateAverageStepGoal();
-
     expect(userRepo.calculateAverageStepGoal()).to.eql(9500);
+    expect(domUpdates.displayAverageStepGoal).to.have.been.called(1)
   });
 
   describe('array changes', function() {
@@ -89,8 +103,14 @@ describe('User Repo', function() {
     let userRepo;
     let hydrationData;
     let sleepData;
+    let today;
+    let aDayAgo;
+    let twoDaysAgo;
 
     beforeEach(function() {
+      today = moment().format("YYYY-MM-DD")
+      aDayAgo = `${moment().subtract(1, 'days').format("YYYY-MM-DD")}`
+      twoDaysAgo = `${moment().subtract(2, 'days').format("YYYY-MM-DD")}`
       user1 = new User({
         id: 1,
         name: "Alex Roth",
@@ -167,12 +187,12 @@ describe('User Repo', function() {
         },
         {
           "userID": 4,
-          "date": `${moment().subtract(1, 'days').format("YYYY-MM-DD")}`,
+          "date": aDayAgo,
           "numOunces": 65
         },
         {
           "userID": 4,
-          "date": `${moment().subtract(2, 'days').format("YYYY-MM-DD")}`,
+          "date": twoDaysAgo,
           "numOunces": 75
         },
         {
@@ -489,15 +509,15 @@ describe('User Repo', function() {
       ]);
     });
     it('should get a users most recent date using the app', function() {
-      expect(userRepo.getToday(4, hydrationData)).to.eql("2020-04-10");
+      expect(userRepo.getToday(4, hydrationData)).to.eql(moment().add(1, "days").format("YYYY-MM-DD"));
     });
 
     describe('getFirstWeek Method', function(){
 
       it('should return an array of data for today and up to 7 days prior', function() {
         expect(userRepo.getFirstWeek(4, hydrationData)).to.deep.eq([
-                                                                      { userID: 4, date: '2020-04-08', numOunces: 65 },
-                                                                      { userID: 4, date: '2020-04-07', numOunces: 75 }
+                                                                      { userID: 4, date: aDayAgo, numOunces: 65 },
+                                                                      { userID: 4, date: twoDaysAgo, numOunces: 75 }
                                                                     ]);
       });
 
