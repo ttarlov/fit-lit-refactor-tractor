@@ -209,7 +209,8 @@ beforeEach(function(){
 }); //Before Each close here
 
 
-it.skip('should be an instance of Calculator Class', function(){
+it('should be an instance of Calculator Class', function(){
+  calc= new Calculator()
   expect(calc).to.be.an.instanceof(Calculator)
 
 });
@@ -222,16 +223,37 @@ describe('calculateAverageData Method', function(){
     expect(calc.calculateAverageData("activityData", 1, "numSteps")).to.eq(6609.8)
   });
 
-  it.only('should be able to calculate average flight of stairs for a given user', function(){
+  it('should be able to calculate average flight of stairs for a given user', function(){
     calc = new Calculator()
     calc.activityData = activityData;
     expect(calc.calculateAverageData("activityData", 2, "flightsOfStairs")).to.eq(57.6)
   });
 
-  it('', function(){
-
+  it('should be able to calculate average minutesActive for a given user', function(){
+    calc = new Calculator()
+    calc.activityData = activityData;
+    expect(calc.calculateAverageData("activityData", 1, "minutesActive")).to.eq(94.2)
   });
 
+  it('should be able to calculate average hoursSlept for a given user', function(){
+    calc = new Calculator()
+    calc.sleepData = sleepData;
+    expect(calc.calculateAverageData("sleepData", 1, "hoursSlept")).to.eq(4.62)
+  });
+
+  it('should be able to calculate average sleepQuality for a given user', function(){
+    calc = new Calculator()
+    calc.sleepData = sleepData;
+    expect(calc.calculateAverageData("sleepData", 1, "sleepQuality")).to.eq(2.8)
+  });
+
+  it('should be able to calculate average number of Ozs consumed for a given user', function(){
+    calc = new Calculator()
+    calc.hydrationData = hydrationData;
+    expect(calc.calculateAverageData("hydrationData", 2, "numOunces")).to.eq(28.8)
+  });
+
+  
 
 });
 
