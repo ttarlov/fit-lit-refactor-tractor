@@ -24,6 +24,8 @@ describe('Sleep', function() {
   let users;
   let userRepo;
   let today;
+  let aDayAgo;
+  let twoDaysAgo;
 
   afterEach(() => {
     chai.spy.restore(domUpdates);
@@ -34,8 +36,10 @@ describe('Sleep', function() {
 
     chai.spy.on(domUpdates, "displayAverageUserSleepQuality", () => {});
 
-
     today = moment().format("YYYY-MM-DD")
+    aDayAgo = moment().subtract(1, "day").format("YYYY-MM-DD")
+    twoDaysAgo = moment().subtract(2, "day").format("YYYY-MM-DD")
+
     sleepData = [{
         "userID": 1,
         "date": "2017/06/15",
@@ -158,13 +162,13 @@ describe('Sleep', function() {
       },
       {
         "userID": 4,
-        "date":`${moment().subtract(1, 'days').format("YYYY-MM-DD")}`,
+        "date": aDayAgo,
         "hoursSlept": 9.6,
         "sleepQuality": 1
       },
       {
         "userID": 4,
-        "date": `${moment().subtract(2, 'days').format("YYYY-MM-DD")}`,
+        "date": twoDaysAgo,
         "hoursSlept": 9,
         "sleepQuality": 3.1
       },
@@ -341,7 +345,7 @@ describe('Sleep', function() {
 
 
   it('should find sleep data for current week', function() {
-    expect(sleep.calculateWeekSleep(today, 4, userRepo)).to.deep.eq([ '2020-04-12: 5.9', '2020-04-11: 9.6', '2020-04-10: 9' ]);
+    expect(sleep.calculateWeekSleep(today, 4, userRepo)).to.deep.eq([ `${today}: 5.9`, `${aDayAgo}: 9.6`, `${twoDaysAgo}: 9` ]);
   })
 
 
