@@ -12,10 +12,13 @@ describe('Hydration', function() {
   let users;
   let user3;
   let user4;
+  let aDayAgo;
+  let twoDaysAgo;
 
   beforeEach(function() {
     today = moment().format("YYYY-MM-DD")
-
+    aDayAgo = moment().subtract(1, "day").format("YYYY-MM-DD")
+    twoDaysAgo = moment().subtract(2, "day").format("YYYY-MM-DD")
     hydrationData = [{
         "userID": 1,
         "date": "2019/06/15",
@@ -150,7 +153,7 @@ describe('Hydration', function() {
   // });
 
   it('should find water intake for today and up to 7 days prior', function() {
-    expect(hydration.calculateFirstWeekOunces(userRepo, 4)).to.eql([ '2020-04-12: 35', '2020-04-11: 40', '2020-04-10: 30' ]);
+    expect(hydration.calculateFirstWeekOunces(userRepo, 4)).to.eql([ `${today}: 35`, `${aDayAgo}: 40`, `${twoDaysAgo}: 30` ]);
   });
 
   it('should find sleep quality by day for that days week', function() {
