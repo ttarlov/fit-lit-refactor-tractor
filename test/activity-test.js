@@ -14,9 +14,13 @@ describe('Activity', function() {
   let userRepo;
   let activity;
   let today;
+  let aDayAgo;
+  let twoDaysAgo;
 
   beforeEach(function() {
     today = moment().format("YYYY-MM-DD")
+    aDayAgo = moment().subtract(1, "day").format("YYYY-MM-DD")
+    twoDaysAgo = moment().subtract(2, "day").format("YYYY-MM-DD")
 
     activityData = [{
         "userID": 1,
@@ -41,21 +45,21 @@ describe('Activity', function() {
       },
       {
         "userID": 4,
-        "date": `${moment().subtract(1, 'days').format("YYYY-MM-DD")}`,
+        "date": today,
         "numSteps": 3486,
         "minutesActive": 114,
         "flightsOfStairs": 32
       },
       {
         "userID": 4,
-        "date": `${moment().subtract(2, 'days').format("YYYY-MM-DD")}`,
+        "date": aDayAgo,
         "numSteps": 4050,
         "minutesActive": 90,
         "flightsOfStairs": 60
       },
       {
         "userID": 4,
-        "date": `${moment().subtract(3, 'days').format("YYYY-MM-DD")}`,
+        "date": twoDaysAgo,
         "numSteps": 2890,
         "minutesActive": 45,
         "flightsOfStairs": 28
@@ -332,14 +336,14 @@ describe('accomplishStepGoal Method', function(){
   });
 
   it('should return steps data for today and up to 7 days prior', function() {
-    expect(activity.userDataForWeek(4, today, userRepo, 'numSteps')).to.deep.eq([ '2020-04-11: 3486', '2020-04-10: 4050', '2020-04-09: 2890' ]);
+    expect(activity.userDataForWeek(4, today, userRepo, 'numSteps')).to.deep.eq([ `${today}: 3486`, `${aDayAgo}: 4050`, `${twoDaysAgo}: 2890` ]);
     // expect(activity.userDataForWeek(1, "2019/06/23", userRepo, 'numSteps')[3]).to.eql("2019/06/20: 9303");
   });
   it('should return minutes active for today and up to 7 days prior', function() {
-    expect(activity.userDataForWeek(4, today, userRepo, 'minutesActive')).to.eql([ '2020-04-11: 114', '2020-04-10: 90', '2020-04-09: 45' ]);
+    expect(activity.userDataForWeek(4, today, userRepo, 'minutesActive')).to.eql([ `${today}: 114`, `${aDayAgo}: 90`, `${twoDaysAgo}: 45` ]);
   });
   it('should return flights of stairs for today and up to 7 days prior', function() {
-    expect(activity.userDataForWeek(4, today, userRepo, 'flightsOfStairs')).to.eql([ '2020-04-11: 32', '2020-04-10: 60', '2020-04-09: 28' ]);
+    expect(activity.userDataForWeek(4, today, userRepo, 'flightsOfStairs')).to.eql([ `${today}: 32`, `${aDayAgo}: 60`, `${twoDaysAgo}: 28` ]);
   });
 })
 
