@@ -9,15 +9,75 @@ chai.use(spies);
 import $ from 'jquery'
 import moment from "moment";
 import domUpdates from "../src/dom-updates.js"
+import UserRepo from '../src/User-repo';
+import User from '../src/User';
 
 describe('Calculator Class', function(){
-
   let hydrationData;
   let sleepData;
   let activityData;
   let calc;
+  let users;
+  let user1;
+  let user2;
+  let user3;
+  let user4;
+  let user5;
+  let userRepo
+
 
 beforeEach(function(){
+
+  user1 = new User({
+    id: 1,
+    name: "Alex Roth",
+    address: "1234 Turing Street, Denver CO 80301-1697",
+    email: "alex.roth1@hotmail.com",
+    strideLength: 4.3,
+    dailyStepGoal: 10000,
+    friends: [2, 3, 4]
+  });
+  user2 = new User({
+    id: 2,
+    name: "Allie McCarthy",
+    address: "1235 Turing Street, Denver CO 80301-1697",
+    email: "allie.mcc1@hotmail.com",
+    strideLength: 3.3,
+    dailyStepGoal: 9000,
+    friends: [1, 3, 4]
+  });
+  user3 = new User({
+    id: 3,
+    name: "The Rock",
+    address: "1236 Awesome Street, Denver CO 80301-1697",
+    email: "therock@hotmail.com",
+    strideLength: 10,
+    dailyStepGoal: 60000,
+    friends: [1, 2, 4]
+  });
+
+  user4 = new User({
+    id: 4,
+    name: "Rainbow Dash",
+    address: "1237 Equestria Street, Denver CO 80301-1697",
+    email: "rainbowD1@hotmail.com",
+    strideLength: 3.8,
+    dailyStepGoal: 7000,
+    friends: [1, 2, 3]
+  });
+
+  user5 = new User({
+    id: 5,
+    name: "Bugs Bunny",
+    address: "1234 Looney Street, Denver CO 80301-1697",
+    email: "BugsB1@hotmail.com",
+    strideLength: 3.8,
+    dailyStepGoal: 7000,
+    friends: [1, 2, 3]
+  });
+
+  users = [user1, user2, user3, user4, user5];
+  userRepo = new UserRepo(users);
 
   hydrationData = [{
       "userID": 1,
@@ -252,10 +312,45 @@ describe('calculateAverageData Method', function(){
     calc.hydrationData = hydrationData;
     expect(calc.calculateAverageData("hydrationData", 2, "numOunces")).to.eq(28.8)
   });
-
-  
-
 });
+
+  describe('calculateDailyData Method', function(){
+
+    it('HAPPY PATH: should be able to calculate hydration for a specific day for a specific user', function(){
+      calc = new Calculator()
+      calc.hydrationData = hydrationData;
+      expect(calc.calculateDailyData("hydrationData", 2, "2019/04/15", "numOunces")).to.eq(36)
+    });
+    it('SAD PATH: should return "0" if no data is found', function(){
+      calc = new Calculator()
+      calc.hydrationData = hydrationData;
+      expect(calc.calculateDailyData("hydrationData", 2, "2017/04/15", "numOunces")).to.eq("0")
+    });
+
+    it('HAPPY PATH: should be able to calculate sleep for a specific day for a specific user', function(){
+      calc = new Calculator()
+      calc.sleepData = sleepData;
+      expect(calc.calculateDailyData("sleepData", 2, "2018/07/17", "hoursSlept")).to.eq(9.6)
+    });
+
+    it('SAD PATH: should return "0" if no data is found', function(){
+      calc = new Calculator()
+      calc.sleepData = sleepData;
+      expect(calc.calculateDailyData("sleepData", 2, "2017/04/15", "hoursSlept")).to.eq("0")
+    });
+
+  });
+
+
+  describe('makeRandomDate Method', function(){
+
+    it.skip('should make a random date', function(){
+      calc = new Calculator()
+      expect(calc.makeRandomDate(userRepo, 2, hydrationData)).match.typeOf("string")
+    });
+
+
+  });
 
 
 
