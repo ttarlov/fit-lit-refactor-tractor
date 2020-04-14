@@ -1,5 +1,8 @@
-class Activity {
+import Calculator from './calculator';
+
+class Activity extends Calculator {
   constructor(activityData) {
+    super();
     this.activityData = activityData
   }
 
@@ -21,7 +24,7 @@ class Activity {
 
   accomplishStepGoal(id, date, userRepo) {
     let userStepsByDate = this.activityData.find(data => id === data.userID && date === data.date);
-    if (userStepsByDate.numSteps === userRepo.dailyStepGoal) {
+    if (userStepsByDate.numSteps > userRepo.dailyStepGoal) {
       return true;
     }
     return false
@@ -53,10 +56,10 @@ class Activity {
     }
   }
   
-  userDataForWeek(id, date, userRepo, releventData) {
-    // return userRepo.getWeekFromDate(date, id, this.activityData).map((data) => `${data.date}: ${data[releventData]}`);
-    return userRepo.getFirstWeek(id, this.activityData).map((data) => `${data.date}: ${data[releventData]}`);
-  }
+  // userDataForWeek(id, date, userRepo, releventData) {
+  //   // return userRepo.getWeekFromDate(date, id, this.activityData).map((data) => `${data.date}: ${data[releventData]}`);
+  //   return userRepo.getFirstWeek(id, this.activityData).map((data) => `${data.date}: ${data[releventData]}`);
+  // }
 
   // Friends
 

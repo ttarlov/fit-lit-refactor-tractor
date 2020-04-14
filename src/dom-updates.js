@@ -15,7 +15,6 @@ let domUpdates = {
     $('#sidebarName').text(user.name);
     $('#headerText').text(`${user.getFirstName()}'s Activity Tracker`);
     $('#stepGoalCard').text(`Your daily step goal is ${user.dailyStepGoal}.`);
-    $('#avStepGoalCard').text(`The average daily step goal is ${userStorage.calculateAverageStepGoal()}`);
     $('#userAddress').text(user.address);
     $('#userEmail').text(user.email);
     $('#userStridelength').text(`Your stridelength is ${user.strideLength} meters.`);
@@ -34,6 +33,7 @@ let domUpdates = {
     return method.map(streakData => `<li class="historical-list-listItem">${streakData}!</li>`).join('');
   },
 
+
   addHydrationInfo(id, hydrationInfo, dateString, userStorage, laterDateString) {
     $('#hydrationToday').prepend(`<p>You drank</p><p><span class="number">${hydrationInfo.calculateDailyData("hydrationData", id, dateString, "numOunces")}</span></p><p>oz water today.</p>`);
     $('#hydrationAverage').prepend(`<p>Your average water intake is</p><p><span class="number">${hydrationInfo.calculateAverageData("hydrationData", id, "numOunces").toFixed(1)}</span></p> <p>oz per day.</p>`);
@@ -51,7 +51,6 @@ let domUpdates = {
 
   displayAverageUserSleepQuality(averageSleepQuality) {
     $('#avUserSleepQuality').prepend(`<p>The average user's sleep quality is</p> <p><span class="number">${averageSleepQuality}</span></p><p>out of 5.</p>`);
-
   },
 
   addFriendGameInfo(id, activityInfo, userStorage, dateString, laterDateString, user) {
@@ -59,7 +58,7 @@ let domUpdates = {
     $('#streakList').prepend(this.makeStepStreakHTML(id, activityInfo, userStorage, activityInfo.getStreak(userStorage, id, 'numSteps')));
     $('#streakListMinutes').prepend(this.makeStepStreakHTML(id, activityInfo, userStorage, activityInfo.getStreak(userStorage, id, 'minutesActive')));
     $('#friendChallengeListHistory').prepend(this.makeFriendChallengeHTML(id, activityInfo, userStorage, activityInfo.showChallengeListAndWinner(user, dateString, userStorage)));
-    $('#bigWinner').prepend(`THIS WEEK'S WINNER! ${activityInfo.showcaseWinner(user, dateString, userStorage)} steps`);
+    $('#bigWinner').prepend(`THIS WEEK'S WINNER! ${activityInfo.showcaseWinner(user, dateString, userStorage)}`);
   },
 
   addActivityInfo(userNowId, activityRepo, today, userRepo) {
