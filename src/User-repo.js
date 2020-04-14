@@ -35,7 +35,6 @@ class UserRepo {
   }
 
   getFirstWeek(id, dataSet) {
-    
     let today = moment().add(1, 'days').format("YYYY-MM-DD")
     let sevenDaysAgo = moment().subtract(7, 'days').format("YYYY-MM-DD")
     let selectedID = this.getDataFromUserID(id, dataSet)
@@ -47,8 +46,7 @@ class UserRepo {
         matchedDays.push(dailyLog)
       }
     })
-    console.log(matchedDays);
-    
+
     return matchedDays;
   }
 
