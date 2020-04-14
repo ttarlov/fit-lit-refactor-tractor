@@ -34,9 +34,10 @@ class Calculator {
   // }
   // RETRY
   calculateWeeklyData(userRepo, id, dataSet, property) {
-    return userRepo.getFirstWeek(id, this[dataSet]).map((data) => {
-      `${data.date}: ${data[property]}`
-    });
+    let firstweekData = userRepo.getFirstWeek(id, this[dataSet])
+    let newDataObj = firstweekData.map((data) => `${data.date}: ${data[property]}`)
+
+    return newDataObj
   }
 
 
