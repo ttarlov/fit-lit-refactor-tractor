@@ -26,5 +26,4 @@ class Hydration extends Calculator {
   // }
 }
 
-
 export default Hydration;
