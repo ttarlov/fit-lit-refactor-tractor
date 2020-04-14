@@ -79,7 +79,6 @@ const updateChart = (daysOftheWeek, data, chartId, chartLabel, units) => {
 }
 
 const makeChartData = (dataArry, chartId, chartLabel, units) => {
-  debugger
   console.log('arry', dataArry)
   let dataForAWeek = dataArry;
   // console.log("week", dataForAWeek)
@@ -106,7 +105,7 @@ function startApp(userData, hydrationData, sleepData, activityData) {
   let userNow = getUserById(userNowId, userRepo);
   let today = moment().format("YYYY-MM-DD").split('-').join('/');
   let randomHistory = calc.makeRandomDate(userRepo, userNowId, hydrationData)
-  
+
   let winnerNow = makeWinnerID(activityRepo, userNow, today, userRepo);
 
   userRepo.calculateAverageStepGoal();
@@ -115,12 +114,12 @@ function startApp(userData, hydrationData, sleepData, activityData) {
   domUpdates.addHydrationInfo(userNowId, hydrationRepo, today, userRepo, randomHistory)
   // hydration translations
   makeChartData(hydrationRepo.calculateRandomWeekData(randomHistory, userNowId, userRepo, "hydrationData", "numOunces"), "randomWeekHydrationChart", "OZs of Water", "Ounces");
-  
 
+console.log(hydrationRepo.calculateWeeklyData(userRepo, userNowId, "hydrationData", "numOunces"));
 
 
   makeChartData(hydrationRepo.calculateWeeklyData(userRepo, userNowId, "hydrationData", "numOunces"), "thisWeekHydrationChart", "OZs of Water", "Ounces");
-  
+
 
 
 
@@ -135,17 +134,17 @@ function startApp(userData, hydrationData, sleepData, activityData) {
 
   // sleep random translation
   makeChartData(sleepRepo.calculateRandomWeekData(randomHistory, userNowId, userRepo, "sleepData", "hoursSlept"), "sleepEarlierWeekChart", "Hours of Sleep", "Hours");
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
   // sleep translation
   makeChartData(sleepRepo.calculateWeeklyData(userRepo, userNowId, "sleepData", "hoursSlept"), "sleepThisWeekChart", "Hours of Sleep", "Hours");
-  
-  
+
+
   sleepRepo.calculateAverageSleepQuality(userNowId)
 
 
@@ -174,7 +173,7 @@ function makeUsers(userData, array) {
 }
 
 function pickUser() {
-  return 27;
+  return 2;
   // return Math.floor(Math.random() * 50);
 // return Math.floor(1 + Math.random() * 50)
 }
