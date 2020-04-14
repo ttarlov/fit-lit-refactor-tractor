@@ -23,6 +23,14 @@ npm install
 ```
 3. Then, run `npm start` in your terminal. Go to `http://localhost:8080/` and you should see the page there! Then, you can enter `control + c` in your terminal to stop the server at any time.
 
+## Technologies Used
+This project had a lot of moving pieces and parts and was the FIRST time we had ever used the following:
+- jQuery
+- Sass
+- Chai Spies
+- the fetch API
+- webpack
+
 ## Contributors
 - Taras Tarlov
 - Carlos Flores
