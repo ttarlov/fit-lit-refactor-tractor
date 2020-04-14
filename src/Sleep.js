@@ -19,8 +19,10 @@ class Sleep extends Calculator {
     let averageSleepQuality = perDaySleepQuality.reduce((sumSoFar, data) => {
       return sumSoFar += data.sleepQuality;
     }, 0) / perDaySleepQuality.length;
-    domUpdates.displayAverageUserSleepQuality(Math.round(averageSleepQuality * 100) / 100);
-    return Math.round(averageSleepQuality * 100) / 100;
+    let roundedNum = Math.round(averageSleepQuality * 100) / 100
+    console.log(roundedNum);
+    domUpdates.displayAverageUserSleepQuality(roundedNum);
+    return roundedNum;
   }
 
 
@@ -29,7 +31,7 @@ class Sleep extends Calculator {
   //   return findSleepByDate.hoursSlept;
   // }
   // TRANSLATE WEEK SLEEP AND RANDOM WEEK SLEEP
-  // on makeChart data it is sleepRepo.calculateWeekSleep 
+  // on makeChart data it is sleepRepo.calculateWeekSleep
   // changed to sleepRepo.calculateWeeklyData
 
   // calculateWeekSleep(date, id, userRepo) {
