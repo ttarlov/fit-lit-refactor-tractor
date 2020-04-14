@@ -9,7 +9,7 @@ let domUpdates = {
     $('#avStepGoalCard').text(`The average daily step goal is ${averageStepGoal}`);
   },
 
-  addInfoToSidebar(user, userStorage,randomHistory) {
+  addInfoToSidebar(user, userStorage, randomHistory) {
     $('.historicalWeek').prepend(`Week of ${randomHistory}`);
 
     $('#sidebarName').text(user.name);
@@ -59,7 +59,6 @@ let domUpdates = {
     $('#streakListMinutes').prepend(this.makeStepStreakHTML(id, activityInfo, userStorage, activityInfo.getStreak(userStorage, id, 'minutesActive')));
     $('#friendChallengeListHistory').prepend(this.makeFriendChallengeHTML(id, activityInfo, userStorage, activityInfo.showChallengeListAndWinner(user, dateString, userStorage)));
     $('#bigWinner').prepend(`THIS WEEK'S WINNER! ${activityInfo.showcaseWinner(user, dateString, userStorage)}`);
-
   },
 
   addActivityInfo(userNowId, activityRepo, today, userRepo) {
