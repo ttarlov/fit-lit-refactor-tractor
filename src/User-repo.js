@@ -40,13 +40,11 @@ class UserRepo {
     let selectedID = this.getDataFromUserID(id, dataSet)
     let sortedByDate = selectedID.sort((a, b) => new Date(b.date) - new Date(a.date));
     let matchedDays = []
-
     sortedByDate.forEach(dailyLog => {
       if (moment(dailyLog.date.split("/").join("-")).isBetween(sevenDaysAgo, today)) {
         matchedDays.push(dailyLog)
       }
     })
-
     return matchedDays;
   }
 

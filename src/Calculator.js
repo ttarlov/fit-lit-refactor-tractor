@@ -6,9 +6,10 @@ class Calculator {
 
   calculateAverageData(fullData, id, property) {
     let perDayUserData = this[fullData].filter((data) => id === data.userID);
-    return perDayUserData.reduce((sumSoFar, data) => {
+    let averagePerDayUserData = perDayUserData.reduce((sumSoFar, data) => {
       return sumSoFar += data[property];
     }, 0) / perDayUserData.length;
+    return averagePerDayUserData;
   }
 
   calculateDailyData(fullData, id, date, property) {
@@ -23,7 +24,7 @@ class Calculator {
   makeRandomDate(userStorage, id, dataSet) {
     let sortedArray = userStorage.makeSortedUserArray(id, dataSet);
     let calculatedSortedArray = sortedArray[Math.floor(Math.random() * sortedArray.length + 1)].date
-    return calculatedSortedArray
+    return calculatedSortedArray;
   }
 
   // new abstraction

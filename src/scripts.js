@@ -111,6 +111,7 @@ function startApp(userData, hydrationData, sleepData, activityData) {
   userRepo.calculateAverageStepGoal();
   domUpdates.addInfoToSidebar(userNow, userRepo, randomHistory)
 
+  hydrationRepo.calculateAverageData("hydrationData", userNowId, "numOunces").toFixed(1)
   domUpdates.addHydrationInfo(userNowId, hydrationRepo, today, userRepo, randomHistory)
   // hydration translations
   makeChartData(hydrationRepo.calculateRandomWeekData(randomHistory, userNowId, userRepo, "hydrationData", "numOunces"), "randomWeekHydrationChart", "OZs of Water", "Ounces");

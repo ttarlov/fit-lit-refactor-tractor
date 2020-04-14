@@ -24,7 +24,7 @@ class Activity extends Calculator {
 
   accomplishStepGoal(id, date, userRepo) {
     let userStepsByDate = this.activityData.find(data => id === data.userID && date === data.date);
-    if (userStepsByDate.numSteps === userRepo.dailyStepGoal) {
+    if (userStepsByDate.numSteps > userRepo.dailyStepGoal) {
       return true;
     }
     return false

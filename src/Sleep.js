@@ -52,6 +52,20 @@ class Sleep extends Calculator {
   calculateWeekSleepQuality(date, id, userRepo) {
     return userRepo.getWeekFromDate(date, id, this.sleepData).map((data) => `${data.date}: ${data.sleepQuality}`);
   }
+  // calculateWeekSleep(date, id, userRepo) {
+  //   return userRepo.getFirstWeek(id, this.sleepData).map((data) => `${data.date}: ${data.hoursSlept}`);
+  // }
+
+  // calculateRandomWeekSleep(date, id, userRepo) {
+  //   return userRepo.getWeekFromDate(date, id, this.sleepData).map((data) => `${data.date}: ${data.hoursSlept}`);
+  // }
+
+//UNUSED METHOD
+  // calculateWeekSleepQuality(date, id, userRepo) {
+  //   return userRepo.getWeekFromDate(date, id, this.sleepData).map((data) => `${data.date}: ${data.sleepQuality}`);
+  // }
+
+
   calculateAllUserSleepQuality() {
     var totalSleepQuality = this.sleepData.reduce(function(sumSoFar, dataItem) {
       sumSoFar += dataItem.sleepQuality;
