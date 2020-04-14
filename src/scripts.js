@@ -1,5 +1,5 @@
 import './css/base.scss';
-import './css/style.scss';
+// import './css/style.scss';
 import $ from 'jquery'
 import './images/person walking on path.jpg';
 import './images/The Rock.jpg';
@@ -31,7 +31,7 @@ const fetchData = () => {
       let sleepData = finalValues[2];
       let activityData = finalValues[3];
       startApp(userData.userData, hydrationData.hydrationData, sleepData.sleepData, activityData.activityData);
-    }).catch(error => console.log(error.message))
+    })//.catch(error => console.log(error.message))
 }
 
 const updateChart = (daysOftheWeek, data, chartId, chartLabel, units) => {
@@ -78,14 +78,17 @@ const updateChart = (daysOftheWeek, data, chartId, chartLabel, units) => {
   });
 }
 
-const makeChartData = (hydrationArry, chartId, chartLabel, units) => {
-  let hydrationDataForAWeek = hydrationArry;
+const makeChartData = (dataArry, chartId, chartLabel, units) => {
+  debugger
+  console.log('arry', dataArry)
+  let dataForAWeek = dataArry;
+  // console.log("week", dataForAWeek)
   let data = [];
   let daysOftheWeek = []
-  hydrationDataForAWeek.forEach(day => {
+  dataForAWeek.forEach(day => {
     data.push(day.split(":").pop())
   })
-  hydrationDataForAWeek.forEach(day => {
+  dataForAWeek.forEach(day => {
     daysOftheWeek.push(day.split(":").shift())
   })
   updateChart(daysOftheWeek, data, chartId, chartLabel, units)
@@ -103,19 +106,56 @@ function startApp(userData, hydrationData, sleepData, activityData) {
   let userNow = getUserById(userNowId, userRepo);
   let today = moment().format("YYYY-MM-DD").split('-').join('/');
   let randomHistory = calc.makeRandomDate(userRepo, userNowId, hydrationData)
+  
   let winnerNow = makeWinnerID(activityRepo, userNow, today, userRepo);
 
   userRepo.calculateAverageStepGoal();
   domUpdates.addInfoToSidebar(userNow, userRepo, randomHistory)
 
   domUpdates.addHydrationInfo(userNowId, hydrationRepo, today, userRepo, randomHistory)
-  makeChartData(hydrationRepo.calculateRandomWeekOunces(randomHistory, userNowId, userRepo),"randomWeekHydrationChart", "OZs of Water", "Ounces");
-  makeChartData(hydrationRepo.calculateFirstWeekOunces(userRepo, userNowId),"thisWeekHydrationChart","OZs of Water", "Ounces");
+  // hydration translations
+  makeChartData(hydrationRepo.calculateRandomWeekData(randomHistory, userNowId, userRepo, "hydrationData", "numOunces"), "randomWeekHydrationChart", "OZs of Water", "Ounces");
+  
+
+
+
+  makeChartData(hydrationRepo.calculateWeeklyData(userRepo, userNowId, "hydrationData", "numOunces"), "thisWeekHydrationChart", "OZs of Water", "Ounces");
+  
+
+
+
+
+
+
+
+
+
 
   domUpdates.addSleepInfo(userNowId, sleepRepo, today, userRepo, randomHistory)
-  makeChartData(sleepRepo.calculateRandomWeekSleep(randomHistory, userNowId, userRepo),"sleepEarlierWeekChart", "Hours of Sleep", "hours");
-  makeChartData(sleepRepo.calculateWeekSleep(today, userNowId, userRepo),"sleepThisWeekChart", "Hours of Sleep", "hours");
+
+  // sleep random translation
+  makeChartData(sleepRepo.calculateRandomWeekData(randomHistory, userNowId, userRepo, "sleepData", "hoursSlept"), "sleepEarlierWeekChart", "Hours of Sleep", "Hours");
+  
+  
+  
+  
+  
+  
+  
+  // sleep translation
+  makeChartData(sleepRepo.calculateWeeklyData(userRepo, userNowId, "sleepData", "hoursSlept"), "sleepThisWeekChart", "Hours of Sleep", "Hours");
+  
+  
   sleepRepo.calculateAverageSleepQuality(userNowId)
+
+
+
+
+
+
+
+
+
 
   domUpdates.addActivityInfo(userNowId, activityRepo, today, userRepo, randomHistory, userNow, winnerNow)
   makeChartData(activityRepo.userDataForWeek(userNowId, today, userRepo, "numSteps"),"stepsThisWeekChart", "Number of Steps", "Steps");
@@ -134,9 +174,9 @@ function makeUsers(userData, array) {
 }
 
 function pickUser() {
-  // return 27;
+  return 27;
   // return Math.floor(Math.random() * 50);
-return Math.floor(1 + Math.random() * 50)
+// return Math.floor(1 + Math.random() * 50)
 }
 
 function getUserById(id, listRepo) {
