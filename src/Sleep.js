@@ -28,17 +28,6 @@ class Sleep extends Calculator {
   //   let findSleepByDate = this.sleepData.find((data) => id === data.userID && date === data.date);
   //   return findSleepByDate.hoursSlept;
   // }
-
-  calculateDailySleepQuality(id, date) {
-    let findSleepQualityByDate = this.sleepData.find((data) => id === data.userID && date === data.date);
-    if (findSleepQualityByDate === undefined) {
-      return "0"
-    } else {
-      return findSleepQualityByDate.sleepQuality;
-    }
-  }
-
-
   // TRANSLATE WEEK SLEEP AND RANDOM WEEK SLEEP
   // on makeChart data it is sleepRepo.calculateWeekSleep 
   // changed to sleepRepo.calculateWeeklyData
@@ -50,6 +39,15 @@ class Sleep extends Calculator {
   // calculateRandomWeekSleep(date, id, userRepo) {
   //   return userRepo.getWeekFromDate(date, id, this.sleepData).map((data) => `${data.date}: ${data.hoursSlept}`);
   // }
+
+  calculateDailySleepQuality(id, date) {
+    let findSleepQualityByDate = this.sleepData.find((data) => id === data.userID && date === data.date);
+    if (findSleepQualityByDate === undefined) {
+      return "0"
+    } else {
+      return findSleepQualityByDate.sleepQuality;
+    }
+  }
 
   calculateWeekSleepQuality(date, id, userRepo) {
     return userRepo.getWeekFromDate(date, id, this.sleepData).map((data) => `${data.date}: ${data.sleepQuality}`);
