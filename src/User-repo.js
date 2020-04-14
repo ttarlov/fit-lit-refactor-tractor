@@ -1,6 +1,7 @@
 import moment from "moment";
 import domUpdates from './dom-updates.js'
 
+
 class UserRepo {
   constructor(users) {
     this.users = users;
@@ -12,7 +13,7 @@ class UserRepo {
 
   getDataFromUserID(id, dataSet) {
     return dataSet.filter((userData) => id === userData.userID);
-  };
+  }
 
   calculateAverageStepGoal() {
     var totalStepGoal = this.users.reduce((sumSoFar, data) => {
@@ -34,6 +35,7 @@ class UserRepo {
   }
 
   getFirstWeek(id, dataSet) {
+    
     let today = moment().add(1, 'days').format("YYYY-MM-DD")
     let sevenDaysAgo = moment().subtract(7, 'days').format("YYYY-MM-DD")
     let selectedID = this.getDataFromUserID(id, dataSet)
@@ -45,6 +47,8 @@ class UserRepo {
         matchedDays.push(dailyLog)
       }
     })
+    console.log(matchedDays);
+    
     return matchedDays;
   }
 
