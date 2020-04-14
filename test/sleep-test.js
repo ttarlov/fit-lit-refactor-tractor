@@ -317,6 +317,7 @@ describe('Sleep', function() {
   it.only('should find the average sleep quality per day for a user', function() {
     expect(sleep.calculateAverageSleepQuality(3)).to.equal(2);
     expect(domUpdates.displayAverageUserSleepQuality).to.have.been.called(1);
+    expect(domUpdates.displayAverageUserSleepQuality).to.have.been.called.with(2)
   });
 
   it('should find the sleep hours for a user on a specified date', function() {
