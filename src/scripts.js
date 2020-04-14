@@ -157,10 +157,10 @@ console.log(hydrationRepo.calculateWeeklyData(userRepo, userNowId, "hydrationDat
 
 
   domUpdates.addActivityInfo(userNowId, activityRepo, today, userRepo, randomHistory, userNow, winnerNow)
-  makeChartData(activityRepo.userDataForWeek(userNowId, today, userRepo, "numSteps"),"stepsThisWeekChart", "Number of Steps", "Steps");
-  makeChartData(activityRepo.userDataForWeek(userNowId, today, userRepo, "flightsOfStairs"), "stairsThisWeekChart", "Flights Of Stairs", "Number of Stairs");
-  makeChartData(activityRepo.userDataForWeek(userNowId, today, userRepo, "minutesActive"), "minutesThisWeekChart", "Minutes of Activity", "Minutes");
-  makeChartData(activityRepo.userDataForWeek(winnerNow, today, userRepo, "numSteps"), "bestUserStepsChart", "Steps", "Steps")
+  makeChartData(activityRepo.calculateWeeklyData(userRepo, userNowId, "activityData", "numSteps"),"stepsThisWeekChart", "Number of Steps", "Steps");
+  makeChartData(activityRepo.calculateWeeklyData(userRepo, userNowId,"activityData", "flightsOfStairs"), "stairsThisWeekChart", "Flights Of Stairs", "Number of Stairs");
+  makeChartData(activityRepo.calculateWeeklyData(userRepo, userNowId, "activityData", "minutesActive"), "minutesThisWeekChart", "Minutes of Activity", "Minutes");
+  makeChartData(activityRepo.calculateWeeklyData(userRepo, winnerNow, "activityData", "numSteps"), "bestUserStepsChart", "Steps", "Steps")
 
   domUpdates.addFriendGameInfo(userNowId, activityRepo, userRepo, today, randomHistory, userNow)
 }
@@ -173,9 +173,10 @@ function makeUsers(userData, array) {
 }
 
 function pickUser() {
-  return 2;
+  // return 2;
+  // return 9;
   // return Math.floor(Math.random() * 50);
-// return Math.floor(1 + Math.random() * 50)
+  return Math.floor(1 + Math.random() * 50)
 }
 
 function getUserById(id, listRepo) {
