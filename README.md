@@ -28,8 +28,11 @@ This project had a lot of moving pieces and parts and was the FIRST time we had 
 - jQuery
 - Sass
 - Chai Spies
+- Mocha
 - the fetch API
 - webpack
+- chart.js
+- moment.js
 
 ## Contributors
 - Taras Tarlov
