@@ -263,11 +263,9 @@ describe('Calculator Class', function() {
     ];
   });
 
-
   it('should be an instance of Calculator Class', function() {
     calc = new Calculator()
     expect(calc).to.be.an.instanceof(Calculator)
-
   });
 
   describe('calculateAverageData Method', function() {
