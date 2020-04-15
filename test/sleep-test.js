@@ -1,15 +1,13 @@
-// import { expect } from 'chai';
-// import $ from 'jquery'
-const chai = require("chai");
-const expect = chai.expect;
-const spies = require("chai-spies");
-chai.use(spies);
-
 import domUpdates from "../src/dom-updates.js"
 import Sleep from '../src/Sleep';
 import UserRepo from '../src/User-repo';
 import User from '../src/User';
 import moment from "moment";
+
+const chai = require("chai");
+const expect = chai.expect;
+const spies = require("chai-spies");
+chai.use(spies);
 
 describe('Sleep', function() {
   let sleepData;
@@ -31,9 +29,7 @@ describe('Sleep', function() {
 
 
   beforeEach(function() {
-
     chai.spy.on(domUpdates, "displayAverageUserSleepQuality", () => {});
-
     today = moment().format("YYYY-MM-DD")
     aDayAgo = moment().subtract(1, "day").format("YYYY-MM-DD")
     twoDaysAgo = moment().subtract(2, "day").format("YYYY-MM-DD")
@@ -256,7 +252,6 @@ describe('Sleep', function() {
     }
     ];
 
-
     sleep = new Sleep(sleepData);
     user1 = new User({
       id: 1,
@@ -337,11 +332,6 @@ describe('Sleep', function() {
       expect(sleep.calculateDailySleepQuality(2, "2020/06/15")).to.equal("0");
     });
   });
-
-
-  it('should find sleep data for current week', function() {
-    expect(sleep.calculateWeekSleep(today, 4, userRepo)).to.deep.eq([ `${today}: 5.9`, `${aDayAgo}: 9.6`, `${twoDaysAgo}: 9` ]);
-  })
 
   it('should determine the best quality sleepers for a week', function() {
     expect(sleep.determineBestSleepers("2019/06/21", userRepo)).to.eql(["Allie McCarthy", "Bugs Bunny"]);
