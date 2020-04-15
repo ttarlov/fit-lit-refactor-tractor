@@ -1,4 +1,3 @@
-// import sleepData from './data/sleep';
 import domUpdates from './dom-updates.js'
 import Calculator from './Calculator';
 
@@ -14,13 +13,13 @@ class Sleep extends Calculator {
       return sumSoFar += data.hoursSlept;
     }, 0) / perDaySleep.length;
   }
+
   calculateAverageSleepQuality(id) {
     let perDaySleepQuality = this.sleepData.filter((data) => id === data.userID);
     let averageSleepQuality = perDaySleepQuality.reduce((sumSoFar, data) => {
       return sumSoFar += data.sleepQuality;
     }, 0) / perDaySleepQuality.length;
     let roundedNum = Math.round(averageSleepQuality * 100) / 100
-    console.log(roundedNum);
     domUpdates.displayAverageUserSleepQuality(roundedNum);
     return roundedNum;
   }
@@ -88,6 +87,5 @@ class Sleep extends Calculator {
     });
   }
 }
-
 
 export default Sleep;
