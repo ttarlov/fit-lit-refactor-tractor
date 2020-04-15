@@ -1,15 +1,13 @@
 import { expect } from 'chai';
-
 import chai from 'chai';
-
-const spies = require('chai-spies')
-chai.use(spies)
-
 import Hydration from '../src/Hydration';
 import UserRepo from '../src/User-repo';
 import User from '../src/User';
 import moment from "moment";
 import domUpdates from '../src/dom-updates.js'
+
+const spies = require('chai-spies')
+chai.use(spies)
 
 describe('Hydration', function() {
   let hydrationData;
