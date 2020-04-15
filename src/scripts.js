@@ -117,8 +117,8 @@ function startApp(userData, hydrationData, sleepData, activityData) {
   makeChartData(sleepRepo.calculateWeeklyData(userRepo, userNowId, "sleepData", "hoursSlept"), "sleepThisWeekChart", "Hours of Sleep", "Hours");
   sleepRepo.calculateAverageSleepQuality(userNowId)
   domUpdates.addActivityInfo(userNowId, activityRepo, today, userRepo, randomHistory, userNow, winnerNow)
-  makeChartData(activityRepo.calculateWeeklyData(userRepo, userNowId, "activityData", "numSteps"),"stepsThisWeekChart", "Number of Steps", "Steps");
-  makeChartData(activityRepo.calculateWeeklyData(userRepo, userNowId,"activityData", "flightsOfStairs"), "stairsThisWeekChart", "Flights Of Stairs", "Number of Stairs");
+  makeChartData(activityRepo.calculateWeeklyData(userRepo, userNowId, "activityData", "numSteps"), "stepsThisWeekChart", "Number of Steps", "Steps");
+  makeChartData(activityRepo.calculateWeeklyData(userRepo, userNowId, "activityData", "flightsOfStairs"), "stairsThisWeekChart", "Flights Of Stairs", "Number of Stairs");
   makeChartData(activityRepo.calculateWeeklyData(userRepo, userNowId, "activityData", "minutesActive"), "minutesThisWeekChart", "Minutes of Activity", "Minutes");
   makeChartData(activityRepo.calculateWeeklyData(userRepo, winnerNow, "activityData", "numSteps"), "bestUserStepsChart", "Steps", "Steps")
 
@@ -140,7 +140,7 @@ function pickUser() {
 
 function getUserById(id, listRepo) {
   return listRepo.getDataFromID(id);
-};
+}
 
 function makeWinnerID(activityInfo, user, dateString, userStorage) {
   return activityInfo.getWinnerId(user, dateString, userStorage)
@@ -162,7 +162,7 @@ const eventHandler = (event) => {
     api.postSleepData(userNowId, $('#date').val().split('-').join('/'), $('#hours-slept').val(), $('#sleep-quality').val())
     $('.pop-up-card').hide();
     $('.main-column-hydration, .main-column-activity, .main-column-sleep').removeClass('blur');
-  } else if(event.target.classList.contains('hydration-button')) {
+  } else if (event.target.classList.contains('hydration-button')) {
     domUpdates.showHydrationForm()
   } else if (event.target.classList.contains("hydration-submit-button")) {
     api.postHydrationData(userNowId, $('#date').val().split('-').join('/'), $("#numOunces").val())
