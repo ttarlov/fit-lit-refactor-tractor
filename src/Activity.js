@@ -41,7 +41,7 @@ class Activity extends Calculator {
 
   getAllUserAverageForDay(date, userRepo, relevantData) {
     let selectedDayData = userRepo.chooseDayDataForAllUsers(this.activityData, date);
-    if(selectedDayData.length === 0) {
+    if (selectedDayData.length === 0) {
       return "0"
     }
     return parseFloat((selectedDayData.reduce((acc, elem) => acc += elem[relevantData], 0) / selectedDayData.length).toFixed(1));
@@ -87,7 +87,7 @@ class Activity extends Calculator {
   showcaseWinner(user, date, userRepo) {
     let namedList = this.showChallengeListAndWinner(user, date, userRepo);
     let winner = this.showChallengeListAndWinner(user, date, userRepo).shift();
-    if(winner == undefined) {
+    if (winner == undefined) {
       return "No Winner This Week"
     }
     return `${winner} steps`;
@@ -108,14 +108,12 @@ class Activity extends Calculator {
 
   getWinnerId(user, date, userRepo) {
     let rankedList = this.getFriendsAverageStepsForWeek(user, date, userRepo);
-    if(rankedList.length === 0) {
+    if (rankedList.length === 0) {
       return "0"
     }
     let keysList = rankedList.map(listItem => Object.keys(listItem));
     return parseInt(keysList[0].join(''))
   }
 }
-
-
 
 export default Activity;
