@@ -5,11 +5,11 @@ import domUpdates from './dom-updates.js'
 class UserRepo {
   constructor(users) {
     this.users = users;
-  };
+  }
 
   getDataFromID(id) {
     return this.users.find((user) => id === user.id);
-  };
+  }
 
   getDataFromUserID(id, dataSet) {
     return dataSet.filter((userData) => id === userData.userID);
@@ -22,7 +22,7 @@ class UserRepo {
     let averageStepGoal = totalStepGoal / this.users.length
     domUpdates.displayAverageStepGoal(averageStepGoal)
     return averageStepGoal
-  };
+  }
 
   makeSortedUserArray(id, dataSet) {
     let selectedID = this.getDataFromUserID(id, dataSet)
@@ -88,6 +88,7 @@ class UserRepo {
       }, 0) / sortedObjectKeys[b].length)
     });
   }
+  
   combineRankedUserIDsAndAveragedData(dataSet, date, relevantData, listFromMethod) {
     let sortedObjectKeys = this.isolateUsernameAndRelevantData(dataSet, date, relevantData, listFromMethod)
     let rankedUsersAndAverages = this.rankUserIDsbyRelevantDataValue(dataSet, date, relevantData, listFromMethod)

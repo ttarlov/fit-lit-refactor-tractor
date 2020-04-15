@@ -1,4 +1,5 @@
-import Calculator from './calculator';
+import Calculator from './Calculator';
+import domUpdates from './dom-updates';
 
 class Activity extends Calculator {
   constructor(activityData) {
@@ -40,7 +41,7 @@ class Activity extends Calculator {
 
   getAllUserAverageForDay(date, userRepo, relevantData) {
     let selectedDayData = userRepo.chooseDayDataForAllUsers(this.activityData, date);
-    if(selectedDayData.length === 0) {
+    if (selectedDayData.length === 0) {
       return "0"
     }
     return parseFloat((selectedDayData.reduce((acc, elem) => acc += elem[relevantData], 0) / selectedDayData.length).toFixed(1));
@@ -49,20 +50,14 @@ class Activity extends Calculator {
   userDataForToday(id, date, userRepo, relevantData) {
     let userData = userRepo.getDataFromUserID(id, this.activityData);
     let userDataByData =  userData.find(data => data.date === date);
-    if(userDataByData === undefined) {
+    if (userDataByData === undefined) {
       return "0"
     } else {
       return userDataByData[relevantData];
     }
   }
-  
-  // userDataForWeek(id, date, userRepo, releventData) {
-  //   // return userRepo.getWeekFromDate(date, id, this.activityData).map((data) => `${data.date}: ${data[releventData]}`);
-  //   return userRepo.getFirstWeek(id, this.activityData).map((data) => `${data.date}: ${data[releventData]}`);
-  // }
 
   // Friends
-
   getFriendsActivity(user, userRepo) {
     let data = this.activityData;
     let userDatalist = user.friends.map(function(friend) {
@@ -92,7 +87,7 @@ class Activity extends Calculator {
   showcaseWinner(user, date, userRepo) {
     let namedList = this.showChallengeListAndWinner(user, date, userRepo);
     let winner = this.showChallengeListAndWinner(user, date, userRepo).shift();
-    if(winner == undefined) {
+    if (winner == undefined) {
       return "No Winner This Week"
     }
     return `${winner} steps`;
@@ -113,14 +108,12 @@ class Activity extends Calculator {
 
   getWinnerId(user, date, userRepo) {
     let rankedList = this.getFriendsAverageStepsForWeek(user, date, userRepo);
-    if(rankedList.length === 0) {
+    if (rankedList.length === 0) {
       return "0"
     }
     let keysList = rankedList.map(listItem => Object.keys(listItem));
     return parseInt(keysList[0].join(''))
   }
 }
-
-
 
 export default Activity;
