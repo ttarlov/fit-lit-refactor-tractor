@@ -9,6 +9,8 @@ As a team, we were tasked to refactor a pre-existing repo called, Fit-Lit. Fit-L
 - Updated all DOM manipulation to be done with jQuery
 - Implemented testing with spies
 - Implemented the fetch API for accessing data from a server
+- Implemented Moment.js for simpler date and time tracking
+- Implemented Chart.js to better visualize data
 - While refactoring, we added 3 buttons at the top of the screen called, 'Update Activity', 'Update Sleep', and 'Update Hydration'. Upon clicking these buttons, the user can fill in their updated information for each activity and submit. Upon submitting, this information is posting the new information to the API. Otherwise, they can click the back button to return to the home screen.
 
 ## GIF of working application
