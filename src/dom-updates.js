@@ -1,6 +1,6 @@
 import $ from 'jquery'
-import ApiController from './api-controller';
 import moment from "moment";
+import ApiController from './api-controller';
 import Chart from 'chart.js';
 
 let domUpdates = {
