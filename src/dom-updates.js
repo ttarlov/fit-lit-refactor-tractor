@@ -4,7 +4,6 @@ import moment from "moment";
 import Chart from 'chart.js';
 
 let domUpdates = {
-
   displayAverageStepGoal(averageStepGoal) {
     $('#avStepGoalCard').text(`The average daily step goal is ${averageStepGoal}`);
   },
@@ -33,7 +32,6 @@ let domUpdates = {
     return method.map(streakData => `<li class="historical-list-listItem">${streakData}!</li>`).join('');
   },
 
-
   addHydrationInfo(id, hydrationInfo, dateString, userStorage, laterDateString) {
     $('#hydrationToday').prepend(`<p>You drank</p><p><span class="number">${hydrationInfo.calculateDailyData("hydrationData", id, dateString, "numOunces")}</span></p><p>oz water today.</p>`);
     $('#hydrationAverage').prepend(`<p>Your average water intake is</p><p><span class="number">${hydrationInfo.calculateAverageData("hydrationData", id, "numOunces").toFixed(1)}</span></p> <p>oz per day.</p>`);
@@ -46,7 +44,6 @@ let domUpdates = {
     $('#sleepQualityToday').prepend(`<p>Your sleep quality was</p> <p><span class="number">${sleepInfo.calculateDailySleepQuality(id, dateString)}</span></p><p>out of 5.</p>`);
     $('#sleepThisWeek').prepend(`<canvas id="sleepThisWeekChart" style="display: block;height: 261px;width: 316px;"></canvas>`);
     $('#sleepEarlierWeek').prepend(`<canvas id="sleepEarlierWeekChart" style="display: block;height: 261px;width: 316px;"></canvas>`);
-
   },
 
   displayAverageUserSleepQuality(averageSleepQuality) {
