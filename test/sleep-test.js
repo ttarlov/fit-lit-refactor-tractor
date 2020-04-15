@@ -6,8 +6,6 @@ const spies = require("chai-spies");
 chai.use(spies);
 
 import domUpdates from "../src/dom-updates.js"
-
-
 import Sleep from '../src/Sleep';
 import UserRepo from '../src/User-repo';
 import User from '../src/User';
